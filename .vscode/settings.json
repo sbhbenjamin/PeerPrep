@@ -1,0 +1,4 @@
+{
+  // required for eslint to work
+  "eslint.workingDirectories": ["frontend"]
+}
