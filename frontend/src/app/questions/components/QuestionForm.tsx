@@ -46,9 +46,13 @@ import { cn } from '@/lib/utils';
 
 interface QuestionFormProps {
   addQuestion: (newQuestion: QuestionType) => void;
+  currentQuestions: QuestionType[];
 }
 
-const QuestionForm: React.FC<QuestionFormProps> = ({ addQuestion }) => {
+const QuestionForm: React.FC<QuestionFormProps> = ({
+  addQuestion,
+  currentQuestions,
+}) => {
   const form = useForm<z.infer<typeof Question>>({
     resolver: zodResolver(Question),
     defaultValues: {
@@ -64,6 +68,18 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ addQuestion }) => {
   function onSubmit(values: z.infer<typeof Question>) {
     const uniqueId = Math.floor(Math.random() * 1000000).toString();
     const newQuestion = { ...values, id: uniqueId };
+
+    // Check for duplicate titles or URLs
+    const isDuplicate = currentQuestions.some(
+      (question) =>
+        question.title === newQuestion.title ||
+        question.link === newQuestion.link,
+    );
+
+    if (isDuplicate) {
+      alert('Error: Duplicate title or URL found.');
+      return;
+    }
 
     // need to cast type due to how zod deals with array attributes
     addQuestion(newQuestion as QuestionType);

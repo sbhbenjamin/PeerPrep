@@ -50,7 +50,10 @@ const page = () => {
         <div className="flex gap-8">
           <div className="w-1/2">
             <h1 className="mb-8 flex text-2xl">Add New Question</h1>
-            <QuestionForm addQuestion={addQuestion} />
+            <QuestionForm
+              addQuestion={addQuestion}
+              currentQuestions={questions}
+            />
           </div>
           <div className="w-1/2">
             <h1 className="mb-8 flex text-2xl">All Questions</h1>
