@@ -44,31 +44,33 @@ const page = () => {
   };
 
   return (
-    <div>
-      <h1 className="mb-8 flex text-3xl font-bold">Questions Repository</h1>
-      <div className="flex gap-8">
-        <div className="w-1/2">
-          <h1 className="mb-8 flex text-2xl">Add New Question</h1>
-          <QuestionForm addQuestion={addQuestion} />
-        </div>
-        <div className="w-1/2">
-          <h1 className="mb-8 flex text-2xl">All Questions</h1>
-          <div className="flex flex-col gap-4">
-            {questions.map(
-              ({ id, title, categories, difficulty, description, link }) => (
-                <div key={id.toString()}>
-                  <QuestionCard
-                    id={id}
-                    title={title}
-                    categories={categories}
-                    difficulty={difficulty}
-                    description={description}
-                    link={link}
-                    deleteQuestion={deleteQuestion}
-                  />
-                </div>
-              ),
-            )}
+    <div className="flex justify-center">
+      <div className="w-full max-w-screen-xl">
+        <h1 className="mb-8 flex text-3xl font-bold">Questions Repository</h1>
+        <div className="flex gap-8">
+          <div className="w-1/2">
+            <h1 className="mb-8 flex text-2xl">Add New Question</h1>
+            <QuestionForm addQuestion={addQuestion} />
+          </div>
+          <div className="w-1/2">
+            <h1 className="mb-8 flex text-2xl">All Questions</h1>
+            <div className="flex flex-col gap-4">
+              {questions.map(
+                ({ id, title, categories, difficulty, description, link }) => (
+                  <div key={id.toString()}>
+                    <QuestionCard
+                      id={id}
+                      title={title}
+                      categories={categories}
+                      difficulty={difficulty}
+                      description={description}
+                      link={link}
+                      deleteQuestion={deleteQuestion}
+                    />
+                  </div>
+                ),
+              )}
+            </div>
           </div>
         </div>
       </div>
