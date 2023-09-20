@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { CheckIcon, ChevronsUpDown } from 'lucide-react';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import type * as z from 'zod';
+import { CheckIcon, ChevronsUpDown } from "lucide-react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import type * as z from "zod";
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { categoriesStub } from '../stubs/categories.stub';
-import { Question } from '../types/question.schema';
-import type { QuestionType } from '../types/question.type';
+import { categoriesStub } from "../stubs/categories.stub";
+import { Question } from "../types/question.schema";
+import type { QuestionType } from "../types/question.type";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from '@/components/ui/command';
+} from "@/components/ui/command";
 import {
   Form,
   FormControl,
@@ -26,23 +26,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 interface QuestionFormProps {
   addQuestion: (newQuestion: QuestionType) => void;
@@ -56,13 +56,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   const form = useForm<z.infer<typeof Question>>({
     resolver: zodResolver(Question),
     defaultValues: {
-      title: '',
-      link: '',
+      title: "",
+      link: "",
       difficulty: undefined,
-      description: '',
+      description: "",
       categories: [],
     },
-    mode: 'all',
+    mode: "all",
   });
 
   function onSubmit(values: z.infer<typeof Question>) {
@@ -77,14 +77,14 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     );
 
     if (isDuplicate) {
-      alert('Error: Duplicate title or URL found.');
+      alert("Error: Duplicate title or URL found.");
       return;
     }
 
     // need to cast type due to how zod deals with array attributes
     addQuestion(newQuestion as QuestionType);
-    console.log('[Question Form] Creating Question', newQuestion);
-    console.log('[Question Form] Question Created, ID: ', uniqueId);
+    console.log("[Question Form] Creating Question", newQuestion);
+    console.log("[Question Form] Question Created, ID: ", uniqueId);
 
     form.reset();
   }
@@ -119,8 +119,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        'justify-between',
-                        !field.value && 'text-muted-foreground',
+                        "justify-between",
+                        !field.value && "text-muted-foreground",
                       )}
                     >
                       {field.value && field.value.length > 0
@@ -132,8 +132,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                                 )?.label,
                             )
                             .filter(Boolean)
-                            .join(', ')
-                        : 'Select categories'}
+                            .join(", ")
+                        : "Select categories"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
@@ -151,7 +151,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                           value={category.label}
                           key={category.value}
                           onSelect={() => {
-                            const currentValues = form.getValues('categories');
+                            const currentValues = form.getValues("categories");
                             const valueSet = new Set(currentValues);
 
                             if (valueSet.has(category.value)) {
@@ -161,7 +161,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                             }
 
                             form.setValue(
-                              'categories',
+                              "categories",
                               // required to suppress zod compatibility issues with array objects
                               Array.from(valueSet) as [string, ...string[]],
                             );
@@ -170,10 +170,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                           {category.label}
                           <CheckIcon
                             className={cn(
-                              'ml-auto h-4 w-4',
+                              "ml-auto h-4 w-4",
                               field.value.includes(category.value)
-                                ? 'opacity-100'
-                                : 'opacity-0',
+                                ? "opacity-100"
+                                : "opacity-0",
                             )}
                           />
                         </CommandItem>

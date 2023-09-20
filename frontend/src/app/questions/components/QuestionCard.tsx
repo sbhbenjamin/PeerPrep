@@ -1,18 +1,18 @@
-import { Link as LinkIcon } from 'lucide-react';
-import React from 'react';
+import { Link as LinkIcon } from "lucide-react";
+import React from "react";
 
-import type { Category, Difficulty } from '../types/question.type';
-import { categoryColors } from '../utils/categoryStyles';
-import { difficultyColors } from '../utils/difficultyStyles';
+import type { Category, Difficulty } from "../types/question.type";
+import { categoryColors } from "../utils/categoryStyles";
+import { difficultyColors } from "../utils/difficultyStyles";
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -20,7 +20,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 
 export interface QuestionCardProps {
   id: string;
@@ -42,7 +42,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   deleteQuestion,
 }) => {
   const handleButtonClick = () => {
-    console.log('[QuestionCard] Deleting ID: ', id);
+    console.log("[QuestionCard] Deleting ID: ", id);
     deleteQuestion(id);
   };
 
@@ -80,7 +80,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 
           <CardContent>
             <AccordionContent>
-              {description.split('\n').map((line, index) => (
+              {description.split("\n").map((line, index) => (
                 <React.Fragment key={`${line}-${index}`}>
                   {line}
                   <br />
