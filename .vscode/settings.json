@@ -1,4 +1,9 @@
 {
-  // required for eslint to work
-  "eslint.workingDirectories": ["frontend"]
+  "eslint.workingDirectories": ["frontend"],
+  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
 }
