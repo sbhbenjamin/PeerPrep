@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
 // needs to be a client component to access localStorage
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import QuestionCard from './components/QuestionCard';
-import QuestionForm from './components/QuestionForm';
-import type { QuestionType } from './types/question.type';
+import QuestionCard from "./components/QuestionCard";
+import QuestionForm from "./components/QuestionForm";
+import type { QuestionType } from "./types/question.type";
 
 const page = () => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
 
   useEffect(() => {
     const storedQuestions = JSON.parse(
-      localStorage.getItem('questions') || '[]',
+      localStorage.getItem("questions") || "[]",
     );
 
     setQuestions(storedQuestions);
@@ -22,14 +22,14 @@ const page = () => {
   const addQuestion = (newQuestion: QuestionType) => {
     setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
     localStorage.setItem(
-      'questions',
+      "questions",
       JSON.stringify([...questions, newQuestion]),
     );
   };
 
   const deleteQuestion = (id: string) => {
     const existingQuestions: QuestionType[] = JSON.parse(
-      localStorage.getItem('questions') || '[]',
+      localStorage.getItem("questions") || "[]",
     );
 
     console.log(existingQuestions);
@@ -40,7 +40,7 @@ const page = () => {
     );
 
     // Save the updated list back to local storage
-    localStorage.setItem('questions', JSON.stringify(updatedQuestions));
+    localStorage.setItem("questions", JSON.stringify(updatedQuestions));
   };
 
   return (

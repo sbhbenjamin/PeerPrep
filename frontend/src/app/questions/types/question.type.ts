@@ -13,18 +13,18 @@ export interface QuestionDescription {
 }
 
 export enum Difficulty {
-  Easy = 'Easy',
-  Medium = 'Medium',
-  Hard = 'Hard',
+  Easy = "Easy",
+  Medium = "Medium",
+  Hard = "Hard",
 }
 
 export enum Category {
-  Strings = 'Strings',
-  Algorithms = 'Algorithms',
-  DataStructures = 'DataStructures',
-  BitManipulation = 'BitManipulation',
-  Recursion = 'Recursion',
-  Databases = 'Databases',
-  Brainteaser = 'Brainteaser',
-  Arrays = 'Arrays',
+  Strings = "Strings",
+  Algorithms = "Algorithms",
+  DataStructures = "DataStructures",
+  BitManipulation = "BitManipulation",
+  Recursion = "Recursion",
+  Databases = "Databases",
+  Brainteaser = "Brainteaser",
+  Arrays = "Arrays",
 }
