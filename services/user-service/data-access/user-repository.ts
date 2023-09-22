@@ -4,7 +4,7 @@ type UserRecord = {
   id: number;
   email: string;
   name: string;
-  image: string | null;
+  image?: string | null;
 };
 
 export async function addUser(newUserRequest: Omit<UserRecord, 'id'>): Promise<UserRecord> {

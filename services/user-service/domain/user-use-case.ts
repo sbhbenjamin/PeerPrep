@@ -1,65 +1,41 @@
-import util from 'util';
-import express from 'express';
-import { logger } from '@practica/logger';
-import * as userUseCase from '../../domain/user-use-case';
+import * as userRepository from '../data-access/user-repository';
+import { AddUserSchema, UpdateUserSchema, userIdSchema } from './user-schema'; // Import your schemas here
+import { z } from 'zod';
 
-export default function defineRoutes(expressApp: express.Application) {
-  const router = express.Router();
+// Define a Zod validator for user ID
+// ✅ Validate and add a new user
+export async function addUser(newUser: any) {
+  // Validate newUser against the AddUserSchema
+  const validatedData = AddUserSchema.parse(newUser);
 
-  router.post('/', async (req, res, next) => {
-    try {
-      logger.info(
-        `User API was called to add new User ${util.inspect(req.body)}`
-      );
-      // ✅ Best Practice: Using the 3-tier architecture, routes/controller are kept thin, logic is encapsulated in a dedicated domain folder
-      const addUserResponse = await userUseCase.addUser(req.body);
-      return res.json(addUserResponse);
-    } catch (error) {
-      next(error);
-      return undefined;
-    }
-  });
+  const response = await userRepository.addUser(validatedData);
 
-  // get existing user by id
-  router.get('/:id', async (req, res, next) => {
-    try {
-      logger.info(`User API was called to get user by id ${req.params.id}`);
-      const response = await userUseCase.getUser(parseInt(req.params.id, 10));
+  return response;
+}
 
-      if (!response) {
-        res.status(404).end();
-        return;
-      }
+// ✅ Delete a user by ID
+export async function deleteUser(userId: number) {
+  // Validate userId using the userIdValidator
+  userIdSchema.parse(userId);
 
-      res.json(response);
-    } catch (error) {
-      next(error);
-    }
-  });
+  return await userRepository.deleteUser(userId);
+}
 
-  // update user by id
-  router.put('/:id', async (req, res, next) => {
-    try {
-      logger.info(`User API was called to update user ${req.params.id}`);
-      const response = await userUseCase.updateUser(parseInt(req.params.id, 10), req.body);
+// ✅ Get a user by ID
+export async function getUser(userId: number) {
+  // Validate userId using the userIdValidator
+  userIdSchema.parse(userId);
 
-      if (!response) {
-        res.status(404).end();
-        return;
-      }
+  return await userRepository.getUserById(userId);
+}
 
-      res.json(response);
-    } catch (error) {
-      next(error);
-    }
-  });
+// ✅ Update a user by ID
+export async function updateUser(userId: number, updateUserRequest: any) {
+  // Validate userId using the userIdValidator
+  userIdSchema.parse(userId);
 
-  // delete user by id
-  router.delete('/:id', async (req, res) => {
-    logger.info(`User API was called to delete user ${req.params.id}`);
-    await userUseCase.deleteUser(parseInt(req.params.id, 10));
-    res.status(204).end();
-  });
+  // Validate updateUserRequest against the UpdateUserSchema
+  const validatedData = UpdateUserSchema.parse(updateUserRequest);
 
-  expressApp.use('/user', router);
+  return await userRepository.updateUser(userId, validatedData);
 }
