@@ -22,8 +22,9 @@ import { selectUserData } from '../state/UserSelectors';
 import { User } from '../types/user.type';
 import { createUser } from '../state/UserAsyncCalls';
 import { AsyncThunkAction } from '@reduxjs/toolkit';
+import { FormInput } from 'lucide-react';
 
-function UserForm() {
+function UserProfileForm() {
   const user = useSelector(selectUserData);
   const [userData, setUserData] = useState<User>(user);
   const dispatch = useDispatch();
@@ -36,7 +37,6 @@ function UserForm() {
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof UserSchema>) {
     console.log(values);
-    dispatch(createUser(values));
   }
 
   return (
@@ -54,20 +54,10 @@ function UserForm() {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Photo</FormLabel>
-              <FormControl>
-                <Input type="file" id="picture" />
-              </FormControl>
-              <FormMessage />
+              <FormDescription>
+                This is your public display name. Please avoid putting your real
+                name!
+              </FormDescription>
             </FormItem>
           )}
         />
@@ -78,9 +68,11 @@ function UserForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="example@gmail.com" {...field} />
+                <Input disabled {...field} />
               </FormControl>
-              <FormMessage />
+              <FormDescription>
+                This is the email your account is associated with.
+              </FormDescription>
             </FormItem>
           )}
         />
@@ -90,4 +82,4 @@ function UserForm() {
   );
 }
 
-export default UserForm;
+export default UserProfileForm;

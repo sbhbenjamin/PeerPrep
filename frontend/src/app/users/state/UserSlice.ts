@@ -4,7 +4,7 @@ import {createUser}  from '../state/UserAsyncCalls'
 import { boolean } from "zod";
 import { stat } from "fs";
 
-const initialState: User = {name: 'Hi', email: 'ang.weijun1999@gmail.com', image: "null"}
+const initialState: User = {name: 'Hi', email: 'ang.weijun1999@gmail.com'}
 
 
 const userSlice = createSlice({
