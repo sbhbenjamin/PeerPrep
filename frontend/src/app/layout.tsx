@@ -3,8 +3,8 @@ import { Inter } from 'next/font/google';
 import React from 'react';
 
 import Navbar from '@/components/Navbar';
-
 import './globals.css';
+import ReduxProvider from './ReduxProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,7 +23,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="min-h-screen px-12 py-10">
           <Navbar />
-          <div className="mt-8">{children}</div>
+          <div className="mt-8">
+            <ReduxProvider>{children}</ReduxProvider>
+          </div>
         </div>
       </body>
     </html>

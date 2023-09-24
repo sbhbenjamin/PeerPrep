@@ -5,16 +5,26 @@ import { validateAddUserInput, validateUpdateUserInput } from './validators';
 export default function defineRoutes(expressApp: express.Application) {
   const router = express.Router();
 
-  router.post('/',validateAddUserInput ,async (req, res, next) => {
+  router.post('/createUser',validateAddUserInput ,async (req, res, next) => {
     try {
       // ✅ Best Practice: Using the 3-tier architecture, routes/controller are kept thin, logic is encapsulated in a dedicated domain folder
       const addUserResponse = await userUseCase.addUser(req.body);
+      console.log(addUserResponse)
       return res.json(addUserResponse);
     } catch (error) {
       next(error);
       return undefined;
     }
   });
+
+  router.get('/getUsers', async (req, res, next) => {
+    try {
+      const response = await userUseCase.getAllUser();
+      res.json(response);
+    } catch (error) {
+      next(error);
+    }
+  })
 
   // get existing user by id
   router.get('/:id', async (req, res, next) => {

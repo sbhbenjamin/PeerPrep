@@ -2,8 +2,10 @@ import { Server } from 'http';
 import { AddressInfo } from 'net';
 import express from 'express';
 import defineRoutes from './routes';
+const cors = require('cors');
 
 let connection: Server;
+
 
 // ️️️✅ Best Practice: API exposes a start/stop function to allow testing control WHEN this should happen
 async function startWebServer(): Promise<AddressInfo> {

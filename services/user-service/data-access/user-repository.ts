@@ -15,6 +15,12 @@ export async function addUser(newUserRequest: Omit<UserRecord, 'id'>): Promise<U
   return resultUser;
 }
 
+export async function getAllUsers() : Promise<UserRecord[]>{
+  const users = await getPrismaClient().user.findMany({
+  })
+  return users;
+}
+
 export async function getUserById(id: number): Promise<UserRecord | null> {
   const resultUser = await getPrismaClient().user.findUnique({
     where: {

@@ -1,14 +1,18 @@
 import express from 'express';
 import userRoutes from './routes/userRoute';
+const cors = require('cors');
 
 const app = express();
-
-// ... Other middleware and configuration ...
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://yourproductiondomain.com'],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // enable session cookie
+  optionsSuccessStatus: 204,
+};
+app.use(cors(corsOptions));
 
 // Include the userRoutes
 app.use('/api/users', userRoutes);
-
-// ... Other routes and middleware ...
 
 // Start the Express server
 const port = process.env.PORT || 3000;

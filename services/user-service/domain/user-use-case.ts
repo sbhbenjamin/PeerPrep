@@ -2,6 +2,13 @@ import * as userRepository from '../data-access/user-repository';
 import { AddUserSchema, UpdateUserSchema, userIdSchema } from './user-schema'; // Import your schemas here
 import { z } from 'zod';
 
+export async function getAllUser() {
+
+  const response = await userRepository.getAllUsers();
+
+  return response;
+}
+
 // Define a Zod validator for user ID
 // ✅ Validate and add a new user
 export async function addUser(newUser: any) {
