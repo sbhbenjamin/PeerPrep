@@ -14,15 +14,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { UserSchema } from '../types/user.schema';
 import * as z from 'zod';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUserData } from '../state/UserSelectors';
 import { User } from '../types/user.type';
-import { createUser } from '../state/UserAsyncCalls';
-import { AsyncThunkAction } from '@reduxjs/toolkit';
-import { FormInput } from 'lucide-react';
 
 function UserProfileForm() {
   const user = useSelector(selectUserData);

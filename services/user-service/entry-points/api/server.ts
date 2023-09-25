@@ -7,10 +7,12 @@ const cors = require('cors');
 let connection: Server;
 
 
+
 // ️️️✅ Best Practice: API exposes a start/stop function to allow testing control WHEN this should happen
 async function startWebServer(): Promise<AddressInfo> {
   // ️️️✅ Best Practice: Declare a strict configuration schema and fail fast if the configuration is invalid
   const expressApp = express();
+  expressApp.use(cors());
   expressApp.use(express.urlencoded({ extended: true }));
   expressApp.use(express.json());
   defineRoutes(expressApp);
