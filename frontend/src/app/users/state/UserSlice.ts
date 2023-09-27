@@ -1,11 +1,10 @@
 import { User } from "../types/user.type";
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {createUser}  from '../state/UserAsyncCalls'
+import { fetchUserData}  from './UserAsyncOperations'
 import { boolean } from "zod";
 import { stat } from "fs";
 
 const initialState: User = {name: 'Hi', email: 'ang.weijun1999@gmail.com'}
-
 
 const userSlice = createSlice({
   name: 'user',
@@ -17,18 +16,6 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createUser.pending, (state) => {
-        // Should do something
-        console.log("Pending", state)
-      })
-      .addCase(createUser.fulfilled, (state, action) => {
-        // Should do something
-        console.log("Fulfilled", state)
-      })
-      .addCase(createUser.rejected, (state, action) => {
-        // Should do something
-        console.log("Rejected", state)
-      });
   },
 });
 
