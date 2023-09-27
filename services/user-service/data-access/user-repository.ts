@@ -27,8 +27,26 @@ export async function getUserById(id: number): Promise<UserRecord | null> {
       id,
     },
   });
-
   return resultUser;
+}
+
+export async function getUserByEmail(email: string): Promise<UserRecord | null> {
+  const user = await getPrismaClient().user.findUnique({
+    where: {
+      email: email
+    }
+  })
+  return user;
+}
+
+export async function isUserRegistered(email: string): Promise<boolean> {
+  const user = await getPrismaClient().user.findUnique({
+    where: {
+      email: email
+    },
+  });
+
+  return !!user;
 }
 
 export async function updateUser(id: number, updateUserRequest: Partial<Omit<UserRecord, 'id'>>): Promise<UserRecord> {

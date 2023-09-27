@@ -8,7 +8,7 @@ export default function Home() {
 
   useEffect(() => {
     // redirect to /questions for assignment 1
-    router.replace('/onboarding');
+    router.replace("/questions");
   }, [router]);
 
   return (

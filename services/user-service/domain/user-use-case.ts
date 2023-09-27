@@ -23,12 +23,18 @@ export async function deleteUser(userId: number) {
   return await userRepository.deleteUser(userId);
 }
 
-// ✅ Get a user by ID
-export async function getUser(userId: number) {
+// ✅ Get a user by mail
+export async function getUserById(userId: number) {
   // Validate userId using the userIdValidator
   userIdSchema.parse(userId);
   return await userRepository.getUserById(userId);
 }
+
+export async function getUserByMail(mail: string) {
+  // Validate userId using the userIdValidator
+  return await userRepository.getUserByEmail(mail);
+}
+
 
 // ✅ Update a user by ID
 export async function updateUser(userId: number, updateUserRequest: any) {

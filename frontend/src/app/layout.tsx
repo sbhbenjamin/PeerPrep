@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import React from "react";
 
-import Navbar from '@/components/Navbar';
-import './globals.css';
-import ReduxProvider from './ReduxProvider';
+import Navbar from "@/components/Navbar";
+import "./globals.css";
+import ReduxProvider from "./ReduxProvider";
+import SessionProvider, { NextAuthProvider } from "./SessionProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,9 @@ export default function RootLayout({
         <div className="min-h-screen px-12 py-10">
           <Navbar />
           <div className="mt-8">
-            <ReduxProvider>{children}</ReduxProvider>
+            <NextAuthProvider>
+              <ReduxProvider>{children}</ReduxProvider>
+            </NextAuthProvider>
           </div>
         </div>
       </body>

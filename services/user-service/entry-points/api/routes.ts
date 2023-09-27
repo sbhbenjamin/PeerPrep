@@ -28,9 +28,23 @@ export default function defineRoutes(expressApp: express.Application) {
   })
 
   // get existing user by id
-  router.get('/:id', async (req, res, next) => {
+  router.get('/id/:id', async (req, res, next) => {
     try {
-      const response = await userUseCase.getUser(parseInt(req.params.id, 10));
+      const response = await userUseCase.getUserById(parseInt(req.params.id, 10));
+      if (!response) {
+        res.status(404).end();
+        return;
+      }
+      res.json(response);
+    } catch (error) {
+      next(error);
+      res.json(error);
+    }
+  });
+
+  router.get('/email/:email', async (req, res, next) => {
+    try {
+      const response = await userUseCase.getUserByMail(req.params.email);
       if (!response) {
         res.status(404).end();
         return;

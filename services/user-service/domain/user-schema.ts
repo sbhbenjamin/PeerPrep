@@ -15,6 +15,7 @@ export const AddUserSchema = UserRecordSchema.omit({ id: true });
 // Schema for the updateUser function
 export const UpdateUserSchema = z.object({
   name: z.string(),
+  email: z.string().email(),
   bio: z.string().max(300).nullish(),
   url: z.string().url().nullish()
 });
