@@ -3,9 +3,7 @@ import { AddUserSchema, UpdateUserSchema, userIdSchema } from './user-schema'; /
 import { z } from 'zod';
 
 export async function getAllUser() {
-
   const response = await userRepository.getAllUsers();
-
   return response;
 }
 
@@ -14,9 +12,7 @@ export async function getAllUser() {
 export async function addUser(newUser: any) {
   // Validate newUser against the AddUserSchema
   const validatedData = AddUserSchema.parse(newUser);
-
   const response = await userRepository.addUser(validatedData);
-
   return response;
 }
 
@@ -24,7 +20,6 @@ export async function addUser(newUser: any) {
 export async function deleteUser(userId: number) {
   // Validate userId using the userIdValidator
   userIdSchema.parse(userId);
-
   return await userRepository.deleteUser(userId);
 }
 
@@ -32,7 +27,6 @@ export async function deleteUser(userId: number) {
 export async function getUser(userId: number) {
   // Validate userId using the userIdValidator
   userIdSchema.parse(userId);
-
   return await userRepository.getUserById(userId);
 }
 
@@ -40,9 +34,7 @@ export async function getUser(userId: number) {
 export async function updateUser(userId: number, updateUserRequest: any) {
   // Validate userId using the userIdValidator
   userIdSchema.parse(userId);
-
   // Validate updateUserRequest against the UpdateUserSchema
   const validatedData = UpdateUserSchema.parse(updateUserRequest);
-
   return await userRepository.updateUser(userId, validatedData);
 }

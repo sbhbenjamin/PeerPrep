@@ -27,7 +27,8 @@ function UserProfileForm() {
     name: 'weijun',
     email: 'ang.weijun1999@gmail.com',
   });
-  const dispatch = useDispatch();
+
+  const [isEditable, setIsEditable] = useState<boolean>(true);
 
   const form = useForm<z.infer<typeof UserSchema>>({
     resolver: zodResolver(UserSchema),
@@ -44,7 +45,7 @@ function UserProfileForm() {
       <div className="w-full max-w-screen-xl">
         <div className="flex flex-row justify-between">
           <h1 className="mb-8 flex text-2xl">Profile Page</h1>
-          <Button>Edit</Button>
+          <Button onClick={() => setIsEditable(true)}>Edit</Button>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -53,10 +54,11 @@ function UserProfileForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Display Name</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="This is your public display name."
+                      disabled={isEditable}
                       {...field}
                     />
                   </FormControl>
@@ -89,7 +91,10 @@ function UserProfileForm() {
                 <FormItem>
                   <FormLabel>URL</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://example.com" />
+                    <Input
+                      placeholder="https://example.com"
+                      disabled={isEditable}
+                    />
                   </FormControl>
                 </FormItem>
               )}
@@ -101,7 +106,7 @@ function UserProfileForm() {
                 <FormItem>
                   <FormLabel>Bio</FormLabel>
                   <FormControl>
-                    <Textarea />
+                    <Textarea disabled={isEditable} />
                   </FormControl>
                 </FormItem>
               )}
