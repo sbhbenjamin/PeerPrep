@@ -1,6 +1,5 @@
 "use client";
 
-import { UserSchema } from "@/app/users/types/user.schema";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Form,
@@ -20,28 +19,19 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
+import { CreateUserSchema } from "../types/onboarding.schema";
 
 const OnboardingCard = () => {
   const { data: session, status } = useSession();
 
-  const [userData, setUserData] = useState<User>({
-    name: session?.user?.name!,
-    email: session?.user?.email!,
-  });
+  const userData = {};
 
-  useEffect(() => {
-    setUserData({
-      name: session?.user?.name!,
-      email: session?.user?.email!,
-    });
-  }, [session, status]);
-
-  const form = useForm<z.infer<typeof UserSchema>>({
-    resolver: zodResolver(UserSchema),
+  const form = useForm<z.infer<typeof CreateUserSchema>>({
+    resolver: zodResolver(CreateUserSchema),
     defaultValues: userData,
   });
 
-  function onSubmit(values: z.infer<typeof UserSchema>) {
+  function onSubmit(values: z.infer<typeof CreateUserSchema>) {
     console.log(values);
   }
 
@@ -65,6 +55,7 @@ const OnboardingCard = () => {
                   <FormControl>
                     <Input
                       placeholder="This is your public display name."
+                      defaultValue={session?.user?.name || ""}
                       {...field}
                     />
                   </FormControl>
@@ -83,7 +74,11 @@ const OnboardingCard = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input disabled {...field} />
+                    <Input
+                      disabled
+                      defaultValue={session?.user?.email || ""}
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
                     This is the email your account is associated with.
@@ -98,7 +93,11 @@ const OnboardingCard = () => {
                 <FormItem>
                   <FormLabel>URL</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://example.com" {...field} />
+                    <Input
+                      value={}
+                      placeholder="https://example.com"
+                      {...field}
+                    />
                   </FormControl>
                 </FormItem>
               )}

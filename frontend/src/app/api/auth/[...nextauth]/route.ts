@@ -20,7 +20,7 @@ const handler = NextAuth({
         )
           .then((response) => response.json())
           .catch((error) => 
-            console.log(error)
+            console.log("error", error)
           );
           if (exist != null) {
             return '/onboarding'
