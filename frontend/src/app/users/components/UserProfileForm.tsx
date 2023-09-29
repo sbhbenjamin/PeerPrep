@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { use, useEffect, useState } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
+import React, { use, useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -12,32 +12,36 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { UserSchema } from '../types/user.schema';
-import * as z from 'zod';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectUserData } from '../state/UserSelectors';
-import { User } from '../types/user.type';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { UserSchema } from "../types/user.schema";
+import * as z from "zod";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUserData } from "../state/UserSelectors";
+import { Textarea } from "@/components/ui/textarea";
+import { fetchUserData } from "../state/UserAsyncOperations";
 
-function UserProfileForm() {
+function UserProfileForm({ userId }) {
   const user = useSelector(selectUserData);
-  const [userData, setUserData] = useState<User>({
-    name: 'weijun',
-    email: 'ang.weijun1999@gmail.com',
-  });
-
   const [isEditable, setIsEditable] = useState<boolean>(true);
+  const dispatch = useDispatch();
 
   const form = useForm<z.infer<typeof UserSchema>>({
     resolver: zodResolver(UserSchema),
-    defaultValues: userData,
+    values: user,
   });
+
+  useEffect(() => {
+    dispatch(fetchUserData(userId));
+  }, [userId, dispatch]);
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof UserSchema>) {
-    console.log(values);
+    // console.log(values);
+    console.log(
+      "🚀 ~ file: UserProfileForm.tsx:26 ~ UserProfileForm ~ user:",
+      user
+    );
   }
 
   return (
@@ -45,7 +49,16 @@ function UserProfileForm() {
       <div className="w-full max-w-screen-xl">
         <div className="flex flex-row justify-between">
           <h1 className="mb-8 flex text-2xl">Profile Page</h1>
-          <Button onClick={() => setIsEditable(true)}>Edit</Button>
+          <Button
+            onClick={() => {
+              console.log(
+                "🚀 ~ file: UserProfileForm.tsx:26 ~ UserProfileForm ~ user:",
+                user
+              );
+            }}
+          >
+            Edit
+          </Button>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

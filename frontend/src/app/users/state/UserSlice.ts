@@ -4,7 +4,7 @@ import { fetchUserData}  from './UserAsyncOperations'
 import { boolean } from "zod";
 import { stat } from "fs";
 
-const initialState: User = {name: 'Hi', email: 'ang.weijun1999@gmail.com'}
+const initialState: User = {name: '', email: ''}
 
 const userSlice = createSlice({
   name: 'user',
@@ -15,7 +15,16 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
+    builder      
+    .addCase(fetchUserData.pending, (state) => {
+        //TODO Loader
+      })
+      .addCase(fetchUserData.fulfilled, (state, action) => {
+        return action.payload;
+      })
+      .addCase(fetchUserData.rejected, (state, action) => {
+        // TODO Error
+      });
   },
 });
 
