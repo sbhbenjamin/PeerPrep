@@ -1,4 +1,5 @@
 "use client";
+
 import RegistrationModal from "@/app/registration/components/RegistrationModal";
 import React from "react";
 

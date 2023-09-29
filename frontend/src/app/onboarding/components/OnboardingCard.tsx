@@ -25,7 +25,6 @@ import { AppDispatch } from "@/app/store";
 const OnboardingCard = () => {
   const { data: session, status } = useSession();
   const dispatch = useDispatch<AppDispatch>();
-
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
     values: {
@@ -35,24 +34,17 @@ const OnboardingCard = () => {
       bio: null,
     },
   });
-
   function onSubmit(values: z.infer<typeof CreateUserSchema>) {
     dispatch(createUser(values));
   }
-
   if (status === "loading") {
     return <p>Loading...</p>;
   }
   if (!session) {
-    return <h1>Login</h1>;
+    return <h1>Not Authenticated</h1>;
   } else {
     return (
       <Card className="p-6 w-3/8">
-        <Button
-          onClick={() => {
-            console.log(form.getValues());
-          }}
-        ></Button>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
