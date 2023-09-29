@@ -10,9 +10,11 @@ export async function getAllUser() {
 
 // Define a Zod validator for user ID
 // ✅ Validate and add a new user
+
+// TODO add type
 export async function addUser(newUser: any) {
   // Validate newUser against the AddUserSchema
-  await assertUserNotExistsByMail(newUser.mail)
+  await assertUserNotExistsByMail(newUser.email)
   const validatedData = AddUserSchema.parse(newUser);
   const response = await userRepository.addUser(validatedData);
   return response;
@@ -45,7 +47,7 @@ export async function getUserByMail(mail: string) {
 export async function updateUser(userId: number, updateUserRequest: any) {
   // Validate userId using the userIdValidator
   userIdSchema.parse(userId);
-  await assertUserNotExistsByMail(updateUserRequest.mail)
+  await assertUserNotExistsByMail(updateUserRequest.email)
   // Validate updateUserRequest against the UpdateUserSchema
   const validatedData = UpdateUserSchema.parse(updateUserRequest);
   return await userRepository.updateUser(userId, validatedData);

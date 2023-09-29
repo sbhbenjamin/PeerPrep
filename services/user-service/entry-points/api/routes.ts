@@ -6,7 +6,7 @@ import { err } from 'pino-std-serializers';
 export default function defineRoutes(expressApp: express.Application) {
   const router = express.Router();
 
-  router.post('/createUser',validateAddUserInput ,async (req, res, next) => {
+  router.post('/',validateAddUserInput ,async (req, res, next) => {
     try {
       // ✅ Best Practice: Using the 3-tier architecture, routes/controller are kept thin, logic is encapsulated in a dedicated domain folder
       const addUserResponse = await userUseCase.addUser(req.body);
@@ -16,7 +16,7 @@ export default function defineRoutes(expressApp: express.Application) {
     }
   });
 
-  router.get('/getUsers', async (req, res, next) => {
+  router.get('/', async (req, res, next) => {
     try {
       const response = await userUseCase.getAllUser();
       res.json(response);

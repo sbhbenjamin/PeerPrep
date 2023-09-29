@@ -9,7 +9,7 @@ export async function assertUserExistsById(id: number) {
 
 export async function assertUserNotExistsByMail(mail: string) {
     const user = await userRepository.getUserByEmail(mail);
-    if (!user) {
+    if (user) {
         throw new Error("User already exist")
     }
 }
