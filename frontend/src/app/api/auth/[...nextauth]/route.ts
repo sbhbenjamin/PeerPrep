@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-import { err } from "pino-std-serializers";
 
 const handler = NextAuth({
   providers: [
@@ -14,19 +13,8 @@ const handler = NextAuth({
       return session
     },
     async signIn({ user, account, profile, email, credentials }) {
-      if (account?.provider === "github" && profile?.email) {
-        const exist = fetch(
-          "http://localhost:2000/user/email/" + profile?.email
-        )
-          .then((response) => response.json())
-          .catch((error) => 
-            console.log("error", error)
-          );
-          if (exist != null) {
-            return '/onboarding'
-          }
-          return '/onboarding'
-
+    if (account?.provider === "github" && profile?.email) {
+        return "/onboarding";
       }
       return true;
     },

@@ -6,6 +6,18 @@ const cors = require('cors');
 
 let connection: Server;
 
+function errorHandler(err, req, res, next) {
+  console.error(err); // Log the error for debugging purposes
+
+  // Handle specific errors or send a generic error response
+  if (err instanceof YourCustomError) {
+    // Handle a specific type of error (e.g., validation error)
+    res.status(400).json({ error: err.message });
+  } else {
+    // Handle other types of errors with a generic response
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
 
 
 // ️️️✅ Best Practice: API exposes a start/stop function to allow testing control WHEN this should happen

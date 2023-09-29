@@ -18,17 +18,25 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { CreateUserSchema } from "../types/onboarding.schema";
+import { useDispatch } from "react-redux";
+import { createUser } from "../state/OnboardingAsyncCalls";
 
 const OnboardingCard = () => {
   const { data: session, status } = useSession();
+  const dispatch = useDispatch();
 
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
-    defaultValues: { name: "", email: "", url: null, bio: null },
+    values: {
+      name: session?.user?.name!,
+      email: session?.user?.email!,
+      url: null,
+      bio: null,
+    },
   });
 
   function onSubmit(values: z.infer<typeof CreateUserSchema>) {
-    console.log(values);
+    dispatch(createUser(values));
   }
 
   if (status === "loading") {
@@ -39,6 +47,11 @@ const OnboardingCard = () => {
   } else {
     return (
       <Card className="p-6 w-3/8">
+        <Button
+          onClick={() => {
+            console.log(form.getValues());
+          }}
+        ></Button>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -88,11 +101,7 @@ const OnboardingCard = () => {
                 <FormItem>
                   <FormLabel>URL</FormLabel>
                   <FormControl>
-                    <Input
-                      defaultValue={null}
-                      placeholder="https://example.com"
-                      {...field}
-                    />
+                    <Input placeholder="https://example.com" {...field} />
                   </FormControl>
                 </FormItem>
               )}

@@ -13,7 +13,6 @@ export default function defineRoutes(expressApp: express.Application) {
       return res.json(addUserResponse);
     } catch (error) {
       next(error);
-      res.json(error);
     }
   });
 
@@ -23,7 +22,6 @@ export default function defineRoutes(expressApp: express.Application) {
       res.json(response);
     } catch (error) {
       next(error);
-      res.json(error);
     }
   })
 
@@ -38,21 +36,15 @@ export default function defineRoutes(expressApp: express.Application) {
       res.json(response);
     } catch (error) {
       next(error);
-      res.json(error);
     }
   });
 
   router.get('/email/:email', async (req, res, next) => {
     try {
       const response = await userUseCase.getUserByMail(req.params.email);
-      if (!response) {
-        res.status(404).end();
-        return;
-      }
       res.json(response);
     } catch (error) {
-      next(error);
-      res.json(error);
+      next(error)
     }
   });
 
@@ -67,17 +59,16 @@ export default function defineRoutes(expressApp: express.Application) {
       res.json(response);
     } catch (error) {
       next(error);
-      res.json(error);
     }
   });
 
   // delete user by id
-  router.delete('/:id', async (req, res) => {
+  router.delete('/:id', async (req, res, next) => {
     try {
       await userUseCase.deleteUser(parseInt(req.params.id, 10));
       res.status(204).end();
     } catch (error) {
-      res.status(404)
+      next(error);
     }
   });
 

@@ -10,15 +10,18 @@ const onboarding = createSlice({
     extraReducers: (builder) => {
         // Do something while pending if you want.
         builder.addCase(createUser.pending, (state, action) => {
-            // TODO : Throw loading screens
+            // TODO : Throw loading 
+            console.log("createUser.pending")
         })
         // Do something when passes.
         builder.addCase(createUser.fulfilled, (state, action) => {
             // TODO : redirect to profile page
+            console.log("createUser.fulfilled")
         })
         // Do something if fails.
         builder.addCase(createUser.rejected, (state, action) => {
             // TODO : Throw error
+            console.log("createUser.reject")
         })
     }})
 
