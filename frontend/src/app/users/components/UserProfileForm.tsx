@@ -19,11 +19,21 @@ import * as z from "zod";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUserData } from "../state/UserSelectors";
 import { Textarea } from "@/components/ui/textarea";
-import { fetchUserData } from "../state/UserAsyncOperations";
+import { fetchUserData, updateUserData } from "../state/UserAsyncOperations";
+import ConfirmEditDialog from "./ConfirmEditDialog";
+import { Alert } from "@/components/ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogHeader,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { AlertDialogContent } from "@radix-ui/react-alert-dialog";
 
 function UserProfileForm({ userId }) {
   const user = useSelector(selectUserData);
-  const [isEditable, setIsEditable] = useState<boolean>(true);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const dispatch = useDispatch();
 
   const form = useForm<z.infer<typeof UserSchema>>({
@@ -35,13 +45,9 @@ function UserProfileForm({ userId }) {
     dispatch(fetchUserData(userId));
   }, [userId, dispatch]);
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof UserSchema>) {
-    // console.log(values);
-    console.log(
-      "🚀 ~ file: UserProfileForm.tsx:26 ~ UserProfileForm ~ user:",
-      user
-    );
+    console.log(values);
+    dispatch(updateUserData({ id: userId, ...values }));
   }
 
   return (
@@ -51,17 +57,14 @@ function UserProfileForm({ userId }) {
           <h1 className="mb-8 flex text-2xl">Profile Page</h1>
           <Button
             onClick={() => {
-              console.log(
-                "🚀 ~ file: UserProfileForm.tsx:26 ~ UserProfileForm ~ user:",
-                user
-              );
+              setIsDisabled(!isDisabled);
             }}
           >
             Edit
           </Button>
         </div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="name"
@@ -71,7 +74,7 @@ function UserProfileForm({ userId }) {
                   <FormControl>
                     <Input
                       placeholder="This is your public display name."
-                      disabled={isEditable}
+                      disabled={isDisabled}
                       {...field}
                     />
                   </FormControl>
@@ -106,7 +109,7 @@ function UserProfileForm({ userId }) {
                   <FormControl>
                     <Input
                       placeholder="https://example.com"
-                      disabled={isEditable}
+                      disabled={isDisabled}
                     />
                   </FormControl>
                 </FormItem>
@@ -119,11 +122,12 @@ function UserProfileForm({ userId }) {
                 <FormItem>
                   <FormLabel>Bio</FormLabel>
                   <FormControl>
-                    <Textarea disabled={isEditable} />
+                    <Textarea disabled={isDisabled} />
                   </FormControl>
                 </FormItem>
               )}
             />
+            {isDisabled ? <></> : <Button type="submit">Submit</Button>}
           </form>
         </Form>
       </div>

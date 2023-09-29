@@ -119,8 +119,9 @@ const OnboardingCard = () => {
               )}
             />
             <div className="flex w-full gap-5">
-              <Button className="ml-auto min-w-30">Skip</Button>
-              <Button className="min-w-30">Submit</Button>
+              <Button className="min-w-30" type="submit">
+                Submit
+              </Button>
             </div>
           </form>
         </Form>

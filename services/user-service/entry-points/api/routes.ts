@@ -49,7 +49,7 @@ export default function defineRoutes(expressApp: express.Application) {
   });
 
   // update user by id
-  router.put('/:id', validateUpdateUserInput, async (req, res, next) => {
+  router.put('/id/:id', validateUpdateUserInput, async (req, res, next) => {
     try {
       const response = await userUseCase.updateUser(parseInt(req.params.id, 10), req.body);
       if (!response) {
@@ -63,7 +63,7 @@ export default function defineRoutes(expressApp: express.Application) {
   });
 
   // delete user by id
-  router.delete('/:id', async (req, res, next) => {
+  router.delete('/id/:id', async (req, res, next) => {
     try {
       await userUseCase.deleteUser(parseInt(req.params.id, 10));
       res.status(204).end();
