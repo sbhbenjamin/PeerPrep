@@ -11,6 +11,9 @@ export const fetchUserData = createAsyncThunk(
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
+    if (response.status == 404) {
+      throw new Error('No such user');
+    }
     const data = await response.json();
     return data;
   }
@@ -22,11 +25,29 @@ export const updateUserData = createAsyncThunk(
     try {
         const apiUrl = `${USERS_MICROSERVICE_URL}/user/id/${userData.id}`;
         const response = await fetch(apiUrl, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(userData),
+          });
+      return response.json();
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  'user/deleteUser',
+  async (userId: number) => {
+    try {
+        const apiUrl = `${USERS_MICROSERVICE_URL}/user/id/${userId}`;
+        const response = await fetch(apiUrl, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
           });
       return response.json();
     } catch (error) {

@@ -45,10 +45,8 @@ export async function getUserByMail(mail: string) {
 
 // ✅ Update a user by ID
 export async function updateUser(userId: number, updateUserRequest: any) {
-  // Validate userId using the userIdValidator
   userIdSchema.parse(userId);
   await assertUserExistsById(userId);
-  // Validate updateUserRequest against the UpdateUserSchema
   const validatedData = UpdateUserSchema.parse(updateUserRequest);
   return await userRepository.updateUser(userId, validatedData);
 }

@@ -19,7 +19,11 @@ import * as z from "zod";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUserData } from "../state/UserSelectors";
 import { Textarea } from "@/components/ui/textarea";
-import { fetchUserData, updateUserData } from "../state/UserAsyncOperations";
+import {
+  deleteUser,
+  fetchUserData,
+  updateUserData,
+} from "../state/UserAsyncOperations";
 import ConfirmEditDialog from "./ConfirmEditDialog";
 import { Alert } from "@/components/ui/alert";
 import {
@@ -46,8 +50,16 @@ function UserProfileForm({ userId }) {
   }, [userId, dispatch]);
 
   function onSubmit(values: z.infer<typeof UserSchema>) {
-    console.log(values);
+    console.log({ id: userId, ...values });
     dispatch(updateUserData({ id: userId, ...values }));
+  }
+
+  function deleteUserAccount() {
+    dispatch(deleteUser(userId));
+  }
+
+  if (user.id == 0) {
+    return <h1>No such user</h1>;
   }
 
   return (
@@ -64,7 +76,10 @@ function UserProfileForm({ userId }) {
           </Button>
         </div>
         <Form {...form}>
-          <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            className="space-y-8 flex flex-col"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
             <FormField
               control={form.control}
               name="name"
@@ -110,6 +125,7 @@ function UserProfileForm({ userId }) {
                     <Input
                       placeholder="https://example.com"
                       disabled={isDisabled}
+                      {...field}
                     />
                   </FormControl>
                 </FormItem>
@@ -122,12 +138,13 @@ function UserProfileForm({ userId }) {
                 <FormItem>
                   <FormLabel>Bio</FormLabel>
                   <FormControl>
-                    <Textarea disabled={isDisabled} />
+                    <Textarea disabled={isDisabled} {...field} />
                   </FormControl>
                 </FormItem>
               )}
             />
             {isDisabled ? <></> : <Button type="submit">Submit</Button>}
+            <Button onClick={deleteUserAccount}>Delete Profile</Button>
           </form>
         </Form>
       </div>
