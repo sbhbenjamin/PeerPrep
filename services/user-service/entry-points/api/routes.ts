@@ -29,11 +29,7 @@ export default function defineRoutes(expressApp: express.Application) {
   router.get('/id/:id', async (req, res, next) => {
     try {
       const response = await userUseCase.getUserById(parseInt(req.params.id, 10));
-      if (!response) {
-        res.status(404).end();
-        return;
-      }
-      res.json(response);
+      res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -42,7 +38,7 @@ export default function defineRoutes(expressApp: express.Application) {
   router.get('/email/:email', async (req, res, next) => {
     try {
       const response = await userUseCase.getUserByMail(req.params.email);
-      res.json(response);
+      res.status(202).json(response);
     } catch (error) {
       next(error)
     }
@@ -52,11 +48,7 @@ export default function defineRoutes(expressApp: express.Application) {
   router.put('id/:id', validateUpdateUserInput, async (req, res, next) => {
     try {
       const response = await userUseCase.updateUser(parseInt(req.params.id, 10), req.body);
-      if (!response) {
-        res.status(404).end();
-        return;
-      }
-      res.json(response);
+      res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -66,7 +58,7 @@ export default function defineRoutes(expressApp: express.Application) {
   router.delete('/id/:id', async (req, res, next) => {
     try {
       await userUseCase.deleteUser(parseInt(req.params.id, 10));
-      res.status(204).end();
+      res.status(200).end();
     } catch (error) {
       next(error);
     }

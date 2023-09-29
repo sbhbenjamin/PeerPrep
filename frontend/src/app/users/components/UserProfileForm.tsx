@@ -34,11 +34,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { AlertDialogContent } from "@radix-ui/react-alert-dialog";
+import { AppDispatch } from "@/app/store";
 
 function UserProfileForm({ userId }) {
   const user = useSelector(selectUserData);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const form = useForm<z.infer<typeof UserSchema>>({
     resolver: zodResolver(UserSchema),

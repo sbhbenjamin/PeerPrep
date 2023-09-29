@@ -1,7 +1,7 @@
 import * as userRepository from '../data-access/user-repository';
 import { AddUserSchema, UpdateUserSchema, userIdSchema } from './user-schema'; // Import your schemas here
 import { z } from 'zod';
-import { assertUserExistsById, assertUserNotExistsByMail } from './user-validator';
+import { assertUserExistsById, assertUserExistsByMail, assertUserNotExistsByMail } from './user-validator';
 
 export async function getAllUser() {
   const response = await userRepository.getAllUsers();
@@ -38,7 +38,7 @@ export async function getUserById(userId: number) {
 
 export async function getUserByMail(mail: string) {
   // Validate userId using the userIdValidator
-  await assertUserNotExistsByMail(mail)
+  await assertUserExistsByMail(mail)
   return await userRepository.getUserByEmail(mail);
 }
 

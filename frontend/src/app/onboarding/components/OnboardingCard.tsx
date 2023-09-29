@@ -20,10 +20,11 @@ import { useSession } from "next-auth/react";
 import { CreateUserSchema } from "../types/onboarding.schema";
 import { useDispatch } from "react-redux";
 import { createUser } from "../state/OnboardingAsyncCalls";
+import { AppDispatch } from "@/app/store";
 
 const OnboardingCard = () => {
   const { data: session, status } = useSession();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),

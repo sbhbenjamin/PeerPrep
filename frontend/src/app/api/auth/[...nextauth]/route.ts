@@ -14,7 +14,13 @@ const handler = NextAuth({
     },
     async signIn({ user, account, profile, email, credentials }) {
     if (account?.provider === "github" && profile?.email) {
-        return "/onboarding";
+        const res = await fetch(`http://localhost:2000/user/email/${profile?.email}`)
+        if (!res.ok) {
+          new Error("Something went wrong")
+        }
+        if (res.status != 200) {
+          return '/onboarding'
+        }
       }
       return true;
     },
