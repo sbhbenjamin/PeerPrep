@@ -1,6 +1,5 @@
-import React from 'react';
-import LoginInForm from './components/LoginForm';
-import OnboardingCard from './components/OnboardingCard';
+import React from "react";
+import OnboardingCard from "./components/OnboardingCard";
 
 const page = () => {
   return (

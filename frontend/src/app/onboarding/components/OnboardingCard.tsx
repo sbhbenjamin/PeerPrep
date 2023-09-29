@@ -10,10 +10,8 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "../../users/types/user.type";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -24,11 +22,9 @@ import { CreateUserSchema } from "../types/onboarding.schema";
 const OnboardingCard = () => {
   const { data: session, status } = useSession();
 
-  const userData = {};
-
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
-    defaultValues: userData,
+    defaultValues: { name: "", email: "", url: null, bio: null },
   });
 
   function onSubmit(values: z.infer<typeof CreateUserSchema>) {
@@ -38,7 +34,6 @@ const OnboardingCard = () => {
   if (status === "loading") {
     return <p>Loading...</p>;
   }
-
   if (!session) {
     return <h1>Login</h1>;
   } else {
@@ -94,7 +89,7 @@ const OnboardingCard = () => {
                   <FormLabel>URL</FormLabel>
                   <FormControl>
                     <Input
-                      value={}
+                      defaultValue={null}
                       placeholder="https://example.com"
                       {...field}
                     />
