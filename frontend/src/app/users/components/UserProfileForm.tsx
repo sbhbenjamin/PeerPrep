@@ -51,7 +51,6 @@ function UserProfileForm({ userId }) {
   }, [userId, dispatch]);
 
   function onSubmit(values: z.infer<typeof UserSchema>) {
-    console.log({ id: userId, ...values });
     dispatch(updateUserData({ id: userId, ...values }));
   }
 
