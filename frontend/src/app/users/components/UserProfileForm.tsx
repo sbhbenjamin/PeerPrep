@@ -16,14 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { UserSchema } from "../types/user.schema";
 import * as z from "zod";
-import { useSelector, useDispatch } from "react-redux";
-import { selectUserData } from "../state/UserSelectors";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  deleteUser,
-  fetchUserData,
-  updateUserData,
-} from "../state/UserAsyncOperations";
+import { fetchUser, updateUser } from "../state/UserAsyncOperations";
 import ConfirmEditDialog from "./ConfirmEditDialog";
 import { Alert } from "@/components/ui/alert";
 import {
@@ -35,31 +29,33 @@ import {
 } from "@/components/ui/alert-dialog";
 import { AlertDialogContent } from "@radix-ui/react-alert-dialog";
 import { AppDispatch } from "@/app/store";
+import { User } from "../types/user.type";
+import { revalidatePath } from "next/cache";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 function UserProfileForm({ userId }) {
-  const user = useSelector(selectUserData);
+  const queryClient = useQueryClient();
+  const mutateClient = useMutation({
+    mutationFn: updateUser,
+    onSuccess: () => queryClient.invalidateQueries("user"),
+  });
+
+  const { data } = useQuery(["user", userId], () => fetchUser(userId));
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
-  const dispatch = useDispatch<AppDispatch>();
 
   const form = useForm<z.infer<typeof UserSchema>>({
     resolver: zodResolver(UserSchema),
-    values: user,
+    values: data,
   });
 
-  useEffect(() => {
-    dispatch(fetchUserData(userId));
-  }, [userId, dispatch]);
-
   function onSubmit(values: z.infer<typeof UserSchema>) {
-    dispatch(updateUserData({ id: userId, ...values }));
+    console.log("Running");
+    mutateClient.mutate({ id: userId, ...values });
+    console.log("Running");
   }
 
   function deleteUserAccount() {
-    dispatch(deleteUser(userId));
-  }
-
-  if (user.id == 0) {
-    return <h1>No such user</h1>;
+    console.log("Delete");
   }
 
   return (
@@ -144,7 +140,9 @@ function UserProfileForm({ userId }) {
               )}
             />
             {isDisabled ? <></> : <Button type="submit">Submit</Button>}
-            <Button onClick={deleteUserAccount}>Delete Profile</Button>
+            <Button type="button" onClick={deleteUserAccount}>
+              Delete
+            </Button>
           </form>
         </Form>
       </div>

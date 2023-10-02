@@ -1,7 +1,6 @@
 import express from 'express';
 import * as userUseCase from '../../domain/user-use-case';
 import { validateAddUserInput, validateUpdateUserInput } from './validators';
-import { err } from 'pino-std-serializers';
 
 export default function defineRoutes(expressApp: express.Application) {
   const router = express.Router();
@@ -45,7 +44,7 @@ export default function defineRoutes(expressApp: express.Application) {
   });
 
   // update user by id
-  router.put('id/:id', validateUpdateUserInput, async (req, res, next) => {
+  router.put('/id/:id', validateUpdateUserInput, async (req, res, next) => {
     try {
       const response = await userUseCase.updateUser(parseInt(req.params.id, 10), req.body);
       res.status(200).json(response);
