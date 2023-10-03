@@ -19,24 +19,33 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { CreateUserSchema } from "../types/onboarding.schema";
 import { useDispatch } from "react-redux";
-import { createUser } from "../state/OnboardingAsyncCalls";
 import { AppDispatch } from "@/app/store";
+import { useCreateUserMutation } from "../state/OnboardingRoutes";
+import { useRouter } from "next/navigation";
+import { User } from "@/app/users/types/user.type";
 
 const OnboardingCard = () => {
   const { data: session, status } = useSession();
+  const router = useRouter();
+  const [createUser, { isLoading, isError, error }] = useCreateUserMutation();
+
   const dispatch = useDispatch<AppDispatch>();
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
-    defaultValues: {
+    values: {
       name: session?.user?.name!,
       email: session?.user?.email!,
       url: null,
       bio: null,
     },
   });
+
   function onSubmit(values: z.infer<typeof CreateUserSchema>) {
-    dispatch(createUser(values));
+    createUser(values).then((res) => {
+      router.push(`/users/${res.data.id}`);
+    });
   }
+
   if (status === "loading") {
     return <p>Loading...</p>;
   }

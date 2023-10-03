@@ -10,9 +10,7 @@ const page = ({ params }: { params: { id: number } }) => {
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-screen-xl">
-        <Suspense fallback={<p>Loading</p>}>
-          <UserProfileForm userId={params.id} />ß
-        </Suspense>
+        <UserProfileForm userId={params.id} />
       </div>
     </div>
   );

@@ -12,9 +12,16 @@ const userApi = rootApi.injectEndpoints({
         method: 'PUT',
         body: userData,
       }),
-    })
+    }),
+    deleteUser: build.mutation<void, number>({
+      query: (userId) => ({
+        url: `user/id/${userId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
+  
   overrideExisting: false,
 })
 
-export const { useGetUserQuery, useUpdateUserMutation } = userApi
+export const { useGetUserQuery, useUpdateUserMutation, useDeleteUserMutation } = userApi
