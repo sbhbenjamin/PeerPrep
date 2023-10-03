@@ -5,7 +5,7 @@ const USERS_MICROSERVICE_URL = process.env.NEXT_PUBLIC_USERS_MICROSERVICE_URL;
 
 export const fetchUser = async (id: number) => {
   const user = await fetch(
-    `${process.env.NEXT_PUBLIC_USERS_MICROSERVICE_URL}/user/id/${id}`
+    `${process.env.NEXT_PUBLIC_USERS_MICROSERVICE_URL}/user/id/${id}`, {next: { tags: ['user'] }}
   ).then((res) => {
     if (!res.ok) {
       throw new Error("No such User");
@@ -16,9 +16,9 @@ export const fetchUser = async (id: number) => {
 };
 
 export const updateUser = async (user: User) => {
-    console.log("🚀 ~ file: UserAsyncOperations.ts:19 ~ updateUser ~ user:", user)
     const apiUrl = `${USERS_MICROSERVICE_URL}/user/id/${user.id}`;
     const res = await fetch(apiUrl, {
+        next: { tags: ['user'] } ,
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

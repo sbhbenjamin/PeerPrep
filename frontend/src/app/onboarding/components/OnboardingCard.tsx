@@ -27,7 +27,7 @@ const OnboardingCard = () => {
   const dispatch = useDispatch<AppDispatch>();
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
-    values: {
+    defaultValues: {
       name: session?.user?.name!,
       email: session?.user?.email!,
       url: null,
@@ -67,7 +67,6 @@ const OnboardingCard = () => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="email"
