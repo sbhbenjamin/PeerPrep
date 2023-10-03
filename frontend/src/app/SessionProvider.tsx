@@ -9,11 +9,7 @@ type Props = {
 
 export const NextAuthProvider = ({ children }: Props) => {
   const queryClient = new QueryClient();
-  return (
-    <QueryClientProvider client={queryClient}>
-      <SessionProvider>{children}</SessionProvider>
-    </QueryClientProvider>
-  );
+  return <SessionProvider>{children}</SessionProvider>;
 };
 
 export default NextAuthProvider;

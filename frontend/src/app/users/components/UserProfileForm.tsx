@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, use, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -33,35 +33,20 @@ import { User } from "../types/user.type";
 import { revalidatePath } from "next/cache";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import page from "../[id]/page";
+import { useGetUserQuery, useUpdateUserMutation } from "../state/UserRoutes";
 
 function UserProfileForm({ userId }) {
-  const queryClient = useQueryClient();
-  const mutateClient = useMutation({
-    mutationFn: updateUser,
-    onSuccess: () => {
-      queryClient.invalidateQueries("user");
-      setIsDisabled(true);
-    },
-  });
-  const { data, isError, isSuccess, isLoading } = useQuery(
-    ["user", userId],
-    () => fetchUser(userId),
-    { retry: 2 }
-  );
-
-  if (isError) {
-    throw new Error("i");
-  }
-
+  const { data: user, error, isLoading } = useGetUserQuery(userId);
+  const [updateUser] = useUpdateUserMutation();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
-
   const form = useForm<z.infer<typeof UserSchema>>({
     resolver: zodResolver(UserSchema),
-    values: data,
+    values: user,
   });
 
   function onSubmit(values: z.infer<typeof UserSchema>) {
-    mutateClient.mutate({ id: userId, ...values });
+    console.log(values);
+    updateUser({ id: userId, ...values });
   }
 
   function deleteUserAccount() {
