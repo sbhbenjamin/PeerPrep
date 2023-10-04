@@ -3,8 +3,8 @@ import { Inter } from "next/font/google";
 import React from "react";
 import Navbar from "@/components/Navbar";
 import "./globals.css";
-import ReduxProvider from "./ReduxProvider";
-import SessionProvider, { NextAuthProvider } from "./SessionProvider";
+import Providers from "./Providers";
+import { useSession } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,17 +19,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <div className="min-h-screen px-12 py-10">
-          <Navbar />
-          <div className="mt-8">
-            <NextAuthProvider>
-              <ReduxProvider>{children}</ReduxProvider>
-            </NextAuthProvider>
+    <Providers>
+      <html lang="en">
+        <body className={inter.className}>
+          <div className="min-h-screen px-12 py-10">
+            <Navbar />
+            <div className="mt-8">{children}</div>
           </div>
-        </div>
-      </body>
-    </html>
+        </body>
+      </html>
+    </Providers>
   );
 }

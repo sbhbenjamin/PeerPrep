@@ -1,20 +1,26 @@
 import { User } from '@/app/users/types/user.type';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { AuthenticationDetails } from '../types/authentication.types';
 
-const initialState: User = { id: 0, name: '', email: ''}
+const initialState: AuthenticationDetails = {currentUser: null, sessionToken: null, isLoggedIn: false}
 
 const authSlice = createSlice({
-  name: 'user',
+  name: 'auth',
   initialState,
   reducers: {
-    updateCurrUser: (state, action: PayloadAction<User>) => {
-      state.id = action.payload.id;
-      state.name = action.payload.name;
-      state.email = action.payload.email;
+    login: (state, action: PayloadAction<AuthenticationDetails>) => {
+      state.currentUser = action.payload.currentUser;
+      state.sessionToken = action.payload.sessionToken;
+      state.isLoggedIn = true;
     },
+    signOut: (state) => {
+        state.currentUser = null,
+        state.sessionToken = null,
+        state.isLoggedIn = false
+    }
   },
 });
 
-export const { updateCurrUser } = authSlice.actions;
+export const { signOut, login} = authSlice.actions;
 
 export default authSlice.reducer;
