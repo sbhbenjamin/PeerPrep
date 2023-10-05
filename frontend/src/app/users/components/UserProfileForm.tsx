@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
@@ -44,9 +44,9 @@ function UserProfileForm({ userId }: { userId: number }) {
     updateUser({ id: userId, ...values });
   }
 
-  function deleteUserAccount() {
+  const deleteUserAccount = useCallback(() => {
     deleteUser(userId);
-  }
+  }, []); // Add any dependencies here
 
   return (
     <div className="flex w-full content-center justify-center">

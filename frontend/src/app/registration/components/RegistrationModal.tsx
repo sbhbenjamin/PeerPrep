@@ -22,7 +22,7 @@ const RegistrationModal = () => (
         Login to PeerPrep
       </AlertDialogHeader>
       <Button>
-        <Icons.google className="mr-2 h-4 w-4" />
+        <Icons.GOOGLE className="mr-2 h-4 w-4" />
         Login via Google
       </Button>
       <Button
@@ -30,7 +30,7 @@ const RegistrationModal = () => (
           signIn("github");
         }}
       >
-        <Icons.gitHub className="mr-2 h-4 w-4" />
+        <Icons.GITHUB className="mr-2 h-4 w-4" />
         Login via Github
       </Button>
     </AlertDialogContent>

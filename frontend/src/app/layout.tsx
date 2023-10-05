@@ -5,7 +5,7 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 
 import "./globals.css";
-import Providers from "./Providers";
+import { Providers } from "./Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 

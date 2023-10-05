@@ -12,12 +12,12 @@ const handler = NextAuth({
     async session({ session, user, token }) {
       return session;
     },
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ account, profile }) {
       if (account?.provider === "github" && profile?.email) {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_USERS_MICROSERVICE_URL}/user/email/${profile?.email}`,
         );
-        if (res.status != 202) {
+        if (res.status !== 202) {
           return "/onboarding";
         }
       }

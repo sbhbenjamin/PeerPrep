@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import type * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,14 +24,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import type { AppDispatch } from "@/app/store";
-
 const OnboardingCard = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [createUser, { isLoading, isError, error }] = useCreateUserMutation();
+  const [createUser] = useCreateUserMutation();
 
-  const dispatch = useDispatch<AppDispatch>();
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
     values: {
