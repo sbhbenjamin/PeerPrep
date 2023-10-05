@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {}
+const initialState = {};
 
 const onboarding = createSlice({
-    name: 'onboarding',
-    initialState,
-    reducers: {},
-    })
+  name: "onboarding",
+  initialState,
+  reducers: {},
+});
 
-export default onboarding.reducer
+export default onboarding.reducer;

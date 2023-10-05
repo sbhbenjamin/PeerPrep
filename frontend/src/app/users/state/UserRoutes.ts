@@ -1,27 +1,27 @@
-import {rootApi} from '../../RootApi.ts'
-import { User } from '../types/user.type.ts'
+import { rootApi } from "../../RootApi.ts";
+import type { User } from "../types/user.type.ts";
 
 const userApi = rootApi.injectEndpoints({
   endpoints: (build) => ({
     getUser: build.query<User, number>({
-      query: (id) => ({url: `user/id/${id}`})
+      query: (id) => ({ url: `user/id/${id}` }),
     }),
     updateUser: build.mutation<User, Partial<User>>({
-        query: (userData) => ({
+      query: (userData) => ({
         url: `user/id/${userData.id}`,
-        method: 'PUT',
+        method: "PUT",
         body: userData,
       }),
     }),
     deleteUser: build.mutation<void, number>({
       query: (userId) => ({
         url: `user/id/${userId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
     }),
   }),
-  
   overrideExisting: false,
-})
+});
 
-export const { useGetUserQuery, useUpdateUserMutation, useDeleteUserMutation } = userApi
+export const { useGetUserQuery, useUpdateUserMutation, useDeleteUserMutation } =
+  userApi;

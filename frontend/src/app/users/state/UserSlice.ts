@@ -1,14 +1,13 @@
-import { User } from "../types/user.type";
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-const initialState: User = { id: 0, name: '', email: '', bio: null, url: null}
+import type { User } from "../types/user.type";
+
+const initialState: User = { id: 0, name: "", email: "", bio: null, url: null };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
-  reducers: {
-  }
+  reducers: {},
 });
 
-// Export the reducer
 export default userSlice.reducer;

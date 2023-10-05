@@ -54,7 +54,6 @@ export async function updateUser(id: number, updateUserRequest: Partial<Omit<Use
     where: { id },
     data: { ...updateUserRequest },
   });
-
   return resultUser;
 }
 

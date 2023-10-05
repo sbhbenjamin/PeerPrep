@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
+
 import { login, signOut } from "./auth/state/AuthSlice";
 
 type Props = {
@@ -28,9 +29,8 @@ const AuthenticationLayer = ({ children }: Props) => {
       dispatch(signOut());
     }
   }, [session]);
-  console.log(session);
 
-  return <html>{children}</html>;
+  return <>{children}</>;
 };
 
 export default AuthenticationLayer;

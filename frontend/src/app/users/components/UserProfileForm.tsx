@@ -1,8 +1,18 @@
 "use client";
 
-import React, { FC, Suspense, useEffect, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import type * as z from "zod";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+  useDeleteUserMutation,
+  useGetUserQuery,
+  useUpdateUserMutation,
+} from "../state/UserRoutes";
+import { UserSchema } from "../types/user.schema";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,32 +21,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UserSchema } from "../types/user.schema";
-import * as z from "zod";
 import { Textarea } from "@/components/ui/textarea";
-import ConfirmEditDialog from "./ConfirmEditDialog";
-import { Alert } from "@/components/ui/alert";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogHeader,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { AlertDialogContent } from "@radix-ui/react-alert-dialog";
-import { AppDispatch } from "@/app/store";
-import { User, UserWithOptionalUrlAndBio } from "../types/user.type";
-import { revalidatePath } from "next/cache";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import page from "../[id]/page";
-import {
-  useDeleteUserMutation,
-  useGetUserQuery,
-  useUpdateUserMutation,
-} from "../state/UserRoutes";
 
 function UserProfileForm({ userId }: { userId: number }) {
   const { data: user, isLoading, isError } = useGetUserQuery(userId);
@@ -62,7 +49,7 @@ function UserProfileForm({ userId }: { userId: number }) {
   }
 
   return (
-    <div className="flex justify-center content-center w-full">
+    <div className="flex w-full content-center justify-center">
       <div className="w-full">
         <div className="flex flex-row justify-between">
           <h1 className="mb-8 flex text-2xl">Profile Page</h1>
@@ -76,7 +63,7 @@ function UserProfileForm({ userId }: { userId: number }) {
         </div>
         <Form {...form}>
           <form
-            className="space-y-3 flex flex-col"
+            className="flex flex-col space-y-3"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <FormField

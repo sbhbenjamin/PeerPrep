@@ -1,15 +1,23 @@
 "use client";
 
-import RegistrationModal from "@/app/registration/components/RegistrationModal";
 import React from "react";
+import { useSelector } from "react-redux";
 
-const Navbar = () => (
-  <div className="flex flex-row justify-between">
-    <div className="font-black">PeerPrep</div>
-    <div className="flex gap-10">
-      <RegistrationModal />
+import UserDropDownMenu from "./UserDropDownMenu";
+import { selectAuthData } from "@/app/auth/state/AuthSelector";
+import RegistrationModal from "@/app/registration/components/RegistrationModal";
+
+const Navbar = () => {
+  const auth = useSelector(selectAuthData);
+
+  return (
+    <div className="flex flex-row justify-between">
+      <div className="font-black">PeerPrep</div>
+      <div className="flex gap-10">
+        {auth.isLoggedIn ? <UserDropDownMenu /> : <RegistrationModal />}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Navbar;
