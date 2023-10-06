@@ -61,7 +61,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
                 </div>
               </AccordionTrigger>
             </CardTitle>
-
             <CardDescription>
               <div className="flex gap-2">
                 {categories.map((category) => (
@@ -77,7 +76,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
               </div>
             </CardDescription>
           </CardHeader>
-
           <CardContent>
             <AccordionContent>
               {description.split("\n").map((line, index) => (

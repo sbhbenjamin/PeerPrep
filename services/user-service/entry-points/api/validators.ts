@@ -2,8 +2,6 @@ import { z } from 'zod';
 import { Request, Response, NextFunction } from 'express';
 import {AddUserSchema, UpdateUserSchema} from '../../domain/user-schema';
 
-// TODO Change
-
 // Middleware to validate addUser input
 export function validateAddUserInput(req: Request, res: Response, next: NextFunction): void {
     try {

@@ -11,7 +11,7 @@ export async function getAllUser() {
 // Define a Zod validator for user ID
 // ✅ Validate and add a new user
 
-// TODO add type
+// TODO Add Types?
 export async function addUser(newUser: any) {
   // Validate newUser against the AddUserSchema
   await assertUserNotExistsByMail(newUser.email)

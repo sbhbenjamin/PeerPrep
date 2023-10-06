@@ -6,6 +6,13 @@ export type User = {
   bio: string | null;
 };
 
+export type EditUseFormInput = {
+  name?: string;
+  email?: string;
+  url?: string;
+  bio?: string;
+};
+
 export type UserWithOptionalUrlAndBio = Omit<User, "url" | "bio"> &
   Partial<Omit<Pick<User, "url" | "bio">, "null">>;
 
