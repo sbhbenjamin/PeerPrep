@@ -14,10 +14,10 @@ export const AddUserSchema = UserRecordSchema.omit({ id: true });
 
 // Schema for the updateUser function
 export const UpdateUserSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  bio: z.string().max(300),
-  url: z.string().url()
+  name: z.string().optional(),
+  email: z.string().email().optional(),
+  bio: z.string().max(300).optional(),
+  url: z.string().url().optional()
 });
 
 export const userIdSchema = z.number().int();
