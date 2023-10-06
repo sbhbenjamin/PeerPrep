@@ -1,10 +1,14 @@
 import { rootApi } from "../../RootApi.ts";
 import type { User } from "../types/user.type.ts";
 
+rootApi.enhanceEndpoints({ addTagTypes: ["User"] });
+
 const userApi = rootApi.injectEndpoints({
   endpoints: (build) => ({
     getUser: build.query<User, number>({
       query: (id) => ({ url: `user/id/${id}` }),
+      // @ts-expect-error
+      providesTags: ["User"],
     }),
     updateUser: build.mutation<User, Partial<User>>({
       query: (userData) => ({
@@ -12,12 +16,16 @@ const userApi = rootApi.injectEndpoints({
         method: "PUT",
         body: userData,
       }),
+      // @ts-expect-error
+      invalidatesTags: ["User"],
     }),
     deleteUser: build.mutation<void, number>({
       query: (userId) => ({
         url: `user/id/${userId}`,
         method: "DELETE",
       }),
+      // @ts-expect-error
+      invalidatesTags: ["User"],
     }),
   }),
   overrideExisting: false,

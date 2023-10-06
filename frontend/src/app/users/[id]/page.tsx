@@ -42,7 +42,7 @@ const page = ({ params }: { params: { id: number } }) => {
             </div>
             <div className="mb-3 flex gap-3">
               <BookMarked />
-              <p>{user?.url || "User has yet to provide a bio"}</p>
+              <p>{user?.bio || "User has yet to provide a bio"}</p>
             </div>
           </CardContent>
         </Card>

@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 import {
   useDeleteUserMutation,
@@ -69,14 +70,14 @@ function EditUserProfileForm({ userId }: { userId: number }) {
         }
         return acc;
       },
-      {} as EditUseFormInput,
+      {} as EditUseFormInput
     );
     updateUser({ id: userId, ...keys });
   }
 
   const deleteUserAccount = useCallback(() => {
     deleteUser(userId);
-  }, []);
+  }, [deleteUser, userId]);
 
   return (
     <Dialog>
@@ -152,12 +153,21 @@ function EditUserProfileForm({ userId }: { userId: number }) {
                     </FormItem>
                   )}
                 />
-                <Button disabled={!isDirty} type="submit">
-                  Submit
-                </Button>
-                <Button variant="destructive" onClick={deleteUserAccount}>
-                  Delete Account
-                </Button>
+                <DialogClose className="w-full">
+                  <Button type="submit" className="w-full">
+                    Submit
+                  </Button>
+                </DialogClose>
+
+                <DialogClose>
+                  <Button
+                    variant="destructive"
+                    className="w-full"
+                    onClick={deleteUserAccount}
+                  >
+                    Delete Account
+                  </Button>
+                </DialogClose>
               </form>
             </Form>
           </div>
