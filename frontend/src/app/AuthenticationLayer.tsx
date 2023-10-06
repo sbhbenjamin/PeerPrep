@@ -19,8 +19,7 @@ const AuthenticationLayer = ({ children }: Props) => {
           currentUser: {
             name: session.user?.name!,
             email: session.user?.email!,
-            bio: null,
-            url: null,
+            photo: session.user?.image,
           },
           sessionToken: null,
           isLoggedIn: true,

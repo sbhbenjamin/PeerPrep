@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import EditUserProfileForm from "../components/EditUserProfileForm";
 import { useGetUserQuery } from "../state/UserRoutes";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
@@ -18,18 +17,17 @@ const page = ({ params }: { params: { id: number } }) => {
   if (isError) {
     throw new Error("User not found");
   }
+
+  if (isLoading) {
+    return <div>Help</div>;
+  }
+
   return (
     <div className="w-full max-w-screen-xl">
       <div className="flex h-96 w-full gap-x-8">
         <Card className="grow items-start p-3">
           <CardContent className="flex flex-col items-start gap-4 p-5">
             <div className="flex  w-full flex-row items-center justify-start gap-6">
-              <Avatar>
-                <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
-                />
-              </Avatar>
               <h1 className="text-lg">{user?.name}</h1>
               {auth.currentUser && auth.currentUser.email === user!.email ? (
                 <EditUserProfileForm userId={params.id} />

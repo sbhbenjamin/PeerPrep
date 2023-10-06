@@ -34,13 +34,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
+
 function EditUserProfileForm({ userId }: { userId: number }) {
-  const { data: user, isError } = useGetUserQuery(userId);
+  const { data: user, isError, isLoading } = useGetUserQuery(userId);
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
 
   if (isError) {
     throw new Error("No such User");
+  }
+
+  if (isLoading) {
+    return <div>Loading</div>;
   }
 
   const form = useForm<z.infer<typeof UserSchema>>({
@@ -55,7 +61,7 @@ function EditUserProfileForm({ userId }: { userId: number }) {
   });
 
   const {
-    formState: { isDirty, dirtyFields },
+    formState: { dirtyFields },
   } = form;
 
   function onSubmit(values: z.infer<typeof UserSchema>) {
@@ -70,7 +76,7 @@ function EditUserProfileForm({ userId }: { userId: number }) {
         }
         return acc;
       },
-      {} as EditUseFormInput
+      {} as EditUseFormInput,
     );
     updateUser({ id: userId, ...keys });
   }
@@ -158,16 +164,7 @@ function EditUserProfileForm({ userId }: { userId: number }) {
                     Submit
                   </Button>
                 </DialogClose>
-
-                <DialogClose>
-                  <Button
-                    variant="destructive"
-                    className="w-full"
-                    onClick={deleteUserAccount}
-                  >
-                    Delete Account
-                  </Button>
-                </DialogClose>
+                <ConfirmDeleteDialog deleteUser={deleteUserAccount} />
               </form>
             </Form>
           </div>
