@@ -1,7 +1,8 @@
-import type { UserWithoutId } from "@/app/users/types/user.type";
+import type { User } from "@/app/users/types/user.type";
 
 export type AuthenticationDetails = {
-  currentUser: UserWithoutId | null;
+  currentUser: User | null;
+  image: string | null;
   sessionToken: string | null;
   isLoggedIn: Boolean;
 };

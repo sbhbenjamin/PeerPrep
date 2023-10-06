@@ -6,13 +6,13 @@ rootApi.enhanceEndpoints({ addTagTypes: ["User"] });
 const userApi = rootApi.injectEndpoints({
   endpoints: (build) => ({
     getUser: build.query<User, number>({
-      query: (id) => ({ url: `user/id/${id}` }),
+      query: (id) => ({ url: `user/${id}` }),
       // @ts-expect-error
       providesTags: ["User"],
     }),
     updateUser: build.mutation<User, Partial<User>>({
       query: (userData) => ({
-        url: `user/id/${userData.id}`,
+        url: `user/${userData.id}`,
         method: "PUT",
         body: userData,
       }),
@@ -21,7 +21,7 @@ const userApi = rootApi.injectEndpoints({
     }),
     deleteUser: build.mutation<void, number>({
       query: (userId) => ({
-        url: `user/id/${userId}`,
+        url: `user/${userId}`,
         method: "DELETE",
       }),
       // @ts-expect-error

@@ -1,3 +1,6 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import type React from "react";
 import { useEffect } from "react";
@@ -12,15 +15,18 @@ type Props = {
 const AuthenticationLayer = ({ children }: Props) => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
+  const router = useRouter();
+
   useEffect(() => {
+    console.log("session", session);
     if (session) {
+      if (session.currentUser === null) {
+        router.push("/onboarding");
+      }
       dispatch(
         login({
-          currentUser: {
-            name: session.user?.name!,
-            email: session.user?.email!,
-            photo: session.user?.image,
-          },
+          currentUser: session.currentUser,
+          image: session.user?.image || null,
           sessionToken: null,
           isLoggedIn: true,
         }),

@@ -27,7 +27,7 @@ const RegistrationModal = () => (
       </Button>
       <Button
         onClick={() => {
-          signIn("github");
+          signIn("github", { redirect: true });
         }}
       >
         <Icons.GITHUB className="mr-2 h-4 w-4" />

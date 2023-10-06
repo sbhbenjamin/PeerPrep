@@ -1,6 +1,6 @@
-export interface CreateUser {
+export interface CreateUserInput {
   name: string;
   email: string;
-  url: string | null;
-  bio: string | null;
+  url?: string;
+  bio?: string;
 }

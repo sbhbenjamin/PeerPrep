@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
@@ -29,30 +29,43 @@ const OnboardingCard = () => {
   const router = useRouter();
   const [createUser] = useCreateUserMutation();
 
+  if (!session) {
+    <div>Loading</div>;
+  }
+
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
-    values: {
+    defaultValues: {
       name: session?.user?.name!,
       email: session?.user?.email!,
-      url: null,
-      bio: null,
+      url: "",
+      bio: "",
     },
   });
 
+  useEffect(() => {
+    if (session) {
+      form.setValue("name", session?.user?.name!);
+      form.setValue("email", session?.user?.email!);
+    }
+  }, [session, form]);
+
   function onSubmit(values: z.infer<typeof CreateUserSchema>) {
-    createUser(values).then((res) => {
+    createUser({
+      ...values,
+      bio: values.bio === "" ? null : values.bio,
+      url: values.url === "" ? null : values.url,
+    }).then((res) => {
       router.push(`/users/${res.data.id}`);
     });
   }
 
-  if (status === "loading") {
+  if (!session) {
     return <p>Loading...</p>;
   }
-  if (!session) {
-    return <h1>Not Authenticated</h1>;
-  }
+
   return (
-    <Card className="w-3/8 p-6">
+    <Card className=" p-6">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -64,7 +77,6 @@ const OnboardingCard = () => {
                 <FormControl>
                   <Input
                     placeholder="This is your public display name."
-                    defaultValue={session?.user?.name || ""}
                     {...field}
                   />
                 </FormControl>
@@ -82,11 +94,7 @@ const OnboardingCard = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input
-                    disabled
-                    defaultValue={session?.user?.email || ""}
-                    {...field}
-                  />
+                  <Input disabled {...field} />
                 </FormControl>
                 <FormDescription>
                   This is the email your account is associated with.

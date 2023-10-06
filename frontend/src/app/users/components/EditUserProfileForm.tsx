@@ -1,7 +1,8 @@
 "use client";
 
 import { Edit } from "lucide-react";
-import React, { useCallback } from "react";
+import { signOut } from "next-auth/react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
@@ -81,9 +82,10 @@ function EditUserProfileForm({ userId }: { userId: number }) {
     updateUser({ id: userId, ...keys });
   }
 
-  const deleteUserAccount = useCallback(() => {
+  const deleteUserAccount = () => {
+    signOut({ callbackUrl: "/" });
     deleteUser(userId);
-  }, [deleteUser, userId]);
+  };
 
   return (
     <Dialog>

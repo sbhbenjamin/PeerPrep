@@ -9,18 +9,20 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, user, token }) {
-      return session;
+    async session({ session }) {
+      try {
+        const users = await fetch(
+          `${process.env.NEXT_PUBLIC_USERS_MICROSERVICE_URL}/user?email=${session.user?.email}`,
+        ).then((res) => res.json());
+        return {
+          ...session,
+          currentUser: users && users[0],
+        };
+      } catch (error) {
+        return session;
+      }
     },
     async signIn({ account, profile }) {
-      if (account?.provider === "github" && profile?.email) {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_USERS_MICROSERVICE_URL}/user/email/${profile?.email}`,
-        );
-        if (res.status !== 202) {
-          return "/onboarding";
-        }
-      }
       return true;
     },
   },

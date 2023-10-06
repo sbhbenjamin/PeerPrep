@@ -1,7 +1,7 @@
 {
   "eslint.workingDirectories": ["frontend"],
   "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true

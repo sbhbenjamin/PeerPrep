@@ -17,15 +17,19 @@ export default function defineRoutes(expressApp: express.Application) {
 
   router.get('/', async (req, res, next) => {
     try {
-      const response = await userUseCase.getAllUser();
-      res.json(response);
+      const {email} = req.query
+      var response = await userUseCase.getAllUser();
+      if (email) {
+        response = response.filter(res => res.email === email)
+      }
+      res.json(response.length == 0? null : response);
     } catch (error) {
       next(error);
     }
   })
 
   // get existing user by id
-  router.get('/id/:id', async (req, res, next) => {
+  router.get('/:id', async (req, res, next) => {
     try {
       const response = await userUseCase.getUserById(parseInt(req.params.id, 10));
       res.status(200).json(response);
@@ -44,7 +48,7 @@ export default function defineRoutes(expressApp: express.Application) {
   });
 
   // update user by id
-  router.put('/id/:id', validateUpdateUserInput, async (req, res, next) => {
+  router.put('/:id', validateUpdateUserInput, async (req, res, next) => {
     try {
       const response = await userUseCase.updateUser(parseInt(req.params.id, 10), req.body);
       res.status(200).json(response);
@@ -54,7 +58,7 @@ export default function defineRoutes(expressApp: express.Application) {
   });
 
   // delete user by id
-  router.delete('/id/:id', async (req, res, next) => {
+  router.delete('/:id', async (req, res, next) => {
     try {
       await userUseCase.deleteUser(parseInt(req.params.id, 10));
       res.status(200).end();
