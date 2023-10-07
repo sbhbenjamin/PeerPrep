@@ -18,7 +18,6 @@ const AuthenticationLayer = ({ children }: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("session", session);
     if (session) {
       if (session.currentUser === null) {
         router.push("/onboarding");
@@ -29,7 +28,7 @@ const AuthenticationLayer = ({ children }: Props) => {
           image: session.user?.image || null,
           sessionToken: null,
           isLoggedIn: true,
-        }),
+        })
       );
     } else {
       dispatch(signOut());

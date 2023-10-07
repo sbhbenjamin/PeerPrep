@@ -8,5 +8,3 @@ export const rootApi = createApi({
   }),
   endpoints: () => ({}),
 });
-
-// TODO take for .env

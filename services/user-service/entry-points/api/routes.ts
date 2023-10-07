@@ -41,7 +41,7 @@ export default function defineRoutes(expressApp: express.Application) {
   router.get('/email/:email', async (req, res, next) => {
     try {
       const response = await userUseCase.getUserByMail(req.params.email);
-      res.status(202).json(response);
+      res.status(200).json(response);
     } catch (error) {
       next(error)
     }
