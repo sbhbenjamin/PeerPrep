@@ -127,9 +127,7 @@ const OnboardingCard = () => {
             )}
           />
           <div className="flex w-full gap-5">
-            <Button className="min-w-30" type="submit">
-              Submit
-            </Button>
+            <Button type="submit">Submit</Button>
           </div>
         </form>
       </Form>

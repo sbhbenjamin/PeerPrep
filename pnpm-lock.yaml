@@ -17,6 +17,10 @@ importers:
       pino:
         specifier: ^8.15.1
         version: 8.15.1
+    devDependencies:
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
 
   services/question-service:
     dependencies:
@@ -26,7 +30,7 @@ importers:
     devDependencies:
       bun-types:
         specifier: latest
-        version: 1.0.4-canary.20231004T140131
+        version: 1.0.5-canary.20231006T140143
 
   services/user-service:
     dependencies:
@@ -54,7 +58,7 @@ importers:
     devDependencies:
       bun-types:
         specifier: latest
-        version: 1.0.4-canary.20231004T140131
+        version: 1.0.5-canary.20231006T140143
 
 packages:
 
@@ -220,8 +224,8 @@ packages:
       ieee754: 1.2.1
     dev: false
 
-  /bun-types@1.0.4-canary.20231004T140131:
-    resolution: {integrity: sha512-k9DSGP8+mJTJHY/87Q2NqixeXRw04mgIHDSIi29D/bhOu7HqZbO1l+48/aiS8miUpj59ZgJVgpSi+Px33yMCJQ==}
+  /bun-types@1.0.5-canary.20231006T140143:
+    resolution: {integrity: sha512-nzjkztC0JLqmcZoTrMZ5W3OvRdRtd82KIIdU4fVBYNK30d4KXFWCFWvd/XYfSb4UT3iJw8BnpkFXcXIrzVVzbA==}
     dev: true
 
   /bytes@3.1.2:
@@ -423,6 +427,12 @@ packages:
       statuses: 2.0.1
       toidentifier: 1.0.1
     dev: false
+
+  /husky@8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
 
   /iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}

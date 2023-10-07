@@ -14,5 +14,8 @@
     "@types/pino": "^7.0.5",
     "@types/pino-std-serializers": "^4.0.0",
     "pino": "^8.15.1"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3"
   }
 }

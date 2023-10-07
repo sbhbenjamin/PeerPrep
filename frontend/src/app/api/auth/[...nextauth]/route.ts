@@ -22,7 +22,7 @@ const handler = NextAuth({
         return session;
       }
     },
-    async signIn({ account, profile }) {
+    async signIn() {
       return true;
     },
   },

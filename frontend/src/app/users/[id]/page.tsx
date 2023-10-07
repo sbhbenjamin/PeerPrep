@@ -14,12 +14,13 @@ import { selectAuthData } from "@/app/auth/state/AuthSelector";
 const page = ({ params }: { params: { id: number } }) => {
   const auth = useSelector(selectAuthData);
   const { data: user, isLoading, isError } = useGetUserQuery(params.id);
+
   if (isError) {
     throw new Error("User not found");
   }
 
   if (isLoading) {
-    return <div>Help</div>;
+    return <div>Loading</div>;
   }
 
   return (
