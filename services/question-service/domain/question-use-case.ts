@@ -1,10 +1,10 @@
 import * as questionRepo from '../data-access/question-repository';
-import { QuestionRecord, QuestionRequest } from '../types';
+import { QuestionFilter, QuestionRequest } from '../types';
 import { AddQuestionSchema, UpdateQuestionSchema } from './question-schema'; // Import your schemas here
-import { assertQuestionExistsById, assertQuestionExistsByTitle, assertQuestionNotExistsByTitle } from './question-validator';
+import { assertQuestionExistsById, assertQuestionNotExistsByTitle } from './question-validator';
 
-export async function getAllQuestions() {
-  const response = await questionRepo.getAllQuestions();
+export async function getQuestions(filter: QuestionFilter) {
+  const response = await questionRepo.getQuestions(filter);
   return response;
 }
 
@@ -18,16 +18,6 @@ export async function addQuestion(newQuestion: QuestionRequest) {
 export async function deleteQuestion(questionId: string) {
   await assertQuestionExistsById(questionId)
   return await questionRepo.deleteQuestion(questionId);
-}
-
-export async function getQuestionById(questionId: string) {
-  await assertQuestionExistsById(questionId)
-  return await questionRepo.getQuestionById(questionId);
-}
-
-export async function getQuestionByTitle(title: string) {
-  await assertQuestionExistsByTitle(title)
-  return await questionRepo.getQuestionByTitle(title);
 }
 
 export async function updateQuestion(questionId: string, updateQuestionRequest: Partial<QuestionRequest>) {

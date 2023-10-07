@@ -16,5 +16,5 @@ model Question {
   category    String[]
   difficulty  String
   description String
-  url         String   @unique
+  url         String
 }

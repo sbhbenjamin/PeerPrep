@@ -14,4 +14,6 @@ export const QuestionRecordSchema = z.object({
 
 export const AddQuestionSchema = QuestionRecordSchema.omit({ id: true });
 
+export const GetQuestionSchema = QuestionRecordSchema.omit({description: true, url: true}).partial();
+
 export const UpdateQuestionSchema = QuestionRecordSchema.omit({ id: true }).partial();
