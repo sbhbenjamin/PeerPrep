@@ -28,7 +28,7 @@ const AuthenticationLayer = ({ children }: Props) => {
           image: session.user?.image || null,
           sessionToken: null,
           isLoggedIn: true,
-        })
+        }),
       );
     } else {
       dispatch(signOut());

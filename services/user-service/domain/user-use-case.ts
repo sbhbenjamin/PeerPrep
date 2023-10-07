@@ -1,11 +1,16 @@
-import * as userRepository from '../data-access/user-repository';
-import { AddUserSchema, UpdateUserSchema, userIdSchema } from './user-schema'; // Import your schemas here
-import { z } from 'zod';
-import { assertUserExistsById, assertUserExistsByMail, assertUserNotExistsByMail } from './user-validator';
+import * as userRepository from '../data-access/user-repository'
+import { AddUserSchema, UpdateUserSchema, userIdSchema } from './user-schema' // Import your schemas here
+
+
+import {
+  assertUserExistsById,
+  assertUserExistsByMail,
+  assertUserNotExistsByMail,
+} from './user-validator'
 
 export async function getAllUser() {
-  const response = await userRepository.getAllUsers();
-  return response;
+  const response = await userRepository.getAllUsers()
+  return response
 }
 
 // Define a Zod validator for user ID
@@ -15,38 +20,37 @@ export async function getAllUser() {
 export async function addUser(newUser: any) {
   // Validate newUser against the AddUserSchema
   await assertUserNotExistsByMail(newUser.email)
-  const validatedData = AddUserSchema.parse(newUser);
-  const response = await userRepository.addUser(validatedData);
-  return response;
+  const validatedData = AddUserSchema.parse(newUser)
+  const response = await userRepository.addUser(validatedData)
+  return response
 }
 
 // ✅ Delete a user by ID
 export async function deleteUser(userId: number) {
   // Validate userId using the userIdValidator
-  userIdSchema.parse(userId);
+  userIdSchema.parse(userId)
   await assertUserExistsById(userId)
-  return await userRepository.deleteUser(userId);
+  return await userRepository.deleteUser(userId)
 }
 
 // ✅ Get a user by mail
 export async function getUserById(userId: number) {
   // Validate userId using the userIdValidator
-  userIdSchema.parse(userId);
+  userIdSchema.parse(userId)
   await assertUserExistsById(userId)
-  return await userRepository.getUserById(userId);
+  return await userRepository.getUserById(userId)
 }
 
 export async function getUserByMail(mail: string) {
   // Validate userId using the userIdValidator
   await assertUserExistsByMail(mail)
-  return await userRepository.getUserByEmail(mail);
+  return await userRepository.getUserByEmail(mail)
 }
-
 
 // ✅ Update a user by ID
 export async function updateUser(userId: number, updateUserRequest: any) {
-  userIdSchema.parse(userId);
-  await assertUserExistsById(userId);
-  const validatedData = UpdateUserSchema.parse(updateUserRequest);
-  return await userRepository.updateUser(userId, validatedData);
+  userIdSchema.parse(userId)
+  await assertUserExistsById(userId)
+  const validatedData = UpdateUserSchema.parse(updateUserRequest)
+  return await userRepository.updateUser(userId, validatedData)
 }

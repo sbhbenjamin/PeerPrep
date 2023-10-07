@@ -1,10 +1,10 @@
-import { PrismaClient } from '.prisma/client';
+import { PrismaClient } from '.prisma/client'
 
-let prismaClientInstance: PrismaClient | undefined;
+let prismaClientInstance: PrismaClient | undefined
 
 export function getPrismaClient() {
-    if (!prismaClientInstance) {
-        prismaClientInstance = new PrismaClient();
-    }
-    return prismaClientInstance!;
+  if (!prismaClientInstance) {
+    prismaClientInstance = new PrismaClient()
+  }
+  return prismaClientInstance!
 }
