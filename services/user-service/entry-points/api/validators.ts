@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express'
-import { AddUserSchema, UpdateUserSchema } from '../../domain/user-schema'
+import { Request, Response, NextFunction } from "express";
+import { AddUserSchema, UpdateUserSchema } from "../../domain/user-schema";
 
 // Middleware to validate addUser input
 export function validateAddUserInput(
@@ -8,10 +8,10 @@ export function validateAddUserInput(
   next: NextFunction,
 ): void {
   try {
-    AddUserSchema.parse(req.body)
-    next()
+    AddUserSchema.parse(req.body);
+    next();
   } catch (e: any) {
-    res.status(400).json({ error: e.errors })
+    res.status(400).json({ error: e.errors });
   }
 }
 
@@ -25,9 +25,9 @@ export function validateUpdateUserInput(
     UpdateUserSchema.parse({
       id: parseInt(req.params.id, 10),
       ...req.body,
-    })
-    next()
+    });
+    next();
   } catch (e: any) {
-    res.status(400).json({ error: e.errors })
+    res.status(400).json({ error: e.errors });
   }
 }
