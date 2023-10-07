@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id       Int      @id @default(autoincrement())
-  email    String   @id
+  email    String   @unique
   name     String
   bio String?
   url String?
