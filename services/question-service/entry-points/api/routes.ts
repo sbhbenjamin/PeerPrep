@@ -5,7 +5,7 @@ import { validateAddQuestionInput, validateUpdateQuestionInput } from './validat
 export default function defineRoutes(expressApp: express.Application) {
   const router = express.Router();
 
-  router.put('/',validateAddQuestionInput ,async (req, res, next) => {
+  router.post('/',validateAddQuestionInput ,async (req, res, next) => {
     try {
       const addQuestionResponse = await questionUseCase.addQuestion(req.body);
       return res.json(addQuestionResponse);
@@ -23,7 +23,7 @@ export default function defineRoutes(expressApp: express.Application) {
     }
   })
 
-  router.get('/id/:id', async (req, res, next) => {
+  router.get('/:id', async (req, res, next) => {
     try {
       const response = await questionUseCase.getQuestionById(req.params.id);
       res.status(200).json(response);
@@ -32,7 +32,7 @@ export default function defineRoutes(expressApp: express.Application) {
     }
   });
 
-  router.get('/title/:title', async (req, res, next) => {
+  router.get('/:title', async (req, res, next) => {
     try {
       const response = await questionUseCase.getQuestionByTitle(req.params.title);
       res.status(202).json(response);
@@ -41,7 +41,7 @@ export default function defineRoutes(expressApp: express.Application) {
     }
   });
 
-  router.patch('/id/:id', validateUpdateQuestionInput, async (req, res, next) => {
+  router.patch('/:id', validateUpdateQuestionInput, async (req, res, next) => {
     try {
       const response = await questionUseCase.updateQuestion(req.params.id, req.body);
       res.status(200).json(response);
@@ -50,7 +50,7 @@ export default function defineRoutes(expressApp: express.Application) {
     }
   });
 
-  router.delete('/id/:id', async (req, res, next) => {
+  router.delete('/:id', async (req, res, next) => {
     try {
       await questionUseCase.deleteQuestion(req.params.id);
       res.status(200).end();

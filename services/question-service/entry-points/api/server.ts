@@ -32,7 +32,7 @@ async function openConnection(
   expressApp: express.Application
 ): Promise<AddressInfo> {
   return new Promise((resolve) => {
-    const webServerPort = 2001 || 0;
+    const webServerPort = process.env.PORT || 0;
     connection = expressApp.listen(webServerPort, () => {
       resolve(connection.address() as AddressInfo);
     });

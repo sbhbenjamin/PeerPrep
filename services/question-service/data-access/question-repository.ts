@@ -10,8 +10,7 @@ export async function addNewQuestion(newQuestionRecordRequest: QuestionRequest):
 }
 
 export async function getAllQuestions(): Promise<QuestionRecord[] | null> {
-  const questions = await getPrismaClient().question.findMany({
-  })
+  const questions = await getPrismaClient().question.findMany()
   return questions;
 }
 
@@ -46,7 +45,7 @@ export async function getQuestionsByDifficulty(difficulty: string): Promise<Ques
 export async function updateQuestion(id: string, updateUserRequest: Partial<QuestionRequest>): Promise<QuestionRecord> {
   const resultQuestion = await getPrismaClient().question.update({
     where: { id },
-    data: { ...updateUserRequest },
+    data: updateUserRequest,
   });
 
   return resultQuestion;
