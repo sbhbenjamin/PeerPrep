@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
+
 import { AddUserSchema, UpdateUserSchema } from "../../domain/user-schema";
 
 // Middleware to validate addUser input

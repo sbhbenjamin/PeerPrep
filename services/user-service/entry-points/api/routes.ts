@@ -1,5 +1,7 @@
 import express from "express";
+
 import * as userUseCase from "../../domain/user-use-case";
+
 import { validateAddUserInput, validateUpdateUserInput } from "./validators";
 
 export default function defineRoutes(expressApp: express.Application) {
@@ -9,7 +11,7 @@ export default function defineRoutes(expressApp: express.Application) {
     try {
       // ✅ Best Practice: Using the 3-tier architecture, routes/controller are kept thin, logic is encapsulated in a dedicated domain folder
       const addUserResponse = await userUseCase.addUser(req.body);
-      return res.json(addUserResponse);
+      res.json(addUserResponse);
     } catch (error) {
       next(error);
     }
@@ -20,9 +22,9 @@ export default function defineRoutes(expressApp: express.Application) {
       const { email } = req.query;
       let response = await userUseCase.getAllUser();
       if (email) {
-        response = response.filter((res) => res.email === email);
+        response = response.filter((result) => result.email === email);
       }
-      res.json(response.length == 0 ? null : response);
+      res.json(response.length === 0 ? null : response);
     } catch (error) {
       next(error);
     }

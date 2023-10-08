@@ -1,6 +1,6 @@
 import * as userRepository from "../data-access/user-repository";
-import { AddUserSchema, UpdateUserSchema, userIdSchema } from "./user-schema"; // Import your schemas here
 
+import { AddUserSchema, UpdateUserSchema, userIdSchema } from "./user-schema"; // Import your schemas here
 import {
   assertUserExistsById,
   assertUserExistsByMail,
@@ -15,7 +15,6 @@ export async function getAllUser() {
 // Define a Zod validator for user ID
 // ✅ Validate and add a new user
 
-// TODO Add Types?
 export async function addUser(newUser: any) {
   // Validate newUser against the AddUserSchema
   await assertUserNotExistsByMail(newUser.email);
@@ -29,7 +28,7 @@ export async function deleteUser(userId: number) {
   // Validate userId using the userIdValidator
   userIdSchema.parse(userId);
   await assertUserExistsById(userId);
-  return await userRepository.deleteUser(userId);
+  return userRepository.deleteUser(userId);
 }
 
 // ✅ Get a user by mail
@@ -37,13 +36,13 @@ export async function getUserById(userId: number) {
   // Validate userId using the userIdValidator
   userIdSchema.parse(userId);
   await assertUserExistsById(userId);
-  return await userRepository.getUserById(userId);
+  return userRepository.getUserById(userId);
 }
 
 export async function getUserByMail(mail: string) {
   // Validate userId using the userIdValidator
   await assertUserExistsByMail(mail);
-  return await userRepository.getUserByEmail(mail);
+  return userRepository.getUserByEmail(mail);
 }
 
 // ✅ Update a user by ID
@@ -51,5 +50,5 @@ export async function updateUser(userId: number, updateUserRequest: any) {
   userIdSchema.parse(userId);
   await assertUserExistsById(userId);
   const validatedData = UpdateUserSchema.parse(updateUserRequest);
-  return await userRepository.updateUser(userId, validatedData);
+  return userRepository.updateUser(userId, validatedData);
 }

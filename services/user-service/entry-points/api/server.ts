@@ -1,8 +1,11 @@
-import { Server } from "http";
-import { AddressInfo } from "net";
 import express from "express";
-import defineRoutes from "./routes";
+import type { Server } from "http";
+import type { AddressInfo } from "net";
+
 import { errorHandler } from "../../errorHandler";
+
+import defineRoutes from "./routes";
+
 const cors = require("cors");
 
 let connection: Server;
@@ -20,16 +23,6 @@ async function startWebServer(): Promise<AddressInfo> {
   return APIAddress;
 }
 
-async function stopWebServer() {
-  return new Promise<void>((resolve) => {
-    if (connection !== undefined) {
-      connection.close(() => {
-        resolve();
-      });
-    }
-  });
-}
-
 async function openConnection(
   expressApp: express.Application,
 ): Promise<AddressInfo> {
@@ -38,6 +31,16 @@ async function openConnection(
     connection = expressApp.listen(webServerPort, () => {
       resolve(connection.address() as AddressInfo);
     });
+  });
+}
+
+async function stopWebServer() {
+  return new Promise<void>((resolve) => {
+    if (connection !== undefined) {
+      connection.close(() => {
+        resolve();
+      });
+    }
   });
 }
 

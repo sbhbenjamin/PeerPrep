@@ -4,7 +4,6 @@ type UserRecord = {
   id: number;
   email: string;
   name: string;
-  image?: string | null;
 };
 
 export async function addUser(
@@ -36,7 +35,7 @@ export async function getUserByEmail(
 ): Promise<UserRecord | null> {
   const user = await getPrismaClient().user.findUnique({
     where: {
-      email: email,
+      email,
     },
   });
   return user;
@@ -45,7 +44,7 @@ export async function getUserByEmail(
 export async function isUserRegistered(email: string): Promise<boolean> {
   const user = await getPrismaClient().user.findUnique({
     where: {
-      email: email,
+      email,
     },
   });
 

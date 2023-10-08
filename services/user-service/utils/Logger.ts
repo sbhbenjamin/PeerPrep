@@ -1,4 +1,4 @@
-import pino, { LoggerOptions } from "pino";
+import pino from "pino";
 
 // Configure Pino options as needed
 const loggerOptions: pino.LoggerOptions = {

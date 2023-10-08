@@ -2,7 +2,6 @@ import * as userRepository from "../data-access/user-repository";
 
 export async function assertUserExistsById(id: number) {
   const user = await userRepository.getUserById(id);
-  console.log(id);
   if (!user) {
     throw new Error("User not found");
   }
