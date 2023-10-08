@@ -1,20 +1,20 @@
 export type QuestionRecord = {
-  id: string,
-  title: string,
-  category: string[],
-  difficulty: string,
-  description: string,
-  url: string
+  id: string;
+  title: string;
+  category: string[];
+  difficulty: string;
+  description: string;
+  url: string;
 };
 
-export type QuestionRequest = Omit<QuestionRecord, 'id'>;
+export type QuestionRequest = Omit<QuestionRecord, "id">;
 
 export type QuestionFilter = {
-  id: string | undefined,
-  title: string | undefined,
-  difficulty: string | undefined,
-  categories: string[] | undefined
-}
+  id: string | undefined;
+  title: string | undefined;
+  difficulty: string | undefined;
+  categories: string[] | undefined;
+};
 
 export enum Difficulty {
   Easy = "Easy",

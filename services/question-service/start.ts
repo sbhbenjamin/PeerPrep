@@ -1,4 +1,4 @@
-import { startWebServer } from './entry-points/api/server';
+import { startWebServer } from "./entry-points/api/server";
 
 async function start() {
   // 🦉 Array of entry point is being used to support more entry-points kinds like message queue, scheduled job,
@@ -6,6 +6,5 @@ async function start() {
 }
 
 start()
-  .then((startResponses) =>  console.log(startResponses)
-  )
-  .catch((error) => {});
+  .then((startResponses) => console.log(startResponses))
+  .catch((error) => console.log(error));

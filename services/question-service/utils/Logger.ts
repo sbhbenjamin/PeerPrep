@@ -1,12 +1,12 @@
-import pino from 'pino';
+import { pino } from "pino";
 
 // Configure Pino options as needed
 const loggerOptions: pino.LoggerOptions = {
-    level: 'info', // Set the default logging level to 'info'
-    timestamp: pino.stdTimeFunctions.isoTime, // Include timestamps in log messages
-    messageKey: 'message', // Use 'message' as the log message key
-    redact: ['password', 'api_key'], // Redact sensitive fields like 'password' and 'api_key'
-  };
+  level: "info", // Set the default logging level to 'info'
+  timestamp: pino.stdTimeFunctions.isoTime, // Include timestamps in log messages
+  messageKey: "message", // Use 'message' as the log message key
+  redact: ["password", "api_key"], // Redact sensitive fields like 'password' and 'api_key'
+};
 
 // Create a Pino logger instance
 const pinoLogger = pino(loggerOptions);

@@ -1,7 +1,11 @@
-import * as questionRepo from '../data-access/question-repository';
-import { QuestionFilter, QuestionRequest } from '../types';
-import { AddQuestionSchema, UpdateQuestionSchema } from './question-schema'; // Import your schemas here
-import { assertQuestionExistsById, assertQuestionNotExistsByTitle } from './question-validator';
+import * as questionRepo from "../data-access/question-repository";
+import type { QuestionFilter, QuestionRequest } from "../types";
+
+import { AddQuestionSchema, UpdateQuestionSchema } from "./question-schema"; // Import your schemas here
+import {
+  assertQuestionExistsById,
+  assertQuestionNotExistsByTitle,
+} from "./question-validator";
 
 export async function getQuestions(filter: QuestionFilter) {
   const response = await questionRepo.getQuestions(filter);
@@ -9,19 +13,22 @@ export async function getQuestions(filter: QuestionFilter) {
 }
 
 export async function addQuestion(newQuestion: QuestionRequest) {
-  await assertQuestionNotExistsByTitle(newQuestion.title)
+  await assertQuestionNotExistsByTitle(newQuestion.title);
   const validatedData = AddQuestionSchema.parse(newQuestion);
   const response = await questionRepo.addNewQuestion(validatedData);
   return response;
 }
 
 export async function deleteQuestion(questionId: string) {
-  await assertQuestionExistsById(questionId)
-  return await questionRepo.deleteQuestion(questionId);
+  await assertQuestionExistsById(questionId);
+  return questionRepo.deleteQuestion(questionId);
 }
 
-export async function updateQuestion(questionId: string, updateQuestionRequest: Partial<QuestionRequest>) {
+export async function updateQuestion(
+  questionId: string,
+  updateQuestionRequest: Partial<QuestionRequest>,
+) {
   await assertQuestionExistsById(questionId);
   const validatedData = UpdateQuestionSchema.parse(updateQuestionRequest);
-  return await questionRepo.updateQuestion(questionId, validatedData);
+  return questionRepo.updateQuestion(questionId, validatedData);
 }
