@@ -1,14 +1,8 @@
+import type { UpdateUser, User, UserFilter, UserWihoutId } from "../types";
+
 import { getPrismaClient } from "./prisma-client-factory";
 
-type UserRecord = {
-  id: number;
-  email: string;
-  name: string;
-};
-
-export async function addUser(
-  newUserRequest: Omit<UserRecord, "id">,
-): Promise<UserRecord> {
+export async function addUser(newUserRequest: UserWihoutId): Promise<User> {
   const resultUser = await getPrismaClient().user.create({
     data: { ...newUserRequest },
   });
@@ -16,12 +10,14 @@ export async function addUser(
   return resultUser;
 }
 
-export async function getAllUsers(): Promise<UserRecord[]> {
-  const users = await getPrismaClient().user.findMany({});
+export async function getAllUsers(filter: UserFilter): Promise<User[]> {
+  const users = await getPrismaClient().user.findMany({
+    where: { email: filter.email },
+  });
   return users;
 }
 
-export async function getUserById(id: number): Promise<UserRecord | null> {
+export async function getUserById(id: number): Promise<User | null> {
   const resultUser = await getPrismaClient().user.findUnique({
     where: {
       id,
@@ -30,9 +26,7 @@ export async function getUserById(id: number): Promise<UserRecord | null> {
   return resultUser;
 }
 
-export async function getUserByEmail(
-  email: string,
-): Promise<UserRecord | null> {
+export async function getUserByEmail(email: string): Promise<User | null> {
   const user = await getPrismaClient().user.findUnique({
     where: {
       email,
@@ -53,8 +47,8 @@ export async function isUserRegistered(email: string): Promise<boolean> {
 
 export async function updateUser(
   id: number,
-  updateUserRequest: Partial<Omit<UserRecord, "id">>,
-): Promise<UserRecord> {
+  updateUserRequest: UpdateUser,
+): Promise<User> {
   const resultUser = await getPrismaClient().user.update({
     where: { id },
     data: { ...updateUserRequest },
@@ -62,7 +56,7 @@ export async function updateUser(
   return resultUser;
 }
 
-export async function deleteUser(userIdToDelete: number): Promise<UserRecord> {
+export async function deleteUser(userIdToDelete: number): Promise<User> {
   const deleteResult = await getPrismaClient().user.delete({
     where: {
       id: userIdToDelete,

@@ -1,6 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 
-import { AddUserSchema, UpdateUserSchema } from "../../domain/user-schema";
+import {
+  UpdateUserSchema,
+  UserRecordWithoutIdSchema,
+} from "../../domain/user-schema";
 
 // Middleware to validate addUser input
 export function validateAddUserInput(
@@ -9,7 +12,7 @@ export function validateAddUserInput(
   next: NextFunction,
 ): void {
   try {
-    AddUserSchema.parse(req.body);
+    UserRecordWithoutIdSchema.parse(req.body);
     next();
   } catch (e: any) {
     res.status(400).json({ error: e.errors });

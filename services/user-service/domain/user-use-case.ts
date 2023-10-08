@@ -1,25 +1,29 @@
 import * as userRepository from "../data-access/user-repository";
+import type { UpdateUser, UserFilter, UserWihoutId } from "../types";
 
-import { AddUserSchema, UpdateUserSchema, userIdSchema } from "./user-schema"; // Import your schemas here
+import {
+  UpdateUserSchema,
+  userIdSchema,
+  UserRecordWithoutIdSchema,
+} from "./user-schema"; // Import your schemas here
 import {
   assertUserExistsById,
   assertUserExistsByMail,
   assertUserNotExistsByMail,
 } from "./user-validator";
 
-export async function getAllUser() {
-  const response = await userRepository.getAllUsers();
+export async function getAllUser(filter: UserFilter) {
+  const response = await userRepository.getAllUsers(filter);
   return response;
 }
 
 // Define a Zod validator for user ID
 // ✅ Validate and add a new user
-
-export async function addUser(newUser: any) {
+export async function addUser(newUser: UserWihoutId) {
   // Validate newUser against the AddUserSchema
   await assertUserNotExistsByMail(newUser.email);
-  const validatedData = AddUserSchema.parse(newUser);
-  const response = await userRepository.addUser(validatedData);
+  const validatedResult = UserRecordWithoutIdSchema.parse(newUser);
+  const response = await userRepository.addUser(validatedResult);
   return response;
 }
 
@@ -34,7 +38,6 @@ export async function deleteUser(userId: number) {
 // ✅ Get a user by mail
 export async function getUserById(userId: number) {
   // Validate userId using the userIdValidator
-  userIdSchema.parse(userId);
   await assertUserExistsById(userId);
   return userRepository.getUserById(userId);
 }
@@ -46,7 +49,10 @@ export async function getUserByMail(mail: string) {
 }
 
 // ✅ Update a user by ID
-export async function updateUser(userId: number, updateUserRequest: any) {
+export async function updateUser(
+  userId: number,
+  updateUserRequest: UpdateUser,
+) {
   userIdSchema.parse(userId);
   await assertUserExistsById(userId);
   const validatedData = UpdateUserSchema.parse(updateUserRequest);

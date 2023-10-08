@@ -19,11 +19,9 @@ export default function defineRoutes(expressApp: express.Application) {
 
   router.get("/", async (req, res, next) => {
     try {
-      const { email } = req.query;
-      let response = await userUseCase.getAllUser();
-      if (email) {
-        response = response.filter((result) => result.email === email);
-      }
+      const response = await userUseCase.getAllUser({
+        email: req.query.email as string,
+      });
       res.json(response.length === 0 ? null : response);
     } catch (error) {
       next(error);
@@ -36,15 +34,6 @@ export default function defineRoutes(expressApp: express.Application) {
       const response = await userUseCase.getUserById(
         parseInt(req.params.id, 10),
       );
-      res.status(200).json(response);
-    } catch (error) {
-      next(error);
-    }
-  });
-
-  router.get("/email/:email", async (req, res, next) => {
-    try {
-      const response = await userUseCase.getUserByMail(req.params.email);
       res.status(200).json(response);
     } catch (error) {
       next(error);

@@ -19,6 +19,10 @@
     "prettier"
   ],
   "rules": {
+    "import/no-extraneous-dependencies": [
+      "error",
+      {"devDependencies": true}
+    ],
     "prettier/prettier": "error",
     "import/extensions": "off", // Avoid missing file extension errors, TypeScript already provides a similar feature
     "@typescript-eslint/consistent-type-imports": "error", // Ensure `import type` is used when it's necessary
