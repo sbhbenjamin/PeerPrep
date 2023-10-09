@@ -32,7 +32,7 @@ export default function defineRoutes(expressApp: express.Application) {
   router.get("/:id", async (req, res, next) => {
     try {
       const response = await userUseCase.getUserById(
-        parseInt(req.params.id, 10),
+        parseInt(req.params.id, 10)
       );
       res.status(200).json(response);
     } catch (error) {
@@ -45,7 +45,7 @@ export default function defineRoutes(expressApp: express.Application) {
     try {
       const response = await userUseCase.updateUser(
         parseInt(req.params.id, 10),
-        req.body,
+        req.body
       );
       res.status(200).json(response);
     } catch (error) {
