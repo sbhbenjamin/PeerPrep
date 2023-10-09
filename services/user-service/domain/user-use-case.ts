@@ -51,7 +51,7 @@ export async function getUserByMail(mail: string) {
 // ✅ Update a user by ID
 export async function updateUser(
   userId: number,
-  updateUserRequest: UpdateUser,
+  updateUserRequest: UpdateUser
 ) {
   userIdSchema.parse(userId);
   await assertUserExistsById(userId);
