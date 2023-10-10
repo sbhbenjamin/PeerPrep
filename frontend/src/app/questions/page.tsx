@@ -32,8 +32,6 @@ const page = () => {
       localStorage.getItem("questions") || "[]",
     );
 
-    console.log(existingQuestions);
-
     // Filter out the question with the given id
     const updatedQuestions = existingQuestions.filter(
       (question) => question.id.toString() !== id,

@@ -5,6 +5,7 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 
 import "./globals.css";
+import { Providers } from "./Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,13 +20,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <div className="min-h-screen px-12 py-10">
-          <Navbar />
-          <div className="mt-8">{children}</div>
-        </div>
-      </body>
-    </html>
+    <Providers>
+      <html lang="en">
+        <body className={inter.className}>
+          <div className="min-h-screen px-12 py-10">
+            <Navbar />
+            <div className="mt-8">{children}</div>
+          </div>
+        </body>
+      </html>
+    </Providers>
   );
 }

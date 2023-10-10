@@ -3,29 +3,18 @@
 
 generator client {
   provider = "prisma-client-js"
+  output = "../node_modules/.prisma/client"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
-
 
 model User {
   id       Int      @id @default(autoincrement())
   email    String   @unique
-  name     String?
-  image    String?
-  auth    Auth?
-}
-
-model Auth {
-  id        Int       @id @default(autoincrement())
-  type      String
-  userId    Int       @unique
-  token     String    @unique
-  secret    String
-  expires   DateTime
-
-  user      User      @relation(fields: [userId], references: [id])
+  name     String
+  bio String?
+  url String?
 }
