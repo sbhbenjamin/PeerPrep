@@ -34,7 +34,7 @@ const UserDropDownMenu = () => {
           <AvatarFallback>{auth?.currentUser?.name}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mr-4 p-y-5">
+      <DropdownMenuContent className="p-y-5 mr-4">
         <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {auth.currentUser !== null && (
