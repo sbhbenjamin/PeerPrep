@@ -11,9 +11,10 @@ const handler = NextAuth({
   callbacks: {
     async session({ session }) {
       try {
-        const users = await fetch(
+        const res = await fetch(
           `${process.env.NEXT_PUBLIC_USERS_MICROSERVICE_URL}/user?email=${session.user?.email}`,
-        ).then((res) => res.json());
+        );
+        const users = await res.json();
         return {
           ...session,
           currentUser: users && users[0],
