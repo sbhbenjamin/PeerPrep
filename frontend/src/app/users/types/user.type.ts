@@ -16,4 +16,7 @@ export type EditUseFormInput = {
 export type UserWithOptionalUrlAndBio = Omit<User, "url" | "bio"> &
   Partial<Omit<Pick<User, "url" | "bio">, "null">>;
 
-export type UserWithoutId = Omit<User, "id">;
+export type UserWithoutId = Partial<Omit<User, "id">> & {
+  name: string;
+  email: string;
+};

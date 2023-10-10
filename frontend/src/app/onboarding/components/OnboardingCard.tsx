@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 const OnboardingCard = () => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
   const [createUser] = useCreateUserMutation();
 
@@ -43,25 +43,20 @@ const OnboardingCard = () => {
     },
   });
 
-  useEffect(() => {
-    if (session) {
-      form.setValue("name", session?.user?.name!);
-      form.setValue("email", session?.user?.email!);
-    }
-  }, [session, form]);
-
-  function onSubmit(values: z.infer<typeof CreateUserSchema>) {
+  async function onSubmit(values: z.infer<typeof CreateUserSchema>) {
     createUser({
       ...values,
-      bio: values.bio === "" ? null : values.bio,
-      url: values.url === "" ? null : values.url,
-    }).then((res) => {
-      router.push(`/users/${res.data.id}`);
-    });
-  }
-
-  if (!session) {
-    return <p>Loading...</p>;
+      bio: values.bio === "" ? undefined : values.bio,
+      url: values.url === "" ? undefined : values.url,
+    })
+      .unwrap()
+      .then((res) => {
+        // update the session her
+        router.push(`/users/${res.id}`);
+      })
+      .catch(() => {
+        throw new Error("Unable to register user!");
+      });
   }
 
   return (

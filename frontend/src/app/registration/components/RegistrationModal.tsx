@@ -21,10 +21,6 @@ const RegistrationModal = () => (
       <AlertDialogHeader className="mb-8 w-1/2 text-2xl">
         Login to PeerPrep
       </AlertDialogHeader>
-      <Button>
-        <Icons.GOOGLE className="mr-2 h-4 w-4" />
-        Login via Google
-      </Button>
       <Button
         onClick={() => {
           signIn("github", { redirect: true });

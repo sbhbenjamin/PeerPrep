@@ -6,7 +6,7 @@ import type React from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { login, signOut } from "./auth/state/AuthSlice";
+import { login } from "./auth/state/AuthSlice";
 
 type Props = {
   children?: React.ReactNode;
@@ -19,9 +19,6 @@ const AuthenticationLayer = ({ children }: Props) => {
 
   useEffect(() => {
     if (session) {
-      if (session.currentUser === null) {
-        router.push("/onboarding");
-      }
       dispatch(
         login({
           currentUser: session.currentUser,
@@ -30,8 +27,9 @@ const AuthenticationLayer = ({ children }: Props) => {
           isLoggedIn: true,
         }),
       );
-    } else {
-      dispatch(signOut());
+      if (session.currentUser == null) {
+        router.push("/onboarding");
+      }
     }
   }, [session]);
 

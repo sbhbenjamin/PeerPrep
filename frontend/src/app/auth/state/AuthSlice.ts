@@ -1,3 +1,5 @@
+import { signOut as NextSignOut } from "next-auth/react";
+
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -16,12 +18,15 @@ const authSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<AuthenticationDetails>) =>
       action.payload,
-    signOut: (state) => ({
-      currentUser: null,
-      image: null,
-      sessionToken: null,
-      isLoggedIn: false,
-    }),
+    signOut: () => {
+      NextSignOut({ callbackUrl: "/" });
+      return {
+        currentUser: null,
+        image: null,
+        sessionToken: null,
+        isLoggedIn: false,
+      };
+    },
   },
 });
 
