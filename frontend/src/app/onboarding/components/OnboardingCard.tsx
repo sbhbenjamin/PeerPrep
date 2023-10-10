@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import type * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,9 +25,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+import { register } from "@/app/auth/state/AuthSlice";
+
 const OnboardingCard = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const dispatch = useDispatch();
   const [createUser] = useCreateUserMutation();
 
   if (!session) {
@@ -51,7 +55,7 @@ const OnboardingCard = () => {
     })
       .unwrap()
       .then((res) => {
-        // update the session her
+        dispatch(register(res));
         router.push(`/users/${res.id}`);
       })
       .catch(() => {

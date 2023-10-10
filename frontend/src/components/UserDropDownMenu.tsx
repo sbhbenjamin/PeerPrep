@@ -1,7 +1,7 @@
 import { Archive, LogOut, UserSquare2 } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -30,7 +30,7 @@ const UserDropDownMenu = () => {
           <AvatarFallback>{auth?.currentUser?.name}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="p-y-5 mr-4">
+      <DropdownMenuContent className="mr-4 py-5">
         <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {auth.currentUser !== null && (
