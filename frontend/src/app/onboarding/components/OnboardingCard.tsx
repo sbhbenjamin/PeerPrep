@@ -80,8 +80,7 @@ const OnboardingCard = () => {
                   />
                 </FormControl>
                 <FormDescription>
-                  This is your public display name. Please avoid putting your
-                  real name!
+                  This is your public display name.
                 </FormDescription>
               </FormItem>
             )}
