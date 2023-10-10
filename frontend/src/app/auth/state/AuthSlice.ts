@@ -5,6 +5,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import type { AuthenticationDetails } from "../types/authentication.types";
 
+import type { User } from "@/app/users/types/user.type";
+
 const initialState: AuthenticationDetails = {
   currentUser: null,
   image: null,
@@ -27,9 +29,13 @@ const authSlice = createSlice({
         isLoggedIn: false,
       };
     },
+    register: (state, action: PayloadAction<User>) => ({
+      ...state,
+      currentUser: action.payload,
+    }),
   },
 });
 
-export const { signOut, login } = authSlice.actions;
+export const { signOut, login, register } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React from "react";
 import { useSelector } from "react-redux";
 
@@ -12,7 +13,9 @@ const Navbar = () => {
 
   return (
     <div className="flex flex-row justify-between">
-      <div className="font-black">PeerPrep</div>
+      <Link className="text-center text-lg font-black" href="/">
+        Peer Prep
+      </Link>
       <div className="flex gap-10">
         {auth.isLoggedIn ? <UserDropDownMenu /> : <RegistrationModal />}
       </div>
