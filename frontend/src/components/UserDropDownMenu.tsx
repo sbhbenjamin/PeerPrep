@@ -22,10 +22,6 @@ const UserDropDownMenu = () => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(auth);
-  }, [auth]);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
