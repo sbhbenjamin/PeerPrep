@@ -7,7 +7,8 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 import { selectAuthData } from "@/features/auth";
-import { EditUserProfileForm, useGetUserByIdQuery } from "@/features/users";
+import { EditUserProfileForm } from "@/features/users";
+import { useGetUserByIdQuery } from "@/services/userApi";
 
 const page = ({ params }: { params: { id: number } }) => {
   const auth = useSelector(selectAuthData);

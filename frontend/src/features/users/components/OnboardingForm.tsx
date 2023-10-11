@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { register } from "@/features/auth/state/authSlice";
-import { useCreateUserMutation } from "@/features/users/api/userApi";
+import { useCreateUserMutation } from "@/services/userApi";
 
 export const OnboardingForm = () => {
   const { data: session } = useSession();

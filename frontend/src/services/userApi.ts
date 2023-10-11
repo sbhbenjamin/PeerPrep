@@ -1,7 +1,6 @@
-import { rootApi } from "../../../app/RootApi.ts";
-import type { User } from "../types/user.type.ts";
-
+import { rootApi } from "@/app/RootApi.ts";
 import { NotificationType, setNotification } from "@/features/notifications";
+import type { User } from "@/features/users";
 
 rootApi.enhanceEndpoints({ addTagTypes: ["User"] });
 

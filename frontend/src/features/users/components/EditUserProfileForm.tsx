@@ -31,12 +31,12 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { ConfirmDeleteDialog } from "./ConfirmDeleteDialog";
 import { signOut } from "@/features/auth/state/authSlice";
+import type { EditUseFormInput } from "@/features/users/types/user.type";
 import {
   useDeleteUserMutation,
   useGetUserByIdQuery,
   useUpdateUserMutation,
-} from "@/features/users/api/userApi";
-import type { EditUseFormInput } from "@/features/users/types/user.type";
+} from "@/services/userApi";
 
 export function EditUserProfileForm({ userId }: { userId: number }) {
   const { data: user, isError, isLoading } = useGetUserByIdQuery(userId);
