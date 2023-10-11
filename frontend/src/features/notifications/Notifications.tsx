@@ -4,34 +4,32 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, Toaster } from "sonner";
 
-import { NotificationType, pop } from "./state/notificationsSlice";
+import { NotificationType, reset } from "./state/notificationsSlice";
 
 import type { RootState } from "@/app/store";
 
 const Notifications = () => {
   const dispatch = useDispatch();
-  const notifications = useSelector(
-    (state: RootState) => state.internal.notifications.queue,
+  const notification = useSelector(
+    (state: RootState) => state.internal.notifications.value,
   );
 
   useEffect(() => {
-    if (notifications.length > 0) {
-      const currentNotification = notifications[0];
-
-      switch (currentNotification.type) {
+    if (notification) {
+      switch (notification.type) {
         case NotificationType.SUCCESS:
-          toast.success(currentNotification.value);
+          toast.success(notification.value);
           break;
         case NotificationType.ERROR:
-          toast.error(currentNotification.value);
+          toast.error(notification.value);
           break;
         default:
-          toast(currentNotification.value);
+          toast(notification.value);
       }
 
-      dispatch(pop());
+      dispatch(reset());
     }
-  }, [notifications, dispatch]);
+  }, [notification, dispatch]);
   return <Toaster position="top-center" richColors />;
 };
 

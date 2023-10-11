@@ -3,7 +3,7 @@ import type { User } from "../types/user.type.ts";
 
 import {
   NotificationType,
-  push,
+  set,
 } from "@/features/notifications/state/notificationsSlice.ts";
 
 rootApi.enhanceEndpoints({ addTagTypes: ["User"] });
@@ -28,7 +28,7 @@ const userApi = rootApi.injectEndpoints({
           type: NotificationType.SUCCESS,
           value: "Successfully updated profile",
         };
-        dispatch(push(notificationPayload));
+        dispatch(set(notificationPayload));
       },
     }),
     deleteUser: build.mutation<void, number>({
@@ -43,7 +43,7 @@ const userApi = rootApi.injectEndpoints({
           type: NotificationType.SUCCESS,
           value: "Successfully deleted user",
         };
-        dispatch(push(notificationPayload));
+        dispatch(set(notificationPayload));
       },
     }),
   }),

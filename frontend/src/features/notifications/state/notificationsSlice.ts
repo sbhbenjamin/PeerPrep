@@ -15,28 +15,26 @@ export type NotificationPayload = {
 };
 
 export type NotificationState = {
-  queue: Array<NotificationPayload>;
+  value: NotificationPayload | null;
 };
 
 const initialState: NotificationState = {
-  queue: [],
+  value: null,
 };
 
 export const notificationsSlice = createSlice({
   name: "notifications",
   initialState,
   reducers: {
-    push: (state, action: PayloadAction<NotificationPayload>) => {
-      state.queue.push(action.payload);
+    set: (state, action: PayloadAction<NotificationPayload>) => {
+      state.value = action.payload;
     },
-    pop: (state) => {
-      if (state.queue.length > 0) {
-        state.queue.shift();
-      }
+    reset: (state) => {
+      state.value = initialState.value;
     },
   },
 });
 
-export const { push, pop } = notificationsSlice.actions;
+export const { set, reset } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

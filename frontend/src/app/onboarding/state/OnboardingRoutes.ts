@@ -3,7 +3,7 @@ import { rootApi } from "../../RootApi.ts";
 import type { User, UserWithoutId } from "@/app/users/types/user.type.ts";
 import {
   NotificationType,
-  push,
+  set,
 } from "@/features/notifications/state/notificationsSlice.ts";
 
 const onboardingApi = rootApi.injectEndpoints({
@@ -19,7 +19,7 @@ const onboardingApi = rootApi.injectEndpoints({
           type: NotificationType.SUCCESS,
           value: "Successfully updated profile",
         };
-        dispatch(push(notificationPayload));
+        dispatch(set(notificationPayload));
       },
     }),
   }),
