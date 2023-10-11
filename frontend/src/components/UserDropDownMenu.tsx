@@ -22,6 +22,10 @@ const UserDropDownMenu = () => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
 
+  const handleSignOut = () => {
+    dispatch(signOut());
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -46,7 +50,7 @@ const UserDropDownMenu = () => {
           </>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="gap-4" onClick={() => dispatch(signOut())}>
+        <DropdownMenuItem className="gap-4" onClick={handleSignOut}>
           <LogOut size={15} />
           Sign out
         </DropdownMenuItem>
