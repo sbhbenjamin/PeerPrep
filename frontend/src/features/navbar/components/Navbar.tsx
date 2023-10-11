@@ -4,17 +4,17 @@ import Link from "next/link";
 import React from "react";
 import { useSelector } from "react-redux";
 
+import LoginButton from "./LoginButton";
 import UserDropDownMenu from "./UserDropDownMenu";
-import { selectAuthData } from "@/app/auth/state/AuthSelector";
-import LoginButton from "@/app/registration/components/LoginButton";
+import { selectAuthData } from "@/features/auth";
 
-const Navbar = () => {
+export const Navbar = () => {
   const auth = useSelector(selectAuthData);
 
   return (
     <div className="flex flex-row justify-between">
       <Link className="text-center text-lg font-black" href="/">
-        Peer Prep
+        PeerPrep
       </Link>
       <div className="flex gap-10">
         {auth.isLoggedIn ? <UserDropDownMenu /> : <LoginButton />}
@@ -22,5 +22,3 @@ const Navbar = () => {
     </div>
   );
 };
-
-export default Navbar;

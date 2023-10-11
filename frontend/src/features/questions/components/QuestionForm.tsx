@@ -7,10 +7,6 @@ import type * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { categoriesStub } from "../stubs/categories.stub";
-import { Question } from "../types/question.schema";
-import type { QuestionType } from "../types/question.type";
-
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -42,6 +38,9 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
+import { categoriesStub } from "@/features/questions/stubs/categories.stub";
+import { Question } from "@/features/questions/types/question.schema";
+import type { QuestionType } from "@/features/questions/types/question.type";
 import { cn } from "@/lib/utils";
 
 interface QuestionFormProps {
@@ -49,7 +48,7 @@ interface QuestionFormProps {
   currentQuestions: QuestionType[];
 }
 
-const QuestionForm: React.FC<QuestionFormProps> = ({
+export const QuestionForm: React.FC<QuestionFormProps> = ({
   addQuestion,
   currentQuestions,
 }) => {
@@ -248,5 +247,3 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     </Form>
   );
 };
-
-export default QuestionForm;

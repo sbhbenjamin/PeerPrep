@@ -1,12 +1,9 @@
 "use client";
 
-// needs to be a client component to access localStorage
-
 import React, { useEffect, useState } from "react";
 
-import QuestionCard from "./components/QuestionCard";
-import QuestionForm from "./components/QuestionForm";
-import type { QuestionType } from "./types/question.type";
+import type { QuestionType } from "@/features/questions";
+import { QuestionCard, QuestionForm } from "@/features/questions";
 
 const page = () => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);

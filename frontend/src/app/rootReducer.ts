@@ -1,16 +1,11 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
-import authReducer from "./auth/state/AuthSlice";
-import onboardingReducer from "./onboarding/state/OnboardingSlice";
-import userReducer from "./users/state/UserSlice";
-
-import notificationReducer from "@/features/notifications/state/notificationsSlice";
+import { authReducer } from "@/features/auth";
+import { notificationsReducer } from "@/features/notifications";
 
 const rootReducer = combineReducers({
-  user: userReducer,
-  onboarding: onboardingReducer,
+  notifications: notificationsReducer,
   auth: authReducer,
-  notifications: notificationReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
