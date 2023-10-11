@@ -1,6 +1,10 @@
 import { rootApi } from "../../RootApi.ts";
 
 import type { User, UserWithoutId } from "@/app/users/types/user.type.ts";
+import {
+  NotificationType,
+  push,
+} from "@/features/notifications/state/notificationsSlice.ts";
 
 const onboardingApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,6 +14,13 @@ const onboardingApi = rootApi.injectEndpoints({
         method: "POST",
         body: newUser,
       }),
+      async onCacheEntryAdded(arg, { dispatch }) {
+        const notificationPayload = {
+          type: NotificationType.SUCCESS,
+          value: "Successfully updated profile",
+        };
+        dispatch(push(notificationPayload));
+      },
     }),
   }),
   overrideExisting: false,

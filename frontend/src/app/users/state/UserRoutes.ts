@@ -1,6 +1,11 @@
 import { rootApi } from "../../RootApi.ts";
 import type { User } from "../types/user.type.ts";
 
+import {
+  NotificationType,
+  push,
+} from "@/features/notifications/state/notificationsSlice.ts";
+
 rootApi.enhanceEndpoints({ addTagTypes: ["User"] });
 
 const userApi = rootApi.injectEndpoints({
@@ -18,6 +23,13 @@ const userApi = rootApi.injectEndpoints({
       }),
       // @ts-expect-error
       invalidatesTags: ["User"],
+      async onCacheEntryAdded(_, { dispatch }) {
+        const notificationPayload = {
+          type: NotificationType.SUCCESS,
+          value: "Successfully updated profile",
+        };
+        dispatch(push(notificationPayload));
+      },
     }),
     deleteUser: build.mutation<void, number>({
       query: (userId) => ({
@@ -26,6 +38,13 @@ const userApi = rootApi.injectEndpoints({
       }),
       // @ts-expect-error
       invalidatesTags: ["User"],
+      async onCacheEntryAdded(_, { dispatch }) {
+        const notificationPayload = {
+          type: NotificationType.SUCCESS,
+          value: "Successfully deleted user",
+        };
+        dispatch(push(notificationPayload));
+      },
     }),
   }),
   overrideExisting: false,
