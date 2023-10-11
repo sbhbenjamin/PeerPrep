@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 
 import "./globals.css";
 import { Providers } from "./Providers";
+import Notifications from "@/features/notifications/Notifications";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <div className="min-h-screen px-12 py-10">
+            <Notifications />
             <Navbar />
             <div className="mt-8">{children}</div>
           </div>
