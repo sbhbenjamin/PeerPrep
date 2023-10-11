@@ -11,8 +11,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/pino": "^7.0.5",
-    "@types/pino-std-serializers": "^4.0.0",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
