@@ -18,7 +18,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<AuthenticationDetails>) =>
+    sessionLogin: (state, action: PayloadAction<AuthenticationDetails>) =>
       action.payload,
     signOut: () => {
       NextSignOut({ callbackUrl: "/" });
@@ -36,6 +36,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { signOut, login, register } = authSlice.actions;
+export const { signOut, sessionLogin, register } = authSlice.actions;
 
 export default authSlice.reducer;
