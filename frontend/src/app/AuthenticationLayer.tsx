@@ -2,11 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import type React from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { login } from "./auth/state/AuthSlice";
+import { sessionLogin } from "./auth/state/AuthSlice";
 
 type Props = {
   children?: React.ReactNode;
@@ -20,18 +19,19 @@ const AuthenticationLayer = ({ children }: Props) => {
   useEffect(() => {
     if (session) {
       dispatch(
-        login({
+        sessionLogin({
           currentUser: session.currentUser,
           image: session.user?.image || null,
           sessionToken: null,
           isLoggedIn: true,
         }),
       );
+
       if (session.currentUser == null) {
         router.push("/onboarding");
       }
     }
-  }, [session]);
+  }, [session, dispatch, router]);
 
   return children;
 };
