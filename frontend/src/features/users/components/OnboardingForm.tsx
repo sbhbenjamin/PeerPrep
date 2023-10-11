@@ -9,8 +9,6 @@ import type * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { CreateUserSchema } from "../types/onboarding.schema";
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -25,7 +23,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { register } from "@/features/auth/state/authSlice";
+
 import { useCreateUserMutation } from "@/services/userApi";
+
+import { CreateUserSchema } from "../types/onboarding.schema";
 
 export const OnboardingForm = () => {
   const { data: session } = useSession();

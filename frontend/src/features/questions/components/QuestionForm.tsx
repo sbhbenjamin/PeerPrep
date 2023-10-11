@@ -38,10 +38,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-import { categoriesStub } from "@/features/questions/stubs/categories.stub";
-import { Question } from "@/features/questions/types/question.schema";
-import type { QuestionType } from "@/features/questions/types/question.type";
 import { cn } from "@/lib/utils";
+
+import { categoriesStub } from "../stubs/categories.stub";
+import { Question } from "../types/question.schema";
+import type { QuestionType } from "../types/question.type";
 
 interface QuestionFormProps {
   addQuestion: (newQuestion: QuestionType) => void;

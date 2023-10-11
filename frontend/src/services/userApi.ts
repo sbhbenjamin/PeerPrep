@@ -1,4 +1,5 @@
 import { rootApi } from "@/app/RootApi.ts";
+
 import { NotificationType, setNotification } from "@/features/notifications";
 import type { User } from "@/features/users";
 

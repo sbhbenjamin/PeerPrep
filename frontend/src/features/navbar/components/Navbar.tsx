@@ -4,9 +4,10 @@ import Link from "next/link";
 import React from "react";
 import { useSelector } from "react-redux";
 
+import { selectAuthData } from "@/features/auth";
+
 import LoginButton from "./LoginButton";
 import UserDropDownMenu from "./UserDropDownMenu";
-import { selectAuthData } from "@/features/auth";
 
 export const Navbar = () => {
   const auth = useSelector(selectAuthData);

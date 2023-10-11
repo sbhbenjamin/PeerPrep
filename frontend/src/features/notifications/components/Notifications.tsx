@@ -4,10 +4,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, Toaster } from "sonner";
 
+import type { RootState } from "@/app/store";
+
 import { resetNotification } from "../state/notificationsSlice";
 import { NotificationType } from "../types/notification.type.ts";
-
-import type { RootState } from "@/app/store";
 
 export const Notifications = () => {
   const dispatch = useDispatch();

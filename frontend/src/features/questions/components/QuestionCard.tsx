@@ -18,12 +18,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import type {
-  Category,
-  Difficulty,
-} from "@/features/questions/types/question.type";
-import { categoryColors } from "@/features/questions/utils/categoryStyles";
-import { difficultyColors } from "@/features/questions/utils/difficultyStyles";
+import type { Category, Difficulty } from "../types/question.type";
+import { categoryColors } from "../utils/categoryStyles";
+import { difficultyColors } from "../utils/difficultyStyles";
 
 export interface QuestionCardProps {
   id: string;

@@ -3,9 +3,9 @@ import { signIn as NextSignIn, signOut as NextSignOut } from "next-auth/react";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
-import type { AuthenticationDetails } from "../types/authentication.type";
-
 import type { User } from "@/features/users";
+
+import type { AuthenticationDetails } from "../types/authentication.type";
 
 const initialState: AuthenticationDetails = {
   currentUser: null,

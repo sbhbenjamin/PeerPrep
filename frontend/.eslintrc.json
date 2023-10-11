@@ -54,10 +54,18 @@
           ["^@?\\w"],
           // Internal packages
           ["^@/(utils|config|etc)"],
-          // Parent imports
-          ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
           // Components and UI components
           ["^@/components/ui/", "^@/components/"],
+          // Library imports
+          ["^@/lib/"],
+          // App imports
+          ["^@/app"],
+          // Feature imports
+          ["^@/features"],
+          // API client imports
+          ["^@/services"],
+          // Parent imports
+          ["^\\.(?!/?$)", "^\\./?$", "^\\.\\./?$"],
           // Other relative imports
           ["^\\./(?=.*/)(?!/?$)", "^\\./?$"]
         ]
