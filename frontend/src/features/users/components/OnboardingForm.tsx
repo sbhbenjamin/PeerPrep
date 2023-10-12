@@ -28,11 +28,20 @@ import { useCreateUserMutation } from "@/services/userApi";
 
 import { CreateUserSchema } from "../types/onboarding.schema";
 
+import { useApiNotifications } from "@/hooks/useApiNotifications";
+
 export const OnboardingForm = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const dispatch = useDispatch();
-  const [createUser] = useCreateUserMutation();
+  const [createUser, { isLoading, isError, isSuccess }] =
+    useCreateUserMutation();
+
+  useApiNotifications({
+    isSuccess,
+    isError,
+    successMessage: "Successfully updated user profile!",
+  });
 
   if (!session) {
     <div>Loading</div>;
@@ -126,7 +135,13 @@ export const OnboardingForm = () => {
             )}
           />
           <div className="flex w-full gap-5">
-            <Button type="submit">Submit</Button>
+            <Button
+              isLoading={isLoading}
+              loadingText="Submitting"
+              type="submit"
+            >
+              Submit
+            </Button>
           </div>
         </form>
       </Form>

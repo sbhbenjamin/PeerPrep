@@ -39,18 +39,47 @@ import {
 import { UserSchema } from "../types/user.schema";
 import { ConfirmDeleteDialog } from "./ConfirmDeleteDialog";
 
+import { useApiNotifications } from "@/hooks/useApiNotifications";
+
 export function EditUserProfileForm({ userId }: { userId: number }) {
-  const { data: user, isError, isLoading } = useGetUserByIdQuery(userId);
+  const {
+    data: user,
+    isError: isGetUserError,
+    isLoading: isGetUserLoading,
+  } = useGetUserByIdQuery(userId);
   const dispatch = useDispatch();
-  const [updateUser] = useUpdateUserMutation();
-  const [deleteUser] = useDeleteUserMutation();
+  const [
+    updateUser,
+    {
+      isSuccess: isUpdateSuccess,
+      isLoading: isUpdateLoading,
+      isError: isUpdateError,
+    },
+  ] = useUpdateUserMutation();
+  const [
+    deleteUser,
+    {
+      isSuccess: isDeleteSuccess,
+      isLoading: isDeleteLoading,
+      isError: isDeleteError,
+    },
+  ] = useDeleteUserMutation();
 
-  if (isError) {
+  useApiNotifications({
+    isSuccess: isUpdateSuccess,
+    isError: isUpdateError,
+    successMessage: "Successfully updated user profile!",
+  });
+
+  useApiNotifications({
+    isSuccess: isDeleteSuccess,
+    isError: isDeleteError,
+    successMessage: "Successfully deleted user!",
+  });
+
+  if (isGetUserError) {
+    // TODO: Redirect user to error page
     throw new Error("No such User");
-  }
-
-  if (isLoading) {
-    return <div>Loading</div>;
   }
 
   const form = useForm<z.infer<typeof UserSchema>>({
@@ -165,7 +194,12 @@ export function EditUserProfileForm({ userId }: { userId: number }) {
                   )}
                 />
                 <DialogClose className="w-full">
-                  <Button type="submit" className="w-full">
+                  <Button
+                    isLoading={isUpdateLoading}
+                    loadingText="Submitting"
+                    type="submit"
+                    className="w-full"
+                  >
                     Submit
                   </Button>
                 </DialogClose>
