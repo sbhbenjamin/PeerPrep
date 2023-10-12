@@ -4,11 +4,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, Toaster } from "sonner";
 
-import { NotificationType, reset } from "./state/notificationsSlice";
-
 import type { RootState } from "@/app/store";
 
-const Notifications = () => {
+import { resetNotification } from "../state/notificationsSlice";
+import { NotificationType } from "../types/notification.type.ts";
+
+export const Notifications = () => {
   const dispatch = useDispatch();
   const notification = useSelector(
     (state: RootState) => state.internal.notifications.value,
@@ -27,10 +28,8 @@ const Notifications = () => {
           toast(notification.value);
       }
 
-      dispatch(reset());
+      dispatch(resetNotification());
     }
   }, [notification, dispatch]);
   return <Toaster position="top-center" richColors />;
 };
-
-export default Notifications;

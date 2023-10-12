@@ -1,11 +1,11 @@
-import { signOut as NextSignOut } from "next-auth/react";
+import { signIn as NextSignIn, signOut as NextSignOut } from "next-auth/react";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
-import type { AuthenticationDetails } from "../types/authentication.types";
+import type { User } from "@/features/users";
 
-import type { User } from "@/app/users/types/user.type";
+import type { AuthenticationDetails } from "../types/authentication.type";
 
 const initialState: AuthenticationDetails = {
   currentUser: null,
@@ -18,8 +18,11 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    sessionLogin: (state, action: PayloadAction<AuthenticationDetails>) =>
+    sessionSignIn: (state, action: PayloadAction<AuthenticationDetails>) =>
       action.payload,
+    signIn: () => {
+      NextSignIn("github", { redirect: true });
+    },
     signOut: () => {
       NextSignOut({ callbackUrl: "/" });
       return {
@@ -36,6 +39,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { signOut, sessionLogin, register } = authSlice.actions;
-
-export default authSlice.reducer;
+export const { signIn, signOut, sessionSignIn, register } = authSlice.actions;
+export const { reducer: authReducer } = authSlice;

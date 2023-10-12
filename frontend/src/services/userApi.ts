@@ -1,19 +1,33 @@
-import { rootApi } from "../../RootApi.ts";
-import type { User } from "../types/user.type.ts";
+import { rootApi } from "@/app/RootApi.ts";
 
-import {
-  NotificationType,
-  set,
-} from "@/features/notifications/state/notificationsSlice.ts";
+import { NotificationType, setNotification } from "@/features/notifications";
+import type { User } from "@/features/users";
 
 rootApi.enhanceEndpoints({ addTagTypes: ["User"] });
 
 const userApi = rootApi.injectEndpoints({
   endpoints: (build) => ({
-    getUser: build.query<User, number>({
+    getUserById: build.query<User, number>({
       query: (id) => ({ url: `user/${id}` }),
       // @ts-expect-error
       providesTags: ["User"],
+    }),
+    getUserByEmail: build.query<User, string>({
+      query: (email) => `/user?email=${email}`,
+    }),
+    createUser: build.mutation<User, Omit<User, "id">>({
+      query: (newUser) => ({
+        url: "/user",
+        method: "POST",
+        body: newUser,
+      }),
+      async onCacheEntryAdded(arg, { dispatch }) {
+        const notificationPayload = {
+          type: NotificationType.SUCCESS,
+          value: "Successfully updated profile",
+        };
+        dispatch(setNotification(notificationPayload));
+      },
     }),
     updateUser: build.mutation<User, Partial<User>>({
       query: (userData) => ({
@@ -28,7 +42,7 @@ const userApi = rootApi.injectEndpoints({
           type: NotificationType.SUCCESS,
           value: "Successfully updated profile",
         };
-        dispatch(set(notificationPayload));
+        dispatch(setNotification(notificationPayload));
       },
     }),
     deleteUser: build.mutation<void, number>({
@@ -43,12 +57,17 @@ const userApi = rootApi.injectEndpoints({
           type: NotificationType.SUCCESS,
           value: "Successfully deleted user",
         };
-        dispatch(set(notificationPayload));
+        dispatch(setNotification(notificationPayload));
       },
     }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetUserQuery, useUpdateUserMutation, useDeleteUserMutation } =
-  userApi;
+export const {
+  useGetUserByIdQuery,
+  useGetUserByEmailQuery,
+  useCreateUserMutation,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+} = userApi;

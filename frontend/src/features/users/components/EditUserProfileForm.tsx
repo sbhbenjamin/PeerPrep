@@ -9,14 +9,6 @@ import type * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogClose } from "@radix-ui/react-dialog";
 
-import {
-  useDeleteUserMutation,
-  useGetUserQuery,
-  useUpdateUserMutation,
-} from "../state/UserRoutes";
-import { UserSchema } from "../types/user.schema";
-import type { EditUseFormInput } from "../types/user.type";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -35,11 +27,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
-import { signOut } from "@/app/auth/state/AuthSlice";
+import { signOut } from "@/features/auth/state/authSlice";
+import type { EditUseFormInput } from "@/features/users/types/user.type";
 
-function EditUserProfileForm({ userId }: { userId: number }) {
-  const { data: user, isError, isLoading } = useGetUserQuery(userId);
+import {
+  useDeleteUserMutation,
+  useGetUserByIdQuery,
+  useUpdateUserMutation,
+} from "@/services/userApi";
+
+import { UserSchema } from "../types/user.schema";
+import { ConfirmDeleteDialog } from "./ConfirmDeleteDialog";
+
+export function EditUserProfileForm({ userId }: { userId: number }) {
+  const { data: user, isError, isLoading } = useGetUserByIdQuery(userId);
   const dispatch = useDispatch();
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
@@ -177,5 +178,3 @@ function EditUserProfileForm({ userId }: { userId: number }) {
     </Dialog>
   );
 }
-
-export default EditUserProfileForm;

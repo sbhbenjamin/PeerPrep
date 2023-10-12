@@ -1,7 +1,7 @@
 "use client";
 
-import { signIn } from "next-auth/react";
 import React from "react";
+import { useDispatch } from "react-redux";
 
 import {
   AlertDialog,
@@ -12,9 +12,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 
+import { signIn } from "@/features/auth";
+
 const LoginButton = () => {
+  const dispatch = useDispatch();
   const handleSignIn = () => {
-    signIn("github", { redirect: true });
+    dispatch(signIn());
   };
 
   return (

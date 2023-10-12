@@ -1,10 +1,6 @@
 import { Link as LinkIcon } from "lucide-react";
 import React from "react";
 
-import type { Category, Difficulty } from "../types/question.type";
-import { categoryColors } from "../utils/categoryStyles";
-import { difficultyColors } from "../utils/difficultyStyles";
-
 import {
   Accordion,
   AccordionContent,
@@ -22,6 +18,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import type { Category, Difficulty } from "../types/question.type";
+import { categoryColors } from "../utils/categoryStyles";
+import { difficultyColors } from "../utils/difficultyStyles";
+
 export interface QuestionCardProps {
   id: string;
   title: string;
@@ -32,7 +32,7 @@ export interface QuestionCardProps {
   deleteQuestion: (id: string) => void;
 }
 
-const QuestionCard: React.FC<QuestionCardProps> = ({
+export const QuestionCard: React.FC<QuestionCardProps> = ({
   id,
   title,
   categories,
@@ -102,5 +102,3 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
     </Card>
   );
 };
-
-export default QuestionCard;

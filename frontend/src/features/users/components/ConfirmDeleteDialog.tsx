@@ -14,7 +14,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
-const ConfirmDeleteDialog = ({ deleteUser }: { deleteUser: () => void }) => (
+export const ConfirmDeleteDialog = ({
+  deleteUser,
+}: {
+  deleteUser: () => void;
+}) => (
   <AlertDialog>
     <AlertDialogTrigger asChild>
       <Button variant="destructive" className="w-full">
@@ -36,5 +40,3 @@ const ConfirmDeleteDialog = ({ deleteUser }: { deleteUser: () => void }) => (
     </AlertDialogContent>
   </AlertDialog>
 );
-
-export default ConfirmDeleteDialog;

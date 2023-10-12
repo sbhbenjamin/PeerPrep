@@ -3,17 +3,17 @@
 import { BookMarked, Link } from "lucide-react";
 import { useSelector } from "react-redux";
 
-import EditUserProfileForm from "../components/EditUserProfileForm";
-import { useGetUserQuery } from "../state/UserRoutes";
-
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-import { selectAuthData } from "@/app/auth/state/AuthSelector";
+import { selectAuthData } from "@/features/auth";
+import { EditUserProfileForm } from "@/features/users";
+
+import { useGetUserByIdQuery } from "@/services/userApi";
 
 const page = ({ params }: { params: { id: number } }) => {
   const auth = useSelector(selectAuthData);
-  const { data: user, isLoading, isError } = useGetUserQuery(params.id);
+  const { data: user, isLoading, isError } = useGetUserByIdQuery(params.id);
 
   if (isError) {
     throw new Error("User not found");

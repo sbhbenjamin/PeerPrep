@@ -9,9 +9,6 @@ import type * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useCreateUserMutation } from "../state/OnboardingRoutes";
-import { CreateUserSchema } from "../types/onboarding.schema";
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -25,9 +22,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { register } from "@/app/auth/state/AuthSlice";
+import { register } from "@/features/auth/state/authSlice";
 
-const OnboardingCard = () => {
+import { useCreateUserMutation } from "@/services/userApi";
+
+import { CreateUserSchema } from "../types/onboarding.schema";
+
+export const OnboardingForm = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -50,8 +51,8 @@ const OnboardingCard = () => {
   async function onSubmit(values: z.infer<typeof CreateUserSchema>) {
     createUser({
       ...values,
-      bio: values.bio === "" ? undefined : values.bio,
-      url: values.url === "" ? undefined : values.url,
+      bio: values.bio === "" ? null : values.bio,
+      url: values.url === "" ? null : values.url,
     })
       .unwrap()
       .then((res) => {
@@ -132,5 +133,3 @@ const OnboardingCard = () => {
     </Card>
   );
 };
-
-export default OnboardingCard;

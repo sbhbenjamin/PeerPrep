@@ -1,4 +1,4 @@
-import type { User } from "@/app/users/types/user.type";
+import type { User } from "@/features/users/types/user.type";
 
 export type AuthenticationDetails = {
   currentUser: User | null;

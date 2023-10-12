@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { sessionLogin } from "./auth/state/AuthSlice";
+import { sessionSignIn } from "@/features/auth";
 
 type Props = {
   children?: React.ReactNode;
@@ -19,7 +19,7 @@ const AuthenticationLayer = ({ children }: Props) => {
   useEffect(() => {
     if (session) {
       dispatch(
-        sessionLogin({
+        sessionSignIn({
           currentUser: session.currentUser,
           image: session.user?.image || null,
           sessionToken: null,

@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +12,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
-import { selectAuthData } from "@/app/auth/state/AuthSelector";
-import { signOut } from "@/app/auth/state/AuthSlice";
+import { selectAuthData, signOut } from "@/features/auth";
 
 const UserDropDownMenu = () => {
   const auth = useSelector(selectAuthData);

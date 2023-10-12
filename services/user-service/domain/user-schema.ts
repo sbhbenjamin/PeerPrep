@@ -5,8 +5,8 @@ export const UserRecordSchema = z.object({
   id: z.number(),
   email: z.string().email(),
   name: z.string(),
-  bio: z.string().max(300).optional(),
-  url: z.string().url().optional(),
+  bio: z.string().max(300).optional().nullable(),
+  url: z.string().url().optional().nullable(),
 });
 
 // Schema for the addUser function
