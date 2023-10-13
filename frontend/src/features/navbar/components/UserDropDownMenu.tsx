@@ -1,5 +1,6 @@
 import { Archive, LogOut, UserSquare2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,41 +18,52 @@ import {
 import { selectAuthData, signOut } from "@/features/auth";
 
 const UserDropDownMenu = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const auth = useSelector(selectAuthData);
   const { data: session } = useSession();
-  const dispatch = useDispatch();
 
   const handleSignOut = () => {
     dispatch(signOut());
+    router.push("/");
   };
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="cursor-pointer">
         <Avatar>
           <AvatarImage src={auth.image} />
           <AvatarFallback>{auth?.currentUser?.name}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mr-4 py-5">
+      <DropdownMenuContent className="mr-4">
         <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {auth.currentUser !== null && (
           <>
-            <DropdownMenuItem className="gap-4">
-              <UserSquare2 size={15} />
-              <Link href={`/users/${auth?.currentUser?.id}`}>Profile page</Link>
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link
+                href={`/users/${auth?.currentUser?.id}`}
+                className="flex items-center gap-2"
+              >
+                <UserSquare2 size={15} />
+                Your Profile
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="gap-4">
-              <Archive size={15} />
-              <Link href={`/users/${auth?.currentUser?.id}`}>History</Link>
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link href="/questions" className="flex items-center gap-2">
+                <Archive size={15} />
+                Questions
+              </Link>
             </DropdownMenuItem>
           </>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="gap-4" onClick={handleSignOut}>
-          <LogOut size={15} />
-          Sign out
+        <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+          <div className="flex items-center gap-2">
+            <LogOut size={15} />
+            Sign out
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
