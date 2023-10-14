@@ -2,40 +2,52 @@
 
 import React, { useEffect, useState } from "react";
 
-import type { QuestionType } from "@/features/questions";
+import type { QuestionType, QuestionWithoutIdType } from "@/features/questions";
 import { QuestionCard, QuestionForm } from "@/features/questions";
 
+import {
+  useAddQuestionMutation,
+  useDeleteQuestionMutation,
+  useGetQuestionsQuery,
+} from "../../services/questionApi";
+
 const page = () => {
+  const [addQuestion] = useAddQuestionMutation();
+  const [deleteQuestion] = useDeleteQuestionMutation();
   const [questions, setQuestions] = useState<QuestionType[]>([]);
+  const { data = [] }: { data?: QuestionType[] } = useGetQuestionsQuery();
 
   useEffect(() => {
-    const storedQuestions = JSON.parse(
-      localStorage.getItem("questions") || "[]",
-    );
+    setQuestions(data);
+  }, [data]);
 
-    setQuestions(storedQuestions);
-  }, [questions]);
-
-  const addQuestion = (newQuestion: QuestionType) => {
-    setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
-    localStorage.setItem(
-      "questions",
-      JSON.stringify([...questions, newQuestion]),
-    );
+  const handleAddQuestion = (newQuestion: QuestionWithoutIdType) => {
+    addQuestion(newQuestion)
+      .unwrap()
+      .then((returnedQuestion: QuestionType) => {
+        setQuestions((prevQuestions) => [...prevQuestions, returnedQuestion]);
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-alert
+        alert(
+          err.data.error[0].message ??
+            err.data.error ??
+            "An error occurred. Please refresh and try again later",
+        );
+      });
   };
 
-  const deleteQuestion = (id: string) => {
-    const existingQuestions: QuestionType[] = JSON.parse(
-      localStorage.getItem("questions") || "[]",
-    );
-
-    // Filter out the question with the given id
-    const updatedQuestions = existingQuestions.filter(
-      (question) => question.id.toString() !== id,
-    );
-
-    // Save the updated list back to local storage
-    localStorage.setItem("questions", JSON.stringify(updatedQuestions));
+  const handleDeleteQuestion = (id: string) => {
+    deleteQuestion(id)
+      .unwrap()
+      .catch((err) => {
+        // eslint-disable-next-line no-alert
+        alert(
+          err.data.error[0].message ??
+            err.data.error ??
+            "An error occurred. Please refresh and try again later",
+        );
+      });
   };
 
   return (
@@ -45,10 +57,7 @@ const page = () => {
         <div className="flex gap-8">
           <div className="w-1/2">
             <h1 className="mb-8 flex text-2xl">Add New Question</h1>
-            <QuestionForm
-              addQuestion={addQuestion}
-              currentQuestions={questions}
-            />
+            <QuestionForm addQuestion={handleAddQuestion} />
           </div>
           <div className="w-1/2">
             <h1 className="mb-8 flex text-2xl">All Questions</h1>
@@ -63,7 +72,7 @@ const page = () => {
                       difficulty={difficulty}
                       description={description}
                       link={link}
-                      deleteQuestion={deleteQuestion}
+                      deleteQuestion={handleDeleteQuestion}
                     />
                   </div>
                 ),

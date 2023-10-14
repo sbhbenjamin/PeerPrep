@@ -4,26 +4,29 @@ import type { User } from "@/features/users";
 
 rootApi.enhanceEndpoints({ addTagTypes: ["User"] });
 
+const buildServiceUrl = (queryUrl: string) =>
+  `${process.env.NEXT_PUBLIC_USER_SERVICE_ADDRESS}${queryUrl}`;
+
 const userApi = rootApi.injectEndpoints({
   endpoints: (build) => ({
     getUserById: build.query<User, number>({
-      query: (id) => ({ url: `user/${id}` }),
+      query: (id) => ({ url: buildServiceUrl(`user/${id}`) }),
       // @ts-expect-error
       providesTags: ["User"],
     }),
     getUserByEmail: build.query<User, string>({
-      query: (email) => `/user?email=${email}`,
+      query: (email) => buildServiceUrl(`/user?email=${email}`),
     }),
     createUser: build.mutation<User, Omit<User, "id">>({
       query: (newUser) => ({
-        url: "/user",
+        url: buildServiceUrl("/user"),
         method: "POST",
         body: newUser,
       }),
     }),
     updateUser: build.mutation<User, Partial<User>>({
       query: (userData) => ({
-        url: `user/${userData.id}`,
+        url: buildServiceUrl(`user/${userData.id}`),
         method: "PUT",
         body: userData,
       }),
@@ -32,7 +35,7 @@ const userApi = rootApi.injectEndpoints({
     }),
     deleteUser: build.mutation<void, number>({
       query: (userId) => ({
-        url: `user/${userId}`,
+        url: buildServiceUrl(`user/${userId}`),
         method: "DELETE",
       }),
       // @ts-expect-error

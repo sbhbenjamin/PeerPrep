@@ -42,17 +42,13 @@ import { cn } from "@/lib/utils";
 
 import { categoriesStub } from "../stubs/categories.stub";
 import { Question } from "../types/question.schema";
-import type { QuestionType } from "../types/question.type";
+import type { QuestionWithoutIdType } from "../types/question.type";
 
 interface QuestionFormProps {
-  addQuestion: (newQuestion: QuestionType) => void;
-  currentQuestions: QuestionType[];
+  addQuestion: (newQuestion: QuestionWithoutIdType) => void;
 }
 
-export const QuestionForm: React.FC<QuestionFormProps> = ({
-  addQuestion,
-  currentQuestions,
-}) => {
+export const QuestionForm: React.FC<QuestionFormProps> = ({ addQuestion }) => {
   const form = useForm<z.infer<typeof Question>>({
     resolver: zodResolver(Question),
     defaultValues: {
@@ -66,26 +62,9 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   });
 
   function onSubmit(values: z.infer<typeof Question>) {
-    const uniqueId = Math.floor(Math.random() * 1000000).toString();
-    const newQuestion = { ...values, id: uniqueId };
-
-    // Check for duplicate titles or URLs
-    const isDuplicate = currentQuestions.some(
-      (question) =>
-        question.title === newQuestion.title ||
-        question.link === newQuestion.link,
-    );
-
-    if (isDuplicate) {
-      alert("Error: Duplicate title or URL found.");
-      return;
-    }
-
     // need to cast type due to how zod deals with array attributes
-    addQuestion(newQuestion as QuestionType);
-    console.log("[Question Form] Creating Question", newQuestion);
-    console.log("[Question Form] Question Created, ID: ", uniqueId);
-
+    addQuestion(values as QuestionWithoutIdType);
+    console.log("[Question Form] Creating Question", values);
     form.reset();
   }
 

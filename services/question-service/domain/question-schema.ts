@@ -1,23 +1,23 @@
 import { z } from "zod";
 
-import { Category, Difficulty } from "../types";
+import { Category, Difficulty } from "@prisma/client";
 
 const CategorySchema = z.nativeEnum(Category);
 
 export const QuestionRecordSchema = z.object({
   id: z.string(),
   title: z.string(),
-  category: z.array(CategorySchema),
+  categories: z.array(CategorySchema),
   description: z.string(),
   difficulty: z.nativeEnum(Difficulty),
-  url: z.string().url(),
+  link: z.string().url(),
 });
 
 export const AddQuestionSchema = QuestionRecordSchema.omit({ id: true });
 
 export const GetQuestionSchema = QuestionRecordSchema.omit({
   description: true,
-  url: true,
+  link: true,
 }).partial();
 
 export const UpdateQuestionSchema = QuestionRecordSchema.omit({

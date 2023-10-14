@@ -10,11 +10,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Difficulty {
+  Easy
+  Medium
+  Hard
+}
+
+enum Category {
+  Strings
+  Algorithms
+  DataStructures
+  BitManipulation
+  Recursion
+  Databases
+  Brainteaser
+  Arrays
+}
+
 model Question {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String   @unique
-  category    String[]
-  difficulty  String
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String     @unique
+  categories  Category[]
+  difficulty  Difficulty
   description String
-  url         String
+  link        String
 }

@@ -20,7 +20,7 @@ export async function getQuestions(
         id: filter.id,
         title: filter.title,
         difficulty: filter.difficulty,
-        category: {
+        categories: {
           hasSome: filter.categories,
         },
       },
