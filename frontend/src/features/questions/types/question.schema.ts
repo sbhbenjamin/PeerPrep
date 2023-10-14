@@ -1,8 +1,9 @@
 import { z } from "zod";
 
+// For resetting Select inputs, see: https://github.com/shadcn-ui/ui/issues/549#issuecomment-1703396297
 const Difficulty = z
-  .enum(["Easy", "Medium", "Hard"])
-  .refine((value) => value !== undefined, {
+  .enum(["", "Easy", "Medium", "Hard"])
+  .refine((value) => value !== "", {
     message: "Difficulty selection is required",
   });
 

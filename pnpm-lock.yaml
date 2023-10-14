@@ -114,6 +114,9 @@ importers:
       redux:
         specifier: ^4.2.1
         version: 4.2.1
+      sonner:
+        specifier: ^1.0.3
+        version: 1.0.3(react-dom@18.2.0)(react@18.2.0)
       tailwind-merge:
         specifier: ^1.14.0
         version: 1.14.0
@@ -169,13 +172,79 @@ importers:
 
   services/question-service:
     dependencies:
-      typescript:
-        specifier: ^5.0.0
-        version: 5.2.2
+      '@prisma/client':
+        specifier: ^5.3.0
+        version: 5.4.2(prisma@5.4.2)
+      '@types/express':
+        specifier: ^4.17.17
+        version: 4.17.18
+      cors:
+        specifier: ^2.8.5
+        version: 2.8.5
+      express:
+        specifier: ^4.18.2
+        version: 4.18.2
+      zod:
+        specifier: ^3.22.2
+        version: 3.22.2
     devDependencies:
+      '@types/node':
+        specifier: ^20.8.3
+        version: 20.8.4
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.7.4
+        version: 6.7.5(@typescript-eslint/parser@6.7.5)(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.7.4
+        version: 6.7.5(eslint@8.51.0)(typescript@5.2.2)
       bun-types:
         specifier: latest
-        version: 1.0.5-canary.20231009T140142
+        version: 1.0.6
+      eslint:
+        specifier: ^8.51.0
+        version: 8.51.0
+      eslint-config-airbnb-base:
+        specifier: ^15.0.0
+        version: 15.0.0(eslint-plugin-import@2.28.1)(eslint@8.51.0)
+      eslint-config-airbnb-typescript:
+        specifier: ^17.1.0
+        version: 17.1.0(@typescript-eslint/eslint-plugin@6.7.5)(@typescript-eslint/parser@6.7.5)(eslint-plugin-import@2.28.1)(eslint@8.51.0)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.0.0(eslint@8.51.0)
+      eslint-plugin-import:
+        specifier: ^2.28.1
+        version: 2.28.1(@typescript-eslint/parser@6.7.5)(eslint-import-resolver-typescript@3.6.1)(eslint@8.51.0)
+      eslint-plugin-prettier:
+        specifier: ^5.0.0
+        version: 5.0.0(eslint-config-prettier@9.0.0)(eslint@8.51.0)(prettier@3.0.3)
+      eslint-plugin-simple-import-sort:
+        specifier: ^10.0.0
+        version: 10.0.0(eslint@8.51.0)
+      eslint-plugin-unused-imports:
+        specifier: ^3.0.0
+        version: 3.0.0(@typescript-eslint/eslint-plugin@6.7.5)(eslint@8.51.0)
+      pino:
+        specifier: ^8.15.6
+        version: 8.16.0
+      prettier:
+        specifier: ^3.0.3
+        version: 3.0.3
+      prisma:
+        specifier: ^5.4.1
+        version: 5.4.2
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.1(@types/node@20.8.4)(typescript@5.2.2)
+      ts-node-dev:
+        specifier: ^2.0.0
+        version: 2.0.0(@types/node@20.8.4)(typescript@5.2.2)
+      tslib:
+        specifier: ^2.6.2
+        version: 2.6.2
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
 
   services/user-service:
     dependencies:
@@ -206,7 +275,7 @@ importers:
         version: 6.7.5(eslint@8.51.0)(typescript@5.2.2)
       bun-types:
         specifier: latest
-        version: 1.0.5-canary.20231009T140142
+        version: 1.0.6
       eslint:
         specifier: ^8.51.0
         version: 8.51.0
@@ -2162,8 +2231,8 @@ packages:
       ieee754: 1.2.1
     dev: true
 
-  /bun-types@1.0.5-canary.20231009T140142:
-    resolution: {integrity: sha512-5hT8WBXZ2ozdJt6s0nnnh4iQXn6xp9a7spbRYjapNxKjR3ckS5U2V347H3+XpaMVzc/a7D2I2KnKqIPO1R82kg==}
+  /bun-types@1.0.6:
+    resolution: {integrity: sha512-5QwynfXiRCRxPW3ZnC0Dv+sHHmctP4SHIuzsRKOWYO0HF/qUpsxQVexoviaxpmwDsF1hoVDDFdc4xUuafOzx1g==}
     dev: true
 
   /bundle-name@3.0.0:
@@ -4703,6 +4772,16 @@ packages:
     dependencies:
       atomic-sleep: 1.0.0
     dev: true
+
+  /sonner@1.0.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-hBoA2zKuYW3lUnpx4K0vAn8j77YuYiwvP9sLQfieNS2pd5FkT20sMyPTDJnl9S+5T27ZJbwQRPiujwvDBwhZQg==}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
 
   /source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
