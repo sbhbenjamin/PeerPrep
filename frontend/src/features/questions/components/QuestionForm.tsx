@@ -1,11 +1,12 @@
 "use client";
 
 import { CheckIcon, ChevronsUpDown } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { QueryStatus } from "@reduxjs/toolkit/query/react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -46,9 +47,13 @@ import type { QuestionWithoutIdType } from "../types/question.type";
 
 interface QuestionFormProps {
   addQuestion: (newQuestion: QuestionWithoutIdType) => void;
+  addQuestionResults: { status: QueryStatus };
 }
 
-export const QuestionForm: React.FC<QuestionFormProps> = ({ addQuestion }) => {
+export const QuestionForm: React.FC<QuestionFormProps> = ({
+  addQuestion,
+  addQuestionResults,
+}) => {
   const form = useForm<z.infer<typeof Question>>({
     resolver: zodResolver(Question),
     defaultValues: {
@@ -64,9 +69,12 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ addQuestion }) => {
   function onSubmit(values: z.infer<typeof Question>) {
     // need to cast type due to how zod deals with array attributes
     addQuestion(values as QuestionWithoutIdType);
-    console.log("[Question Form] Creating Question", values);
-    form.reset();
   }
+  useEffect(() => {
+    if (addQuestionResults.status === QueryStatus.fulfilled) {
+      form.reset();
+    }
+  }, [addQuestionResults, form]);
 
   return (
     <Form {...form}>
@@ -220,7 +228,13 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ addQuestion }) => {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={!form.formState.isValid}>
+        <Button
+          type="submit"
+          disabled={
+            !form.formState.isValid ||
+            addQuestionResults.status === QueryStatus.pending
+          }
+        >
           Submit
         </Button>
       </form>

@@ -12,7 +12,7 @@ import {
 } from "../../services/questionApi";
 
 const page = () => {
-  const [addQuestion] = useAddQuestionMutation();
+  const [addQuestion, addQuestionResults] = useAddQuestionMutation();
   const [deleteQuestion] = useDeleteQuestionMutation();
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const { data = [] }: { data?: QuestionType[] } = useGetQuestionsQuery();
@@ -57,7 +57,10 @@ const page = () => {
         <div className="flex gap-8">
           <div className="w-1/2">
             <h1 className="mb-8 flex text-2xl">Add New Question</h1>
-            <QuestionForm addQuestion={handleAddQuestion} />
+            <QuestionForm
+              addQuestion={handleAddQuestion}
+              addQuestionResults={addQuestionResults}
+            />
           </div>
           <div className="w-1/2">
             <h1 className="mb-8 flex text-2xl">All Questions</h1>
