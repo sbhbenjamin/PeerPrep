@@ -63,13 +63,13 @@ export default function defineRoutes(expressApp: express.Application) {
     }
   });
 
-  router.get("/healthz", async (req, res, next) => {
+  expressApp.use("/user", router);
+
+  expressApp.get("/health", async (req, res, next) => {
     try {
       res.status(200).end("Healthy");
     } catch (error) {
       next(error);
     }
   });
-
-  expressApp.use("/user", router);
 }
