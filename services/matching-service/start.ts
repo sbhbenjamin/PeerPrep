@@ -5,8 +5,19 @@ async function start() {
   return Promise.all([startWebServer()]);
 }
 
+export interface Match {
+  id: number,
+  difficulty: string
+}
+
+export const easy_queue: Match[] = [];
+export const medium_queue: Match[] = [];
+export const hard_queue: Match[] = [];
+
+
 start()
   .then((startResponses) => console.log(startResponses))
   .catch((error) => {
     console.log(error);
   });
+
