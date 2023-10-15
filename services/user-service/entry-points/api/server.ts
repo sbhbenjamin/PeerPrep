@@ -15,7 +15,7 @@ async function openConnection(
   expressApp: express.Application,
 ): Promise<AddressInfo> {
   return new Promise((resolve) => {
-    const webServerPort = 2001;
+    const webServerPort = process.env.SERVER_PORT || 2001;
     connection = expressApp.listen(webServerPort, () => {
       resolve(connection.address() as AddressInfo);
     });
