@@ -55,8 +55,16 @@ io.on("connection", (socket) => {
             this_queue.length = 0;
             socket.disconnect();
         } else {
-            // Delay 30s
-            return;
+            // Delay 5s
+            const DELAY = 5000;
+            setTimeout(() => {
+                if (this_queue.find((user) => user.id == msg.id)) {
+                    console.log("FAILURE!");
+                    socket.emit("error", "Sorry, we could not find you a match!");
+                    socket.disconnect();
+                    this_queue.length = 0;
+                }
+            }, DELAY);
         }
     })
 
