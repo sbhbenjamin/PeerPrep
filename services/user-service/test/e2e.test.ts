@@ -91,6 +91,21 @@ describe("PUT /user", () => {
 
     expect(newUser?.name).toBe("new name");
   });
+
+  test("PUT /user [No such user]", async () => {
+    await mockApp
+      .post("/user")
+      .send({ name: "wei jun", email: "weijun@gmail.com" });
+
+    const oldUser = await prisma.user.findUnique({
+      where: { email: "weijun@gmail.com" },
+    });
+
+    await mockApp
+      .put(`/user/${oldUser!.id + 1}`)
+      .send({ ...oldUser, name: "new name" })
+      .expect(404);
+  });
 });
 
 describe("GET /user/id", () => {
