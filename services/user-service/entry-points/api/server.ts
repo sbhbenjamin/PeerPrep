@@ -15,22 +15,26 @@ async function openConnection(
   expressApp: express.Application,
 ): Promise<AddressInfo> {
   return new Promise((resolve) => {
-    const webServerPort = process.env.SERVER_PORT || 2001;
+    const webServerPort = 2001;
     connection = expressApp.listen(webServerPort, () => {
       resolve(connection.address() as AddressInfo);
     });
   });
 }
 
-async function startWebServer(): Promise<AddressInfo> {
-  // ️️️✅ Best Practice: Declare a strict configuration schema and fail fast if the configuration is invalid
+function createWebApplication() {
   const expressApp = express();
   expressApp.use(cors());
   expressApp.use(express.urlencoded({ extended: true }));
   expressApp.use(express.json());
   defineRoutes(expressApp);
   expressApp.use(errorHandler);
-  const APIAddress = await openConnection(expressApp);
+  return expressApp;
+}
+
+async function startWebServer(): Promise<AddressInfo> {
+  // ️️️✅ Best Practice: Declare a strict configuration schema and fail fast if the configuration is invalid
+  const APIAddress = await openConnection(createWebApplication());
   return APIAddress;
 }
 
@@ -44,4 +48,4 @@ async function stopWebServer() {
   });
 }
 
-export { startWebServer, stopWebServer };
+export { createWebApplication, startWebServer, stopWebServer };
