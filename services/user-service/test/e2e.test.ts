@@ -1,75 +1,84 @@
-import request from "supertest";
-
-import { PrismaClient } from "@prisma/client";
-
+import { getPrismaClient } from "../data-access/prisma-client-factory";
 import { createWebApplication } from "../entry-points/api/server";
 
 import resetDb from "./helper/resetDb";
 
-const prisma = new PrismaClient();
-
-prisma.$connect();
+const request = require("supertest");
 
 const app = createWebApplication();
 
 const mockApp = request(app);
 
+const prisma = getPrismaClient();
+
 beforeEach(async () => {
   await resetDb();
 });
 
-test("Testing adding of add users", () => {
-  mockApp
-    .post("/users")
-    .send({ name: "wei jun", email: "weijun@gmail.com" })
-    .expect(200);
-
-  mockApp
-    .get("/users")
-    .expect([
-      { name: "wei jun", email: "weijun@gmail.com", bio: null, url: null },
-    ])
-    .expect(200);
+test("POST /user", async () => {
+  await mockApp
+    .post("/user")
+    .send({ name: "wei jun", email: "weijun@gmail.com" });
+  expect(200);
 });
 
-test("Testing adding of users", () => {
-  mockApp
-    .post("/users")
-    .send({ name: "wei jun", email: "weijun@gmail.com" })
-    .expect(200);
-});
-
-test("Testing no duplicate user", () => {
-  mockApp
-    .post("/users")
+test("GET /user", async () => {
+  await mockApp
+    .post("/user")
     .send({ name: "wei jun", email: "weijun@gmail.com" })
     .expect(200);
 
-  mockApp
-    .post("/users")
-    .send({ name: "wei jun", email: "weijun@gmail.com" })
-    .expect(202);
+  const user = await prisma.user.findMany();
+  await mockApp.get("/user").expect(user).expect(200);
 });
 
-test("Testing edit of user", () => {
-  mockApp.post("/users").send({ name: "wei jun", email: "weijun@gmail.com" });
-  // .end();
+test("GET /user [Duplicate]", async () => {
+  await mockApp
+    .post("/user")
+    .send({ name: "wei jun", email: "weijun@gmail.com" })
+    .expect(200);
 
-  mockApp.get("/users?email=weijun@gmail.com").expect({
-    name: "wei jun",
-    email: "weijun@gmail.com",
-    bio: "dad",
-    url: "null",
+  await mockApp
+    .post("/user")
+    .send({ name: "wei jun", email: "weijun@gmail.com" })
+    .expect(409);
+});
+
+test("PUT /user", async () => {
+  await mockApp
+    .post("/user")
+    .send({ name: "wei jun", email: "weijun@gmail.com" });
+
+  const oldUser = await prisma.user.findUnique({
+    where: { email: "weijun@gmail.com" },
   });
 
-  //   mockApp
-  //     .put(`/users/${user!.id}`)
-  //     .send({ name: "New Name", email: "weijun@gmail.com" })
-  //     .expect(200)
-  //     .expect({
-  //       name: "New Name",
-  //       email: "weijun@gmail.com",
-  //       bio: null,
-  //       url: null,
-  //     });
+  await mockApp
+    .put(`/user/${oldUser!.id}`)
+    .send({ ...oldUser, name: "new name" });
+
+  const newUser = await prisma.user.findUnique({
+    where: { email: "weijun@gmail.com" },
+  });
+
+  expect(newUser?.name).toBe("new name");
+});
+
+test("POST /user/:id", async () => {
+  await mockApp
+    .post("/user")
+    .send({ name: "wei jun", email: "weijun@gmail.com" });
+  expect(200);
+
+  const user = await prisma.user.findUnique({
+    where: { email: "weijun@gmail.com" },
+  });
+
+  const { id } = user!;
+
+  await mockApp.get(`/user/${id}`).expect(200);
+});
+
+test("POST /user/:id [No such user]", async () => {
+  await mockApp.get(`/user/${7}`).expect(404);
 });
