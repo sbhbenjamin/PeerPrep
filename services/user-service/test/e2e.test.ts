@@ -32,6 +32,29 @@ test("GET /user", async () => {
   await mockApp.get("/user").expect(user).expect(200);
 });
 
+test("GET /user [Filtering]", async () => {
+  await mockApp
+    .post("/user")
+    .send({ name: "wei jun", email: "weijun@gmail.com" })
+    .expect(200);
+
+  await mockApp
+    .post("/user")
+    .send({ name: "wei jun", email: "weijun1@gmail.com" })
+    .expect(200);
+
+  await mockApp
+    .post("/user")
+    .send({ name: "wei jun", email: "weijun2@gmail.com" })
+    .expect(200);
+
+  const users = await prisma.user.findMany({
+    where: { email: "weijun1@gmail.com" },
+  });
+
+  await mockApp.get("/user?email=weijun1@gmail.com").expect(users);
+});
+
 test("GET /user [Duplicate]", async () => {
   await mockApp
     .post("/user")
