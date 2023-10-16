@@ -48,11 +48,14 @@ io.on("connection", (socket) => {
             const peerSocket = io.sockets.sockets.get(sockAddr);
             if (peerSocket) {
                 peerSocket.emit("success", `You have been paired with User ${this_queue[1].id}`);
+                peerSocket.disconnect();
             } else {
                 console.log("Cannot find peer socket!");
             }
             this_queue.length = 0;
+            socket.disconnect();
         } else {
+            // Delay 30s
             return;
         }
     })
