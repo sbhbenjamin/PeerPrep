@@ -64,6 +64,10 @@ test("PUT /user", async () => {
   expect(newUser?.name).toBe("new name");
 });
 
+test("GET /user/:id [No such user]", async () => {
+  await mockApp.get(`/user/${7}`).expect(404);
+});
+
 test("POST /user/:id", async () => {
   await mockApp
     .post("/user")
@@ -79,6 +83,31 @@ test("POST /user/:id", async () => {
   await mockApp.get(`/user/${id}`).expect(200);
 });
 
-test("POST /user/:id [No such user]", async () => {
-  await mockApp.get(`/user/${7}`).expect(404);
+test("DELETE /user/:id", async () => {
+  await mockApp
+    .post("/user")
+    .send({ name: "wei jun", email: "weijun@gmail.com" });
+  expect(200);
+
+  const user = await prisma.user.findUnique({
+    where: { email: "weijun@gmail.com" },
+  });
+
+  const { id } = user!;
+
+  await mockApp.delete(`/user/${id}`).expect(200);
+
+  const res = await prisma.user.findUnique({
+    where: { email: "weijun@gmail.com" },
+  });
+
+  expect(res).toBe(null);
 });
+
+test("DELETE /user/:id [User does not exist]", async () => {
+  const id = 0;
+
+  await mockApp.delete(`/user/${id}`).expect(404);
+});
+
+// Test validation
