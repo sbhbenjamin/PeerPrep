@@ -19,8 +19,8 @@ describe("POST /user", () => {
   test("POST /user", async () => {
     await mockApp
       .post("/user")
-      .send({ name: "wei jun", email: "weijun@gmail.com" });
-    expect(200);
+      .send({ name: "wei jun", email: "weijun@gmail.com" })
+      .expect(200);
   });
 
   test("POST /user [Duplicate]", async () => {
@@ -112,8 +112,8 @@ describe("GET /user/id", () => {
   test("GET /user/id", async () => {
     await mockApp
       .post("/user")
-      .send({ name: "wei jun", email: "weijun@gmail.com" });
-    expect(200);
+      .send({ name: "wei jun", email: "weijun@gmail.com" })
+      .expect(200);
 
     const user = await prisma.user.findUnique({
       where: { email: "weijun@gmail.com" },
@@ -133,8 +133,8 @@ describe("DELETE /user/:id", () => {
   test("DELETE /user/:id", async () => {
     await mockApp
       .post("/user")
-      .send({ name: "wei jun", email: "weijun@gmail.com" });
-    expect(200);
+      .send({ name: "wei jun", email: "weijun@gmail.com" })
+      .expect(200);
 
     const user = await prisma.user.findUnique({
       where: { email: "weijun@gmail.com" },
