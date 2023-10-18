@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
+import type * as z from "zod";
 
-import type { QuestionType, QuestionWithoutIdType } from "@/features/questions";
+import type { QuestionWithoutIdType } from "@/features/questions";
 import { QuestionCard, QuestionForm } from "@/features/questions";
+import type { Question } from "@/features/questions/types/question.schema";
 
 import {
   useAddQuestionMutation,
@@ -11,43 +13,55 @@ import {
   useGetQuestionsQuery,
 } from "../../services/questionApi";
 
+import { useApiNotifications } from "@/hooks/useApiNotifications";
+
 const page = () => {
-  const [addQuestion, addQuestionResults] = useAddQuestionMutation();
-  const [deleteQuestion] = useDeleteQuestionMutation();
-  const [questions, setQuestions] = useState<QuestionType[]>([]);
-  const { data = [] }: { data?: QuestionType[] } = useGetQuestionsQuery();
+  const [
+    addQuestion,
+    { isSuccess: isAddSuccess, isLoading: isAddLoading, isError: isAddError },
+  ] = useAddQuestionMutation();
 
-  useEffect(() => {
-    setQuestions(data);
-  }, [data]);
+  const [
+    deleteQuestion,
+    {
+      isSuccess: isDeleteSuccess,
+      isLoading: isDeleteLoading,
+      isError: isDeleteError,
+    },
+  ] = useDeleteQuestionMutation();
 
-  const handleAddQuestion = (newQuestion: QuestionWithoutIdType) => {
-    addQuestion(newQuestion)
-      .unwrap()
-      .then((returnedQuestion: QuestionType) => {
-        setQuestions((prevQuestions) => [...prevQuestions, returnedQuestion]);
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-alert
-        alert(
-          err.data.error[0].message ??
-            err.data.error ??
-            "An error occurred. Please refresh and try again later",
-        );
-      });
-  };
+  const { data: questions = [], isError: isGetQuestionsError } =
+    useGetQuestionsQuery();
 
-  const handleDeleteQuestion = (id: string) => {
-    deleteQuestion(id)
-      .unwrap()
-      .catch((err) => {
-        // eslint-disable-next-line no-alert
-        alert(
-          err.data.error[0].message ??
-            err.data.error ??
-            "An error occurred. Please refresh and try again later",
-        );
-      });
+  if (isAddError) {
+    // TODO: Redirect user to error page
+    throw new Error("No such User");
+  }
+
+  useApiNotifications({
+    isSuccess: isAddSuccess,
+    isError: isAddError,
+    successMessage: "Question successfully added!",
+    errorMessage:
+      "Something went wrong while adding your question. Please try again later.",
+  });
+
+  useApiNotifications({
+    isSuccess: isDeleteSuccess,
+    isError: isDeleteError,
+    successMessage: "Question successfully deleted!",
+    errorMessage:
+      "Something went wrong while deleting your question. Please try again later.",
+  });
+
+  useApiNotifications({
+    isError: isGetQuestionsError,
+    errorMessage:
+      "Something went wrong while retrieving the questions. Please try again later.",
+  });
+
+  const handleAddQuestion = (newQuestion: z.infer<typeof Question>) => {
+    addQuestion(newQuestion as QuestionWithoutIdType);
   };
 
   return (
@@ -58,8 +72,12 @@ const page = () => {
           <div className="w-1/2">
             <h1 className="mb-8 flex text-2xl">Add New Question</h1>
             <QuestionForm
-              addQuestion={handleAddQuestion}
-              addQuestionResults={addQuestionResults}
+              onSubmit={handleAddQuestion}
+              formSubmitStatus={{
+                isError: isAddError,
+                isLoading: isAddLoading,
+                isSuccess: isAddSuccess,
+              }}
             />
           </div>
           <div className="w-1/2">
@@ -75,7 +93,8 @@ const page = () => {
                       difficulty={difficulty}
                       description={description}
                       link={link}
-                      deleteQuestion={handleDeleteQuestion}
+                      isDeleteLoading={isDeleteLoading}
+                      deleteQuestion={deleteQuestion}
                     />
                   </div>
                 ),

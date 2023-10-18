@@ -29,6 +29,7 @@ export interface QuestionCardProps {
   description: string;
   difficulty: Difficulty;
   link: string;
+  isDeleteLoading: boolean;
   deleteQuestion: (id: string) => void;
 }
 
@@ -39,6 +40,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   difficulty,
   description,
   link,
+  isDeleteLoading,
   deleteQuestion,
 }) => {
   const handleButtonClick = () => {
@@ -93,7 +95,11 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 <LinkIcon />
               </Button>
             </a>
-            <Button variant="outline" onClick={handleButtonClick}>
+            <Button
+              variant="outline"
+              isLoading={isDeleteLoading}
+              onClick={handleButtonClick}
+            >
               Delete
             </Button>
           </CardFooter>

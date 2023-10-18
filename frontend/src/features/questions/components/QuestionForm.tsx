@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { QueryStatus } from "@reduxjs/toolkit/query/react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -43,16 +42,19 @@ import { cn } from "@/lib/utils";
 
 import { categoriesStub } from "../stubs/categories.stub";
 import { Question } from "../types/question.schema";
-import type { QuestionWithoutIdType } from "../types/question.type";
 
 interface QuestionFormProps {
-  addQuestion: (newQuestion: QuestionWithoutIdType) => void;
-  addQuestionResults: { status: QueryStatus };
+  onSubmit: (values: z.infer<typeof Question>) => void;
+  formSubmitStatus: {
+    isError: boolean;
+    isSuccess: boolean;
+    isLoading: boolean;
+  };
 }
 
 export const QuestionForm: React.FC<QuestionFormProps> = ({
-  addQuestion,
-  addQuestionResults,
+  onSubmit,
+  formSubmitStatus,
 }) => {
   const form = useForm<z.infer<typeof Question>>({
     resolver: zodResolver(Question),
@@ -66,15 +68,12 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
     mode: "all",
   });
 
-  function onSubmit(values: z.infer<typeof Question>) {
-    // need to cast type due to how zod deals with array attributes
-    addQuestion(values as QuestionWithoutIdType);
-  }
   useEffect(() => {
-    if (addQuestionResults.status === QueryStatus.fulfilled) {
+    if (formSubmitStatus.isSuccess) {
       form.reset();
     }
-  }, [addQuestionResults, form]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formSubmitStatus.isSuccess]);
 
   return (
     <Form {...form}>
@@ -230,10 +229,8 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         />
         <Button
           type="submit"
-          disabled={
-            !form.formState.isValid ||
-            addQuestionResults.status === QueryStatus.pending
-          }
+          disabled={!form.formState.isValid}
+          isLoading={formSubmitStatus.isLoading}
         >
           Submit
         </Button>
