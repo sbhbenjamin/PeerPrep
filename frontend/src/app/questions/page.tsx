@@ -1,41 +1,67 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
+import type * as z from "zod";
 
-import type { QuestionType } from "@/features/questions";
+import type { QuestionWithoutIdType } from "@/features/questions";
 import { QuestionCard, QuestionForm } from "@/features/questions";
+import type { Question } from "@/features/questions/types/question.schema";
+
+import {
+  useAddQuestionMutation,
+  useDeleteQuestionMutation,
+  useGetQuestionsQuery,
+} from "../../services/questionApi";
+
+import { useApiNotifications } from "@/hooks/useApiNotifications";
 
 const page = () => {
-  const [questions, setQuestions] = useState<QuestionType[]>([]);
+  const [
+    addQuestion,
+    { isSuccess: isAddSuccess, isLoading: isAddLoading, isError: isAddError },
+  ] = useAddQuestionMutation();
 
-  useEffect(() => {
-    const storedQuestions = JSON.parse(
-      localStorage.getItem("questions") || "[]",
-    );
+  const [
+    deleteQuestion,
+    {
+      isSuccess: isDeleteSuccess,
+      isLoading: isDeleteLoading,
+      isError: isDeleteError,
+    },
+  ] = useDeleteQuestionMutation();
 
-    setQuestions(storedQuestions);
-  }, [questions]);
+  const { data: questions = [], isError: isGetQuestionsError } =
+    useGetQuestionsQuery();
 
-  const addQuestion = (newQuestion: QuestionType) => {
-    setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
-    localStorage.setItem(
-      "questions",
-      JSON.stringify([...questions, newQuestion]),
-    );
-  };
+  if (isAddError) {
+    // TODO: Redirect user to error page
+    throw new Error("No such User");
+  }
 
-  const deleteQuestion = (id: string) => {
-    const existingQuestions: QuestionType[] = JSON.parse(
-      localStorage.getItem("questions") || "[]",
-    );
+  useApiNotifications({
+    isSuccess: isAddSuccess,
+    isError: isAddError,
+    successMessage: "Question successfully added!",
+    errorMessage:
+      "Something went wrong while adding your question. Please try again later.",
+  });
 
-    // Filter out the question with the given id
-    const updatedQuestions = existingQuestions.filter(
-      (question) => question.id.toString() !== id,
-    );
+  useApiNotifications({
+    isSuccess: isDeleteSuccess,
+    isError: isDeleteError,
+    successMessage: "Question successfully deleted!",
+    errorMessage:
+      "Something went wrong while deleting your question. Please try again later.",
+  });
 
-    // Save the updated list back to local storage
-    localStorage.setItem("questions", JSON.stringify(updatedQuestions));
+  useApiNotifications({
+    isError: isGetQuestionsError,
+    errorMessage:
+      "Something went wrong while retrieving the questions. Please try again later.",
+  });
+
+  const handleAddQuestion = (newQuestion: z.infer<typeof Question>) => {
+    addQuestion(newQuestion as QuestionWithoutIdType);
   };
 
   return (
@@ -46,8 +72,12 @@ const page = () => {
           <div className="w-1/2">
             <h1 className="mb-8 flex text-2xl">Add New Question</h1>
             <QuestionForm
-              addQuestion={addQuestion}
-              currentQuestions={questions}
+              onSubmit={handleAddQuestion}
+              formSubmitStatus={{
+                isError: isAddError,
+                isLoading: isAddLoading,
+                isSuccess: isAddSuccess,
+              }}
             />
           </div>
           <div className="w-1/2">
@@ -63,6 +93,7 @@ const page = () => {
                       difficulty={difficulty}
                       description={description}
                       link={link}
+                      isDeleteLoading={isDeleteLoading}
                       deleteQuestion={deleteQuestion}
                     />
                   </div>

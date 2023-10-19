@@ -7,6 +7,8 @@ export interface QuestionType {
   link: string;
 }
 
+export type QuestionWithoutIdType = Omit<QuestionType, "id">;
+
 export interface QuestionDescription {
   id: string;
   description: string;

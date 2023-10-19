@@ -1,5 +1,7 @@
 import express from "express";
 
+import type { Category, Difficulty } from "@prisma/client";
+
 import * as questionUseCase from "../../domain/question-use-case";
 
 import {
@@ -25,8 +27,8 @@ export default function defineRoutes(expressApp: express.Application) {
       const response = await questionUseCase.getQuestions({
         id: req.query.id as string,
         title: req.query.title as string,
-        difficulty: req.query.difficulty as string,
-        categories: req.query.categories as string[],
+        difficulty: req.query.difficulty as Difficulty,
+        categories: req.query.categories as Category[],
       });
       res.json(response);
     } catch (error) {

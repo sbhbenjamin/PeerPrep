@@ -1,34 +1,16 @@
+import type { Category, Difficulty } from "@prisma/client";
+
 export type QuestionRecord = {
   id: string;
   title: string;
-  category: string[];
-  difficulty: string;
+  categories: Category[];
+  difficulty: Difficulty;
   description: string;
-  url: string;
+  link: string;
 };
 
 export type QuestionRequest = Omit<QuestionRecord, "id">;
 
-export type QuestionFilter = {
-  id: string | undefined;
-  title: string | undefined;
-  difficulty: string | undefined;
-  categories: string[] | undefined;
-};
-
-export enum Difficulty {
-  Easy = "Easy",
-  Medium = "Medium",
-  Hard = "Hard",
-}
-
-export enum Category {
-  Strings = "Strings",
-  Algorithms = "Algorithms",
-  DataStructures = "DataStructures",
-  BitManipulation = "BitManipulation",
-  Recursion = "Recursion",
-  Databases = "Databases",
-  Brainteaser = "Brainteaser",
-  Arrays = "Arrays",
-}
+export type QuestionFilter = Partial<
+  Omit<QuestionRecord, "description" | "link">
+>;

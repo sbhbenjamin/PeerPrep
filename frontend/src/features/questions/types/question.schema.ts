@@ -14,7 +14,7 @@ const Question = z.object({
     .nonempty({ message: "At least one category should be selected" }),
   difficulty: Difficulty,
   description: z.string().nonempty({ message: "Description is required" }),
-  link: z.string().nonempty({ message: "Link is required" }),
+  link: z.string().url().nonempty({ message: "Link is required" }),
 });
 
 export { Question };
