@@ -3,6 +3,7 @@
 import { CheckIcon, ChevronsUpDown } from "lucide-react";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import type * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,6 +41,8 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { cn } from "@/lib/utils";
 
+import { NotificationType, setNotification } from "@/features/notifications";
+
 import { categoriesStub } from "../stubs/categories.stub";
 import { Question } from "../types/question.schema";
 
@@ -56,12 +59,13 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   onSubmit,
   formSubmitStatus,
 }) => {
+  const dispatch = useDispatch();
   const form = useForm<z.infer<typeof Question>>({
     resolver: zodResolver(Question),
     defaultValues: {
       title: "",
       link: "",
-      difficulty: undefined,
+      difficulty: "",
       description: "",
       categories: [],
     },
@@ -179,10 +183,18 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Difficulty</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                value={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a difficulty" />
+                    {field.value ? (
+                      <SelectValue placeholder="Select a difficulty" />
+                    ) : (
+                      "Select a difficulty"
+                    )}
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
