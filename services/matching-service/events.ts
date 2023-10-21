@@ -25,7 +25,7 @@ export function defineEventListeners(io: Server) {
             return;
         }
         
-        // Check for duplicate ID and push to Queue
+        // Check for duplicate ID
         if (checkIdExists(msg.id)) {
             socket.emit("error", "You are already in the queue!");
             return;
