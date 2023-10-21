@@ -32,40 +32,43 @@ export function defineEventListeners(io: Server) {
         } 
 
         // Find match if exists, else create new queue and wait.
-   
         const matchName = difficulty + category; // e.g. easyrecursion
+        
+        const thisMatch = {
+            id: msg.id,
+            difficulty: difficulty,
+            category: category,
+            sockAddr: socket.id
+        };     
+
         if (queues.has(matchName)) {
             let thisQueue: Match = queues.get(matchName) as Match;
-
-            // Match found, remove queue from queues
-            console.log("WE FOUND A MATCH!");
-            queues.delete(matchName);
-            
-            // Remove id from ids.
-            const peerID = thisQueue.id;
-            // ids = ids.filter(id => id != msg.id && id != peerID);
-            
-            // Emit on this user's socket
-            socket.emit("success", `You have been paired with User ${peerID}.`);
 
             // Emit on paired user's socket
             const peerSockAddr = thisQueue.sockAddr;
             const peerSocket = io.sockets.sockets.get(peerSockAddr);
+
             if (peerSocket) {
+                console.log("WE FOUND A MATCH!");
+                
+                // Match found, remove from queues
+                queues.delete(matchName);
+                const peerID = thisQueue.id;
+                
+                // Emit on peer user's socket
                 peerSocket.emit("success", `You have been paired with User ${msg.id}`);
                 peerSocket.disconnect();
+
+                // Emit on this user's socket
+                socket.emit("success", `You have been paired with User ${peerID}.`);
+                socket.disconnect();
             } else {
                 console.log("Cannot find peer socket!");
+                queues.delete(matchName);
+                queues.set(matchName, thisMatch);
             }        
-            socket.disconnect();
         } else {
-            // No match, so we push queue to queues.
-            const thisMatch = {
-                id: msg.id,
-                difficulty: difficulty,
-                category: category,
-                sockAddr: socket.id
-            };            
+            // No match, so we push match to queues.
             queues.set(matchName, thisMatch);
 
             // Wait
