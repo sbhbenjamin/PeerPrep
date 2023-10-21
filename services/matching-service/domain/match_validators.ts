@@ -1,6 +1,5 @@
-// Initialize queues within matching-socketio service
-import { ids } from "../start";
-import { Match } from "../types";
+import { queues } from "../start";
+
 
 export function extractDifficulty(difficulty: string) {
     const DIFFICULTIES = [
@@ -37,9 +36,7 @@ export function extractCategory(category: string) {
 }
 
 export function checkIdExists(id: number) {
-    if (ids.includes(id)) {
-        return true;
-    } else {
-        return false;
-    }
+    const matches = Array.from(queues.entries());
+    const res = matches.find((element) => element[1].id == id);
+    return res != undefined;
 }
