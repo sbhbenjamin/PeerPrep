@@ -2,7 +2,8 @@ import express from "express";
 import { Server } from "socket.io";
 import { createServer } from "http";
 
-import { extractCategory, extractDifficulty, isDuplicateID as checkIdExists } from "./domain/match_validators";
+import { extractCategory, extractDifficulty, checkIdExists } from "./domain/match_validators";
+import { Match } from "./types";
 
 const app = express();
 const httpServer = createServer(app);
@@ -39,32 +40,26 @@ io.on("connection", (socket) => {
         } 
 
         // Find match if exists, else create new queue and wait.
-        const this_match = {
-                id: msg.id,
-                difficulty: difficulty,
-                category: category,
-                sockAddr: socket.id
-            }
+   
         const queueName = difficulty + category; // e.g. easyrecursion
-        let this_queue = queues.get(queueName);
-        if (this_queue) {
+        let thisQueue = queues.get(queueName);
+        if (thisQueue) {
             // Match found, remove queue from queues
-            this_queue.push(this_match)
             console.log("WE FOUND A MATCH!");
             queues.delete(queueName);
             
             // Remove id from ids.
-            const peerID = this_queue[0].id;
+            const peerID = thisQueue[0].id;
             ids = ids.filter(id => id != msg.id && id != peerID);
             
             // Emit on this user's socket
             socket.emit("success", `You have been paired with User ${peerID}.`);
 
             // Emit on paired user's socket
-            const peerSockAddr = this_queue[0].sockAddr;
+            const peerSockAddr = thisQueue[0].sockAddr;
             const peerSocket = io.sockets.sockets.get(peerSockAddr);
             if (peerSocket) {
-                peerSocket.emit("success", `You have been paired with User ${this_queue[1].id}`);
+                peerSocket.emit("success", `You have been paired with User ${msg.id}`);
                 peerSocket.disconnect();
             } else {
                 console.log("Cannot find peer socket!");
@@ -72,8 +67,14 @@ io.on("connection", (socket) => {
             socket.disconnect();
         } else {
             // No match, so we push queue to queues.
-            this_queue = [this_match];
-            queues.set(queueName, this_queue);
+            const thisMatch = {
+                id: msg.id,
+                difficulty: difficulty,
+                category: category,
+                sockAddr: socket.id
+            };            
+            thisQueue = [thisMatch];
+            queues.set(queueName, thisQueue);
 
             // Push this user's id into ids.
             ids.push(msg.id);
@@ -81,8 +82,8 @@ io.on("connection", (socket) => {
             // Wait
             const DELAY = 5000;
             setTimeout(() => {
-                this_queue = queues.get(queueName);
-                if (ids.includes(msg.id) && this_queue) {
+                thisQueue = queues.get(queueName);
+                if (ids.includes(msg.id) && thisQueue) {
                     queues.delete(queueName);
                     ids = ids.filter(id => id != msg.id);
                     console.log("FAILURE!");
@@ -107,13 +108,6 @@ httpServer.listen(port, () => {
     console.log(`Matching service running on ${port}`)
 });
 
-
-export interface Match {
-  id: number,
-  difficulty: string,
-  category: string,
-  sockAddr: string
-}
 
 const queues: Map<string, Array<Match>> = new Map();
 
