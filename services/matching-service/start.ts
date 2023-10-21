@@ -2,7 +2,7 @@ import express from "express";
 import { Server } from "socket.io";
 import { createServer } from "http";
 
-import { defineQueue, isDuplicateID } from "./domain/match_validators";
+import { extractCategory, extractDifficulty, isDuplicateID as checkIdExists } from "./domain/match_validators";
 
 const app = express();
 const httpServer = createServer(app);
@@ -15,57 +15,83 @@ io.on("connection", (socket) => {
     socket.emit("reply", "hello from server");
 
     socket.on("register", (msg) => {
-        console.log(`A NEW USER WITH ID ${msg.id} JOINED!`);
+        console.log(`A NEW USER WITH ID ${msg.id} JOINED!`);    
+    
+        const difficulty = extractDifficulty(msg.difficulty);
+        const category = extractCategory(msg.category);
+        
         // Check Valid Difficulty
-        const this_queue = defineQueue(msg.difficulty);
-        if (this_queue == undefined) {
+        if (difficulty == undefined) {
             socket.emit("error", "Invalid Difficulty!");
-            // Temporary Return to avoid undefined arrays
+            return;
+        }
+        
+        //Check valid Category
+        if (category == undefined) {
+            socket.emit("error", "Invalid Category!");
             return;
         }
         
         // Check for duplicate ID and push to Queue
-        if (isDuplicateID(msg.id)) {
+        if (checkIdExists(msg.id)) {
             socket.emit("error", "You are already in the queue!");
-            // Temporary Return to avoid undefined arrays
             return;
-        } else {
-            socket.emit("reply", "You are in the queue!");
-            this_queue.push({
-                id: msg.id,
-                difficulty: msg.difficulty,
-                sockAddr: socket.id
-            });
-        }
-        console.log(`Length of queue is: ${this_queue.filter(element => element != undefined).length}`);
-        
-        // Check for match
-        if (this_queue.length == 2) {
-            console.log("WE FOUND A MATCH!");
-            socket.emit("success", `You have been paired with User ${this_queue[0].id}`);
+        } 
 
-            const sockAddr = this_queue[0].sockAddr;
-            const peerSocket = io.sockets.sockets.get(sockAddr);
+        // Find match if exists, else create new queue and wait.
+        const this_match = {
+                id: msg.id,
+                difficulty: difficulty,
+                category: category,
+                sockAddr: socket.id
+            }
+        const queueName = difficulty + category; // e.g. easyrecursion
+        let this_queue = queues.get(queueName);
+        if (this_queue) {
+            // Match found, remove queue from queues
+            this_queue.push(this_match)
+            console.log("WE FOUND A MATCH!");
+            queues.delete(queueName);
+            
+            // Remove id from ids.
+            const peerID = this_queue[0].id;
+            ids = ids.filter(id => id != msg.id && id != peerID);
+            
+            // Emit on this user's socket
+            socket.emit("success", `You have been paired with User ${peerID}.`);
+
+            // Emit on paired user's socket
+            const peerSockAddr = this_queue[0].sockAddr;
+            const peerSocket = io.sockets.sockets.get(peerSockAddr);
             if (peerSocket) {
                 peerSocket.emit("success", `You have been paired with User ${this_queue[1].id}`);
                 peerSocket.disconnect();
             } else {
                 console.log("Cannot find peer socket!");
-            }
-            this_queue.length = 0;
+            }        
             socket.disconnect();
         } else {
-            // Delay 5s
+            // No match, so we push queue to queues.
+            this_queue = [this_match];
+            queues.set(queueName, this_queue);
+
+            // Push this user's id into ids.
+            ids.push(msg.id);
+
+            // Wait
             const DELAY = 5000;
             setTimeout(() => {
-                if (this_queue.find((user) => user.id == msg.id)) {
+                this_queue = queues.get(queueName);
+                if (ids.includes(msg.id) && this_queue) {
+                    queues.delete(queueName);
+                    ids = ids.filter(id => id != msg.id);
                     console.log("FAILURE!");
                     socket.emit("error", "Sorry, we could not find you a match!");
                     socket.disconnect();
-                    this_queue.length = 0;
                 }
             }, DELAY);
         }
+        socket.emit("reply", "You are in the queue!");
     })
 
 
@@ -81,13 +107,14 @@ httpServer.listen(port, () => {
     console.log(`Matching service running on ${port}`)
 });
 
+
 export interface Match {
   id: number,
   difficulty: string,
+  category: string,
   sockAddr: string
 }
 
-// export const easy_queue: Match[] = [];
-export const easy_queue = new Array<Match>(0);
-export const medium_queue = new Array<Match>(0);
-export const hard_queue = new Array<Match>(0);
+const queues: Map<string, Array<Match>> = new Map();
+
+export let ids: Array<number> = [];

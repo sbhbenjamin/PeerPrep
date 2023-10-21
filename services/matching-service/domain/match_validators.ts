@@ -1,23 +1,44 @@
 // Initialize queues within matching-socketio service
-import { easy_queue, medium_queue, hard_queue, Match } from "../start";
+import { Match, ids } from "../start";
 
-export function defineQueue(difficulty: string) {
-    if (difficulty.toLowerCase() == "easy") {
-        return easy_queue;
-    } else if (difficulty.toLowerCase() == "medium") {
-        return medium_queue;
-    } else if (difficulty.toLowerCase() == "hard") {
-        return hard_queue;
+export function extractDifficulty(difficulty: string) {
+    const DIFFICULTIES = [
+        "easy",
+        "medium",
+        "hard"
+    ]
+    difficulty = difficulty.toLowerCase();
+    if (DIFFICULTIES.includes(difficulty)) {
+        return difficulty;
+    } else {
+        return undefined;
+    }
+}
+
+export function extractCategory(category: string) {
+    const CATEGORIES = [
+        "strings",
+        "algorithms",
+        "datastructures",
+        "bitmanipulation",
+        "recursion",
+        "databases",
+        "brainteaser",
+        "arrays"
+    ]
+
+    category = category.toLowerCase();
+    if (CATEGORIES.includes(category)) {
+        return category;
     } else {
         return undefined;
     }
 }
 
 export function isDuplicateID(id: number) {
-    if (easy_queue.find((match: Match) => match != undefined && match.id == id) || 
-    medium_queue.find((match: Match) => match != undefined && match.id == id) || 
-    hard_queue.find((match: Match) => match != undefined && match.id == id)) {
+    if (ids.includes(id)) {
         return true;
+    } else {
+        return false;
     }
-    return false;
 }

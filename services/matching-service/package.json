@@ -1,5 +1,5 @@
 {
-  "name": "matching-socketio",
+  "name": "matching-service",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev start.ts",
