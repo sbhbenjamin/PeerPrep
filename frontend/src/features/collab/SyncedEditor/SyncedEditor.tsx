@@ -2,15 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import type { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
 
-import { Editor } from "@monaco-editor/react";
+import { Editor, useMonaco } from "@monaco-editor/react";
 
+import { questionsStub } from "@/features/questions/stubs/questions.stub";
+
+import QuestionDisplay from "../QuestionDisplay";
 import type { Message, User } from "../types";
 import ChatWindow from "./ChatWindow";
 
-import "./styles.css";
-
 export default function SyncedEditor({ roomId }: { roomId: string }) {
-  const [userNameSelected, setUsernameSelected] = useState<string>();
+  const monaco = useMonaco();
+  const URL = "http://localhost:4001";
+  const [currentUser, setCurrentUser] = useState<string>();
   const [editorContent, setEditorContent] = useState<string>(
     "// add your code here",
   );
@@ -18,15 +21,20 @@ export default function SyncedEditor({ roomId }: { roomId: string }) {
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const socketRef = useRef<Socket>();
 
+  const monacoConfig = {
+    fontSize: 14,
+  };
+
   useEffect(() => {
-    const URL = "http://localhost:4001";
     const socket = io(URL, { autoConnect: false });
+
     socket.on("connect_error", (err) => {
       console.error(err);
       if (err.message === "invalid username") {
-        setUsernameSelected(undefined);
+        setCurrentUser(undefined);
       }
     });
+
     socket.on("users", (users: User[]) => {
       console.log(`recv: ${users}`);
       users.forEach((user: User) => {
@@ -42,44 +50,51 @@ export default function SyncedEditor({ roomId }: { roomId: string }) {
         }),
       );
     });
+
     socket.on("user_connected", (newUser: User) => {
       setConnectedUsers((currUsers) => [...currUsers, newUser]);
     });
+
     socket.on("code_update", (content: string) => {
       setEditorContent(content);
     });
+
     socket.on("message", (content: Message) => {
-      console.log(`${content.username}: ${content.content}`);
-      setChatMessages((Messages) => [...chatMessages, content]);
+      console.log(`incoming message ${content.username}: ${content.content}`);
+      // required to reference the most recent state of chatMessages
+      setChatMessages((prevMessages) => [...prevMessages, content]);
     });
     socketRef.current = socket;
   }, []);
 
   useEffect(() => {
     if (socketRef.current) {
-      if (!userNameSelected) {
-        setUsernameSelected(Math.floor(Math.random() * 100).toString());
+      if (!currentUser) {
+        setCurrentUser(Math.floor(Math.random() * 100).toString());
       }
       socketRef.current.auth = {
-        username: userNameSelected,
+        username: currentUser,
       };
       socketRef.current.connect();
       socketRef.current.emit("join", roomId);
     }
-  }, [userNameSelected, socketRef.current]);
+  }, [currentUser, socketRef.current]);
 
   // const handleLanguageChange = (value: string) => {
-  //     monaco.editor.setModel
-  //     const model = monacoInstance?.editor.getModel();
-  //     monacoInstance?.editor
-  //     if (monacoInstance && monacoInstance.editor.getModel()) {
-  //         monacoInstance.editor.setModelLanguage(monacoInstance.editor.getModel(), value);
-  //     }
-  // }
+  //   monaco.editor.setModel;
+  //   const model = monacoInstance?.editor.getModel();
+  //   monacoInstance?.editor;
+  //   if (monacoInstance && monacoInstance.editor.getModel()) {
+  //     monacoInstance.editor.setModelLanguage(
+  //       monacoInstance.editor.getModel(),
+  //       value,
+  //     );
+  //   }
+  // };
 
   const handleOnEditorChange = (value: string | undefined) => {
     if (socketRef.current) {
-      console.log("sending ", value, "to ", roomId);
+      console.log("[Code] sending ", value, "to ", roomId);
       socketRef.current.emit("code_update", {
         content: value,
         to: roomId,
@@ -93,32 +108,38 @@ export default function SyncedEditor({ roomId }: { roomId: string }) {
       socketRef.current.emit("message", {
         content: value,
         to: roomId,
-        from: userNameSelected,
+        from: currentUser,
       });
       setChatMessages((messages) => [
         ...messages,
-        { username: userNameSelected, content: value } as Message,
+        { username: currentUser, content: value } as Message,
       ]);
     }
   };
 
   return (
-    <div className="synced-editor">
-      <div className="editor-container">
+    <div className="flex h-[80vh] gap-2">
+      <div className="w-3/12">
+        <QuestionDisplay question={questionsStub[0]} />
+      </div>
+      <div className="w-6/12 overflow-hidden rounded-lg border py-2 shadow-sm">
         {/* <input type="radio" value="javascript" onChange={e => handleLanguageChange(e.target.value)} /> */}
         <Editor
           value={editorContent}
           defaultLanguage="javascript"
           defaultValue="// some comment"
           onChange={handleOnEditorChange}
+          options={monacoConfig}
         />
       </div>
-      <div className="user-display-container">
-        <ChatWindow
-          users={connectedUsers}
-          messages={chatMessages}
-          sendMessage={sendMessage}
-        />
+      <div className="w-3/12">
+        {currentUser && (
+          <ChatWindow
+            messages={chatMessages}
+            sendMessage={sendMessage}
+            currentUser={currentUser}
+          />
+        )}
       </div>
     </div>
   );

@@ -2,20 +2,10 @@
 
 "use client";
 
-import QuestionDisplay from "@/features/collab/QuestionDisplay";
 import SyncedEditor from "@/features/collab/SyncedEditor/SyncedEditor";
 
 import "./styles.css";
 
-const page = () => (
-  <div className="main">
-    <div className="question-container">
-      <QuestionDisplay question={{}} />
-    </div>
-    <div className="synced-container">
-      <SyncedEditor roomId="123" />
-    </div>
-  </div>
-);
+const page = () => <SyncedEditor roomId="123" />;
 
 export default page;

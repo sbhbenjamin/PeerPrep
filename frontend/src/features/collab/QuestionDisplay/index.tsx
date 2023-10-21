@@ -1,12 +1,32 @@
-import type { Question } from "../types";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import type { QuestionType } from "@/features/questions";
+import { CategoryBadge } from "@/features/questions";
 
 import "./styles.css";
 
-type UsersProps = {
-  question: Question;
+type QuestionDisplayProps = {
+  question: QuestionType;
 };
 
-export default function QuestionDisplay(props: UsersProps) {
-  const { question } = props;
-  return <div className="question-display-div" />;
+export default function QuestionDisplay({ question }: QuestionDisplayProps) {
+  const { title, categories, difficulty, description, link } = question;
+  return (
+    <Card className="h-full">
+      <CardHeader>
+        <p className="text-xs font-bold text-gray-500">{difficulty}</p>
+        <CardTitle className="text-2xl">{title}</CardTitle>
+        <CardDescription>
+          <CategoryBadge categories={categories} />
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="whitespace-pre-line">{description}</CardContent>
+    </Card>
+  );
 }
