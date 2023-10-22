@@ -1,0 +1,29 @@
+# docker-compose.yml
+
+version: '3.8'
+services:
+  backend:
+    container_name: question-service
+    build: .
+    environment:
+      - DATABASE_URL=mongodb://mongodb-user:mongodb-pass@question-db-container:27017/question-db?authSource=admin&directConnection=true
+      - PORT=3001
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - '3001:3001'
+      
+  mongodb:
+    container_name: question-db-container
+    restart: on-failure
+    image: bitnami/mongodb:4.4
+    environment:
+      MONGODB_ADVERTISED_HOSTNAME: question-db-container
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_ROOT_USER: mongodb-user
+      MONGODB_ROOT_PASSWORD: mongodb-pass
+      MONGO_INITDB_DATABASE: question-db
+      MONGODB_REPLICA_SET_KEY: replicasetkey123
+    ports:
+      - '27017:27017'
