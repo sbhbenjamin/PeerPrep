@@ -58,4 +58,12 @@ export default function defineRoutes(expressApp: express.Application) {
   });
 
   expressApp.use("/question", router);
+
+  expressApp.get("/healthz", async (req, res, next) => {
+    try {
+      res.status(200).end("Healthy");
+    } catch (error) {
+      next(error);
+    }
+  });
 }
