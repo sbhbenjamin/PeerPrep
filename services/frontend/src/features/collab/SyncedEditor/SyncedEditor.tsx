@@ -17,7 +17,8 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
   const [editorContent, setEditorContent] = useState<string>(
     "// add your code here",
   );
-  const [numConnectedUsers, setNumConnectedUsers] = useState<number>([]);
+
+  const [numConnectedUsers, setNumConnectedUsers] = useState<number>();
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const socketRef = useRef<Socket>();
 

@@ -16,6 +16,11 @@ export type QuestionFilter = {
   categories: string[] | undefined;
 };
 
+export type Message = {
+  username: string;
+  content: string;
+};
+
 export enum Difficulty {
   Easy = "Easy",
   Medium = "Medium",
