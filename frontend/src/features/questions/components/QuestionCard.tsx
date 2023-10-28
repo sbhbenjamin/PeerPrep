@@ -1,5 +1,5 @@
 import { Link as LinkIcon } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Accordion,
@@ -29,8 +29,8 @@ export interface QuestionCardProps {
   description: string;
   difficulty: Difficulty;
   link: string;
-  isDeleteLoading: boolean;
   deleteQuestion: (id: string) => void;
+  deleteQuestionError: boolean;
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
@@ -40,13 +40,22 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   difficulty,
   description,
   link,
-  isDeleteLoading,
   deleteQuestion,
+  deleteQuestionError,
 }) => {
+  const [isDeletePending, setIsDeletePending] = useState<boolean>(false);
+
   const handleButtonClick = () => {
+    setIsDeletePending(true);
     console.log("[QuestionCard] Deleting ID: ", id);
     deleteQuestion(id);
   };
+
+  useEffect(() => {
+    if (deleteQuestionError) {
+      setIsDeletePending(false);
+    }
+  }, [deleteQuestionError]);
 
   return (
     <Card>
@@ -97,7 +106,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             </a>
             <Button
               variant="outline"
-              isLoading={isDeleteLoading}
+              isLoading={isDeletePending}
               onClick={handleButtonClick}
             >
               Delete
