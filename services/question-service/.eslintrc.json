@@ -6,7 +6,7 @@
   "extends": [
     "airbnb-base",
     "airbnb-typescript/base",
-    "prettier"
+    "plugin:prettier/recommended"
   ],
   "parserOptions": {
     "project": "./tsconfig.json"
@@ -15,15 +15,13 @@
     "@typescript-eslint",
     "unused-imports",
     "import",
-    "simple-import-sort",
-    "prettier"
+    "simple-import-sort"
   ],
   "rules": {
     "import/no-extraneous-dependencies": [
       "error",
       {"devDependencies": true}
     ],
-    "prettier/prettier": "error",
     "import/extensions": "off", // Avoid missing file extension errors, TypeScript already provides a similar feature
     "@typescript-eslint/consistent-type-imports": "error", // Ensure `import type` is used when it's necessary
     "@typescript-eslint/no-unused-vars": "off",
