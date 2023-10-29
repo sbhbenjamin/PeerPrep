@@ -5,7 +5,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev src/start.ts",
     "lint:fix": "eslint --ext .ts --fix .",
-    "ci": "eslint --ext .ts ."
+    "ci": "eslint --ext .ts . --max-warnings=-1"
   },
   "devDependencies": {
     "@types/node": "^20.8.3",

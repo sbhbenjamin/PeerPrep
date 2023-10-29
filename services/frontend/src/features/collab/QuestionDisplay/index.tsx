@@ -15,7 +15,7 @@ type QuestionDisplayProps = {
   question: QuestionType;
 };
 
-export default function QuestionDisplay({ question }: QuestionDisplayProps) {
+export function QuestionDisplay({ question }: QuestionDisplayProps) {
   const { title, categories, difficulty, description, link } = question;
   return (
     <Card className="h-full">

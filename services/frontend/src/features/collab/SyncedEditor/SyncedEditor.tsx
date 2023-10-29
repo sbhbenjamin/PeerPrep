@@ -6,11 +6,11 @@ import { Editor, useMonaco } from "@monaco-editor/react";
 
 import { questionsStub } from "@/features/questions/stubs/questions.stub";
 
-import QuestionDisplay from "../QuestionDisplay";
+import { QuestionDisplay } from "../QuestionDisplay";
 import type { Message, User } from "../types";
-import ChatWindow from "./ChatWindow";
+import { ChatWindow } from "./ChatWindow";
 
-export default function SyncedEditor({ roomId }: { roomId: string }) {
+export function SyncedEditor({ roomId }: { roomId: string }) {
   const monaco = useMonaco();
   const URL = "http://localhost:4001";
   const [currentUser, setCurrentUser] = useState<string>();

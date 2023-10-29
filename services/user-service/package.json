@@ -8,7 +8,7 @@
     "posttest": "DATABASE_URL=postgres://postgres:postgres@localhost:6543/user-service?schema=public && npx prisma db push",
     "dev": "ts-node-dev src/start.ts",
     "lint:fix": "eslint --ext .ts --fix .",
-    "ci": "eslint --ext .ts ."
+    "ci": "eslint --ext .ts . --max-warnings=-1"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",
