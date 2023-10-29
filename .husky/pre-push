@@ -5,5 +5,5 @@ SERVICES="frontend question-service user-service"
 
 for package in $SERVICES; do
   echo "Linting $package..."
-  (cd packages/$package && npm run lint:fix)
+  (cd services/$package && npm run lint:fix)
 done

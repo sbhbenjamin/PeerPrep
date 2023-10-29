@@ -23,14 +23,14 @@ jobs:
       - name: Cache Node.js modules
         uses: actions/cache@v2
         with:
-          path: packages/${{ matrix.package }}/node_modules
-          key: ${{ runner.OS }}-node-${{ matrix.package }}-${{ hashFiles('packages/${{ matrix.package }}/package-lock.json') }}
+          path: services/${{ matrix.package }}/node_modules
+          key: ${{ runner.OS }}-node-${{ matrix.package }}-${{ hashFiles('services/${{ matrix.package }}/package-lock.json') }}
           restore-keys: |
             ${{ runner.OS }}-node-${{ matrix.package }}-
             ${{ runner.OS }}-node-
             
       - name: Install dependencies for ${{ matrix.package }}
-        run: cd packages/${{ matrix.package }} && npm install
+        run: cd services/${{ matrix.package }} && npm install
 
       - name: Run CI script for ${{ matrix.package }}
-        run: cd packages/${{ matrix.package }} && npm run ci
+        run: cd services/${{ matrix.package }} && npm run ci
