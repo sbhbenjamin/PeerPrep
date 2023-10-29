@@ -2,7 +2,7 @@
 
 "use client";
 
-import SyncedEditor from "@/features/collab/SyncedEditor/SyncedEditor";
+import { SyncedEditor } from "@/features/collab/SyncedEditor/SyncedEditor";
 
 import "./styles.css";
 

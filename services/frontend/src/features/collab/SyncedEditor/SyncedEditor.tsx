@@ -17,7 +17,7 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
   const [editorContent, setEditorContent] = useState<string>(
     "// add your code here",
   );
-  const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
+  const [numConnectedUsers, setNumConnectedUsers] = useState<number>([]);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const socketRef = useRef<Socket>();
 
@@ -37,22 +37,13 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
 
     socket.on("users", (users: User[]) => {
       console.log(`recv: ${users}`);
-      users.forEach((user: User) => {
-        user.isSelf = user.userID === socket.id;
-      });
-      // put the current user first, and then sort by username
-      setConnectedUsers(
-        users.sort((a: User, b: User) => {
-          if (a.isSelf) return -1;
-          if (b.isSelf) return 1;
-          if (a.username < b.username) return -1;
-          return a.username > b.username ? 1 : 0;
-        }),
-      );
+      setNumConnectedUsers(users.length);
     });
 
     socket.on("user_connected", (newUser: User) => {
-      setConnectedUsers((currUsers) => [...currUsers, newUser]);
+      setNumConnectedUsers(
+        (prevNumConnectedUsers: number) => prevNumConnectedUsers - 1,
+      );
     });
 
     socket.on("code_update", (content: string) => {
@@ -62,7 +53,7 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
     socket.on("message", (content: Message) => {
       console.log(`incoming message ${content.username}: ${content.content}`);
       // required to reference the most recent state of chatMessages
-      setChatMessages((prevMessages) => [...prevMessages, content]);
+      setChatMessages((prevMessages: Message[]) => [...prevMessages, content]);
     });
     socketRef.current = socket;
   }, []);
@@ -110,7 +101,7 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
         to: roomId,
         from: currentUser,
       });
-      setChatMessages((messages) => [
+      setChatMessages((messages: Message[]) => [
         ...messages,
         { username: currentUser, content: value } as Message,
       ]);
