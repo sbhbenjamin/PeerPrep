@@ -25,10 +25,8 @@ services:
       MONGODB_ROOT_PASSWORD: mongodb-pass
       MONGO_INITDB_DATABASE: question-db
       MONGODB_REPLICA_SET_KEY: replicasetkey123
-
     volumes:
       - 'mongodb_master_data:/bitnami'
-
     ports:
       - '27017:27017'
 
