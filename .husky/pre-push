@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-cd frontend && npm run lint:fix
-cd frontend && npm run lint:fix
+SERVICES="frontend question-service user-service"
+
+for package in $SERVICES; do
+  echo "Linting $package..."
+  (cd services/$package && npm run lint:fix)
+done
