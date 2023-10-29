@@ -18,7 +18,7 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
     "// add your code here",
   );
 
-  const [numConnectedUsers, setNumConnectedUsers] = useState<number>();
+  const [numConnectedUsers, setNumConnectedUsers] = useState<number>(0);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const socketRef = useRef<Socket>();
 
@@ -56,7 +56,10 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
         console.log(`incoming message ${message.username}: ${message.content}`);
       });
       // required to reference the most recent state of chatMessages
-      setChatMessages((prevMessages: Message[]) => [...prevMessages, ...messages]);
+      setChatMessages((prevMessages: Message[]) => [
+        ...prevMessages,
+        ...messages,
+      ]);
     });
     socketRef.current = socket;
   }, []);
