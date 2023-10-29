@@ -51,10 +51,12 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
       setEditorContent(content);
     });
 
-    socket.on("message", (content: Message) => {
-      console.log(`incoming message ${content.username}: ${content.content}`);
+    socket.on("message", (messages: Message[]) => {
+      messages.forEach((message) => {
+        console.log(`incoming message ${message.username}: ${message.content}`);
+      });
       // required to reference the most recent state of chatMessages
-      setChatMessages((prevMessages: Message[]) => [...prevMessages, content]);
+      setChatMessages((prevMessages: Message[]) => [...prevMessages, ...messages]);
     });
     socketRef.current = socket;
   }, []);
@@ -95,12 +97,11 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
   };
 
   const sendMessage = (value: string | undefined) => {
-    if (socketRef.current) {
+    if (socketRef.current && value) {
       console.log("sending ", value, "to ", roomId);
       socketRef.current.emit("message", {
-        content: value,
         to: roomId,
-        from: currentUser,
+        message: { username: currentUser, content: value } as Message,
       });
       setChatMessages((messages: Message[]) => [
         ...messages,
