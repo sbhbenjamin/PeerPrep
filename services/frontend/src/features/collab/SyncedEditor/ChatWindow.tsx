@@ -71,7 +71,7 @@ export function ChatWindow({
           </Avatar>
           <div>
             <p className="text-sm font-medium leading-none">Sofia Davis</p>
-            <p className="text-muted-foreground text-sm">m@example.com</p>
+            <p className="text-sm text-muted-foreground">m@example.com</p>
           </div>
         </div>
       </CardHeader>
