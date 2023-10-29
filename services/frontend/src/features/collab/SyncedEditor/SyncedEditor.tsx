@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import type { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
 
 import { Editor, useMonaco } from "@monaco-editor/react";
 
+import { selectAuthData } from "@/features/auth";
 import { questionsStub } from "@/features/questions/stubs/questions.stub";
 
 import { QuestionDisplay } from "../QuestionDisplay";
 import type { Message, User } from "../types";
 import { ChatWindow } from "./ChatWindow";
 
-export function SyncedEditor({ roomId }: { roomId: string }) {
+export default function SyncedEditor({ roomId }: { roomId: string }) {
+  const auth = useSelector(selectAuthData);
   const monaco = useMonaco();
   const URL = "http://localhost:4001";
   const [currentUser, setCurrentUser] = useState<string>();
@@ -67,7 +70,10 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
   useEffect(() => {
     if (socketRef.current) {
       if (!currentUser) {
-        setCurrentUser(Math.floor(Math.random() * 100).toString());
+        setCurrentUser(
+          auth.currentUser?.id.toString() ??
+            Math.floor(Math.random() * 100).toString(),
+        );
       }
       socketRef.current.auth = {
         username: currentUser,

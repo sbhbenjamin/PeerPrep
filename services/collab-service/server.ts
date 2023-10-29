@@ -5,8 +5,6 @@ import { Server } from "socket.io";
 
 import type { Message } from "./types";
 
-// import { errorHandler } from "../../errorHandler";
-
 const cors = require("cors");
 
 let connection: Server;
@@ -147,8 +145,6 @@ async function startWebServer(): Promise<AddressInfo> {
   expressApp.use(cors());
   expressApp.use(express.urlencoded({ extended: true }));
   expressApp.use(express.json());
-  // defineRoutes(expressApp);
-  // expressApp.use(errorHandler);
   const APIAddress = await openConnection(expressApp);
   return APIAddress;
 }
