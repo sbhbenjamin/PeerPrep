@@ -3,11 +3,14 @@ import { createServer } from "http";
 import type { AddressInfo } from "net";
 import { Server } from "socket.io";
 
-// import { errorHandler } from "../../errorHandler";
+import type { Message } from "./types";
 
 const cors = require("cors");
 
 let connection: Server;
+const codeCache: Map<string, string> = new Map();
+const messageCache: Map<string, Message[]> = new Map();
+const timeouts: Map<string, NodeJS.Timeout> = new Map();
 
 const setupSocket = (io: Server) => {
   const getConnectedUsers = (roomId: string) =>
@@ -51,43 +54,63 @@ const setupSocket = (io: Server) => {
         .then((users) => {
           socket.emit("users", users);
         });
+      if (codeCache.has(roomId)) {
+        socket.emit("code_update", codeCache.get(roomId));
+      }
+      if (messageCache.has(roomId)) {
+        socket.emit("message", messageCache.get(roomId));
+      }
+      if (timeouts.has(roomId)) {
+        console.log(`resetting timeout for room: ${roomId}`);
+        clearTimeout(timeouts.get(roomId));
+        timeouts.delete(roomId);
+      }
     });
 
     socket.on(
       "code_update",
       ({ content, to }: { content: string; to: string }) => {
         socket.to(to).emit("code_update", content);
+        codeCache.set(to, content);
       },
     );
 
     socket.on(
       "message",
-      ({
-        content,
-        to,
-        from,
-      }: {
-        content: string;
-        to: string;
-        from: string;
-      }) => {
-        console.log(`received message: ${content}`);
-        socket.to(to).emit("message", {
-          username: from,
-          content,
-        });
+      ({ to, message }: { to: string; message: Message }) => {
+        console.log(
+          `received message: "${message.content}" from: ${message.username}`,
+        );
+        socket.to(to).emit("message", [message]);
+        if (messageCache.has(to)) {
+          messageCache.get(to)!.push(message);
+        } else {
+          messageCache.set(to, [message]);
+        }
       },
     );
 
     socket.on("disconnecting", () => {
-      console.log("disconnected");
       for (const room of socket.rooms) {
         if (room === socket.id) {
+          console.log("disconnecting from home socket");
           continue;
+        } else {
+          console.log(`disconnecting from room: ${room}`);
         }
         getConnectedUsers(room)
           .catch((e) => console.error(e))
           .then((users) => {
+            if (!users || users.length === 1) {
+              console.log(`setting cache timeout for empty room: ${room}`);
+              const clearRoomCacheTimeout = setTimeout(() => {
+                messageCache.delete(room);
+                codeCache.delete(room);
+                console.log(`cleared caches for room: ${room}`);
+              }, 600000);
+              timeouts.set(room, clearRoomCacheTimeout);
+              return;
+            }
             const remainingUsers = users?.filter(
               (user) => user.userID !== socket.id,
             );
@@ -122,8 +145,6 @@ async function startWebServer(): Promise<AddressInfo> {
   expressApp.use(cors());
   expressApp.use(express.urlencoded({ extended: true }));
   expressApp.use(express.json());
-  // defineRoutes(expressApp);
-  // expressApp.use(errorHandler);
   const APIAddress = await openConnection(expressApp);
   return APIAddress;
 }

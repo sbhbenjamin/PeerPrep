@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import type { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
 
 import { Editor, useMonaco } from "@monaco-editor/react";
 
+import { selectAuthData } from "@/features/auth";
 import { questionsStub } from "@/features/questions/stubs/questions.stub";
 
 import { QuestionDisplay } from "../QuestionDisplay";
@@ -11,13 +13,15 @@ import type { Message, User } from "../types";
 import { ChatWindow } from "./ChatWindow";
 
 export function SyncedEditor({ roomId }: { roomId: string }) {
+  const auth = useSelector(selectAuthData);
   const monaco = useMonaco();
   const URL = "http://localhost:4001";
   const [currentUser, setCurrentUser] = useState<string>();
   const [editorContent, setEditorContent] = useState<string>(
     "// add your code here",
   );
-  const [numConnectedUsers, setNumConnectedUsers] = useState<number>([]);
+
+  const [numConnectedUsers, setNumConnectedUsers] = useState<number>(0);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const socketRef = useRef<Socket>();
 
@@ -50,10 +54,15 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
       setEditorContent(content);
     });
 
-    socket.on("message", (content: Message) => {
-      console.log(`incoming message ${content.username}: ${content.content}`);
+    socket.on("message", (messages: Message[]) => {
+      messages.forEach((message) => {
+        console.log(`incoming message ${message.username}: ${message.content}`);
+      });
       // required to reference the most recent state of chatMessages
-      setChatMessages((prevMessages: Message[]) => [...prevMessages, content]);
+      setChatMessages((prevMessages: Message[]) => [
+        ...prevMessages,
+        ...messages,
+      ]);
     });
     socketRef.current = socket;
   }, []);
@@ -61,7 +70,10 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
   useEffect(() => {
     if (socketRef.current) {
       if (!currentUser) {
-        setCurrentUser(Math.floor(Math.random() * 100).toString());
+        setCurrentUser(
+          auth.currentUser?.id.toString() ??
+            Math.floor(Math.random() * 100).toString(),
+        );
       }
       socketRef.current.auth = {
         username: currentUser,
@@ -94,12 +106,11 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
   };
 
   const sendMessage = (value: string | undefined) => {
-    if (socketRef.current) {
+    if (socketRef.current && value) {
       console.log("sending ", value, "to ", roomId);
       socketRef.current.emit("message", {
-        content: value,
         to: roomId,
-        from: currentUser,
+        message: { username: currentUser, content: value } as Message,
       });
       setChatMessages((messages: Message[]) => [
         ...messages,

@@ -41,8 +41,6 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { cn } from "@/lib/utils";
 
-import { NotificationType, setNotification } from "@/features/notifications";
-
 import { categoriesStub } from "../stubs/categories.stub";
 import { Question } from "../types/question.schema";
 
