@@ -23,11 +23,7 @@ const page = () => {
 
   const [
     deleteQuestion,
-    {
-      isSuccess: isDeleteSuccess,
-      isLoading: isDeleteLoading,
-      isError: isDeleteError,
-    },
+    { isSuccess: isDeleteSuccess, isError: isDeleteError },
   ] = useDeleteQuestionMutation();
 
   const { data: questions = [], isError: isGetQuestionsError } =
@@ -93,8 +89,8 @@ const page = () => {
                       difficulty={difficulty}
                       description={description}
                       link={link}
-                      isDeleteLoading={isDeleteLoading}
                       deleteQuestion={deleteQuestion}
+                      deleteQuestionError={isDeleteError}
                     />
                   </div>
                 ),
