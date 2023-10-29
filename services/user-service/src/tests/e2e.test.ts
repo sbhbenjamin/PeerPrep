@@ -1,5 +1,6 @@
 import { getPrismaClient } from "../data-access/prisma-client-factory";
 import { createWebApplication } from "../entry-points/api/server";
+import { loadEnvConfig } from "../../env-config";
 
 import resetDb from "./helper/resetDb";
 
@@ -10,6 +11,8 @@ const app = createWebApplication();
 const mockApp = request(app);
 
 const prisma = getPrismaClient();
+
+loadEnvConfig();
 
 beforeEach(async () => {
   await resetDb();

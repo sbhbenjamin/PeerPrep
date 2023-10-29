@@ -1,4 +1,7 @@
 import { startWebServer } from "./entry-points/api/server";
+import { loadEnvConfig } from "../env-config";
+
+loadEnvConfig();
 
 async function start() {
   // 🦉 Array of entry point is being used to support more entry-points kinds like message queue, scheduled job,

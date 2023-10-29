@@ -23,9 +23,7 @@ services:
     image: postgres:14.1-alpine
     restart: always
     ports:
-      - '6542:5433'
-    volumes:
-      - db:/var/lib/postgresql/data
+      - '6542:5432'
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
