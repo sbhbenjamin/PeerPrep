@@ -4,8 +4,8 @@ import path from "path";
 export function loadEnvConfig() {
   const envFileName = path.resolve(
     __dirname,
-    "./",
-    `.env.${process.env.NODE_ENV || "development"}`
+    "../../../",
+    `.env.${process.env.NODE_ENV || "development"}`,
   );
   config({ path: envFileName });
   console.log("Loaded env file:", envFileName);

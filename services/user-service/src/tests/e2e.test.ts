@@ -1,4 +1,4 @@
-import { loadEnvConfig } from "../../env-config";
+import { loadEnvConfig } from "../commons/utils/env-config";
 import { getPrismaClient } from "../data-access/prisma-client-factory";
 import { createWebApplication } from "../entry-points/api/server";
 
