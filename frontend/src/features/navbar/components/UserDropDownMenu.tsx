@@ -56,6 +56,12 @@ const UserDropDownMenu = () => {
                 Questions
               </Link>
             </DropdownMenuItem>
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link href="/collab" className="flex items-center gap-2">
+                <Archive size={15} />
+                Collab
+              </Link>
+            </DropdownMenuItem>
           </>
         )}
         <DropdownMenuSeparator />

@@ -12,7 +12,7 @@ const handler = NextAuth({
     async session({ session }) {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_USERS_MICROSERVICE_URL}/user?email=${session.user?.email}`,
+          `http://${process.env.NEXT_PUBLIC_USERS_MICROSERVICE_URL}/user?email=${session.user?.email}`,
         );
         const users = await res.json();
         return {

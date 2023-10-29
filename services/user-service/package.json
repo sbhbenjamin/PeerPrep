@@ -1,7 +1,8 @@
 {
   "name": "user-service",
   "scripts": {
-    "predev": "npx prisma generate && npx prisma db push",
+    "postinstall": "prisma generate",
+    "predev": "prisma db push",
     "pretest": "DATABASE_URL=postgres://postgres:postgres@localhost:6542/user-service?schema=public && npx prisma db push",
     "test": "jest",
     "posttest": "DATABASE_URL=postgres://postgres:postgres@localhost:6543/user-service?schema=public && npx prisma db push",
