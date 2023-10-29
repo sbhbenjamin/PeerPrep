@@ -12,7 +12,7 @@ import { QuestionDisplay } from "../QuestionDisplay";
 import type { Message, User } from "../types";
 import { ChatWindow } from "./ChatWindow";
 
-export default function SyncedEditor({ roomId }: { roomId: string }) {
+export function SyncedEditor({ roomId }: { roomId: string }) {
   const auth = useSelector(selectAuthData);
   const monaco = useMonaco();
   const URL = "http://localhost:4001";
