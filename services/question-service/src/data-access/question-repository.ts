@@ -1,4 +1,4 @@
-import type { QuestionFilter, QuestionRecord, QuestionRequest } from "../types";
+import type { QuestionFilter, QuestionRecord, QuestionRequest } from "../../types";
 
 import { getPrismaClient } from "./prisma-client-factory";
 
