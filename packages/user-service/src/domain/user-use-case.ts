@@ -1,5 +1,5 @@
+import type { UpdateUser, UserFilter, UserWihoutId } from "../../types";
 import * as userRepository from "../data-access/user-repository";
-import type { UpdateUser, UserFilter, UserWihoutId } from "../types";
 
 import {
   UpdateUserSchema,

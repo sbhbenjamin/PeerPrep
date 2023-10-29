@@ -6,7 +6,7 @@ import { toast, Toaster } from "sonner";
 
 import type { RootState } from "@/app/store";
 
-import { resetNotification } from "../state/notificationsSlice";
+import { resetNotification } from "../state/notificationsSlice.ts";
 import { NotificationType } from "../types/notification.type.ts";
 
 export const Notifications = () => {

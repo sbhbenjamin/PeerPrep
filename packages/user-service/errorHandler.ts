@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 
-import type HttpError from "./error/index";
+import type HttpError from "./src/commons/error/index";
 
 export function errorHandler(
   error: HttpError,

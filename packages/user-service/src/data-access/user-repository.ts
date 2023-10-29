@@ -1,4 +1,4 @@
-import type { UpdateUser, User, UserFilter, UserWihoutId } from "../types";
+import type { UpdateUser, User, UserFilter, UserWihoutId } from "../../types";
 
 import { getPrismaClient } from "./prisma-client-factory";
 

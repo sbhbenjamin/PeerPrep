@@ -2,7 +2,7 @@ import express from "express";
 import type { Server } from "http";
 import type { AddressInfo } from "net";
 
-import { errorHandler } from "../../errorHandler";
+import { errorHandler } from "../../../errorHandler";
 
 import defineRoutes from "./routes";
 

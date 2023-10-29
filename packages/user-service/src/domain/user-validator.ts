@@ -1,5 +1,5 @@
+import HttpError from "../commons/error/index";
 import * as userRepository from "../data-access/user-repository";
-import HttpError from "../error/index";
 
 export async function assertUserExistsById(id: number) {
   const user = await userRepository.getUserById(id);
