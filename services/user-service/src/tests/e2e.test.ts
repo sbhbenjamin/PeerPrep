@@ -1,6 +1,6 @@
+import { loadEnvConfig } from "../../env-config";
 import { getPrismaClient } from "../data-access/prisma-client-factory";
 import { createWebApplication } from "../entry-points/api/server";
-import { loadEnvConfig } from "../../env-config";
 
 import resetDb from "./helper/resetDb";
 

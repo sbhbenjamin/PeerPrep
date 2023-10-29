@@ -1,5 +1,6 @@
-import { startWebServer } from "./entry-points/api/server";
 import { loadEnvConfig } from "../env-config";
+
+import { startWebServer } from "./entry-points/api/server";
 
 loadEnvConfig();
 
