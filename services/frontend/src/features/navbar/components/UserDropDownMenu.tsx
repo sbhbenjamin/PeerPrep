@@ -32,7 +32,7 @@ const UserDropDownMenu = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
         <Avatar>
-          <AvatarImage src={auth.image} />
+          {auth.image && <AvatarImage src={auth.image} />}
           <AvatarFallback>{auth?.currentUser?.name}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

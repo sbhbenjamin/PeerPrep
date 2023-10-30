@@ -5,7 +5,7 @@ import type { QuestionType } from "@/features/questions";
 rootApi.enhanceEndpoints({ addTagTypes: ["Question"] });
 
 const buildServiceUrl = (queryUrl: string) =>
-  `${process.env.NEXT_PUBLIC_QUESTION_SERVICE_ADDRESS}${queryUrl}`;
+  `${process.env.NEXT_PUBLIC_SERVICE_QUESTION_URL}${queryUrl}`;
 
 const questionApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
