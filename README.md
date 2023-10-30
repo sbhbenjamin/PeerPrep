@@ -97,8 +97,8 @@ pnpm i
     echo "NEXT_PUBLIC_GITHUB_CLIENT_SECRET=<Your GitHub OAuth client secret>" >> .env
     echo "NEXTAUTH_SECRET=<Generate a secret>" >> .env
     echo "NEXTAUTH_URL=http://localhost:<frontend-port>" >> .env
-    echo "NEXT_PUBLIC_USERS_MICROSERVICE_URL=localhost:<user-service-port>" >> .env
-    echo "NEXT_PUBLIC_QUESTION_SERVICE_ADDRESS=localhost:<questions-service-port>" >> .env
+    echo "NEXT_PUBLIC_SERVICE_USER_URL=localhost:<user-service-port>" >> .env
+    echo "NEXT_PUBLIC_SERVICE_QUESTION_URL=localhost:<questions-service-port>" >> .env
     ```
 
 4. Run microservice.
