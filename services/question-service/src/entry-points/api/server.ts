@@ -1,12 +1,30 @@
 import express from "express";
 import type { Server } from "http";
 import type { AddressInfo } from "net";
+import pinoHttp from "pino-http";
 
 import { errorHandler } from "../../../errorHandler";
 
 import defineRoutes from "./routes";
 
 const cors = require("cors");
+
+const httpLogger = pinoHttp({
+  serializers: {
+    req(req) {
+      return {
+        id: req.id,
+        method: req.method,
+        url: req.url,
+      };
+    },
+    res(res) {
+      return {
+        statusCode: res.statusCode,
+      };
+    },
+  },
+});
 
 let connection: Server;
 
@@ -23,6 +41,7 @@ async function openConnection(
 
 async function startWebServer(): Promise<AddressInfo> {
   const expressApp = express();
+  expressApp.use(httpLogger);
   expressApp.use(cors());
   expressApp.use(express.urlencoded({ extended: true }));
   expressApp.use(express.json());
