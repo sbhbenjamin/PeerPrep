@@ -17,3 +17,8 @@ model User {
   bio String?
   url String?
 }
+
+enum Role {
+  USER
+  ADMIN
+}
