@@ -58,3 +58,5 @@ export async function updateUser(
   const validatedData = UpdateUserSchema.parse(updateUserRequest);
   return userRepository.updateUser(userId, validatedData);
 }
+
+// Check if user is registered
