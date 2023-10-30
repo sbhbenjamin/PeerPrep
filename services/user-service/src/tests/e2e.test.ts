@@ -31,11 +31,16 @@ const createUserInputFull = {
 const createUserInput = { name: "wei jun", email: "weijun@gmail.com" };
 const createUserInput1 = { name: "wei jun", email: "weijun1@gmail.com" };
 const createUserInput2 = { name: "wei ming", email: "weiming@gmail.com" };
+const validJwt =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
 describe("POST /user", () => {
   test("when valid name, email, bio and url are provided, return status 200 OK", async () => {
     // act
-    const res = await mockApp.post("/user").send(createUserInputFull);
+    const res = await mockApp
+      .post("/user")
+      .set({ Authorization: `Bearer ${validJwt}` })
+      .send(createUserInputFull);
     const user = await prisma.user.findUnique({
       where: { ...createUserInputFull },
     });
