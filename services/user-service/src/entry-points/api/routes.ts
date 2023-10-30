@@ -1,5 +1,6 @@
 import express from "express";
 
+import { authenticationCheck } from "../../commons/auth/authenticator";
 import * as userUseCase from "../../domain/user-use-case";
 
 import { validateAddUserInput, validateUpdateUserInput } from "./validators";
@@ -7,15 +8,19 @@ import { validateAddUserInput, validateUpdateUserInput } from "./validators";
 export default function defineRoutes(expressApp: express.Application) {
   const router = express.Router();
 
-  router.post("/", validateAddUserInput, async (req, res, next) => {
-    try {
-      // ✅ Best Practice: Using the 3-tier architecture, routes/controller are kept thin, logic is encapsulated in a dedicated domain folder
-      const addUserResponse = await userUseCase.addUser(req.body);
-      res.json(addUserResponse);
-    } catch (error) {
-      next(error);
-    }
-  });
+  router.post(
+    "/",
+    [validateAddUserInput, authenticationCheck],
+    async (req, res, next) => {
+      try {
+        // ✅ Best Practice: Using the 3-tier architecture, routes/controller are kept thin, logic is encapsulated in a dedicated domain folder
+        const addUserResponse = await userUseCase.addUser(req.body);
+        res.json(addUserResponse);
+      } catch (error) {
+        next(error);
+      }
+    },
+  );
 
   router.get("/", async (req, res, next) => {
     try {

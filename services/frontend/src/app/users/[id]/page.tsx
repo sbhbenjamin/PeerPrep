@@ -23,6 +23,8 @@ const page = ({ params }: { params: { id: number } }) => {
     return <div>Loading</div>;
   }
 
+  console.log(auth);
+
   return (
     <div className="w-full max-w-screen-xl">
       <div className="flex h-96 w-full gap-x-8">
