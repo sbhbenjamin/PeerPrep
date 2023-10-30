@@ -8,19 +8,15 @@ import { validateAddUserInput, validateUpdateUserInput } from "./validators";
 export default function defineRoutes(expressApp: express.Application) {
   const router = express.Router();
 
-  router.post(
-    "/",
-    [validateAddUserInput, authenticationCheck],
-    async (req, res, next) => {
-      try {
-        // ✅ Best Practice: Using the 3-tier architecture, routes/controller are kept thin, logic is encapsulated in a dedicated domain folder
-        const addUserResponse = await userUseCase.addUser(req.body);
-        res.json(addUserResponse);
-      } catch (error) {
-        next(error);
-      }
-    },
-  );
+  router.post("/", [validateAddUserInput], async (req, res, next) => {
+    try {
+      await authenticationCheck(req);
+      const addUserResponse = await userUseCase.addUser(req.body);
+      res.json(addUserResponse);
+    } catch (error) {
+      next(error);
+    }
+  });
 
   router.get("/", async (req, res, next) => {
     try {
@@ -46,8 +42,9 @@ export default function defineRoutes(expressApp: express.Application) {
   });
 
   // update user by id
-  router.put("/:id", validateUpdateUserInput, async (req, res, next) => {
+  router.put("/:id", [validateUpdateUserInput], async (req, res, next) => {
     try {
+      await authenticationCheck(req);
       const response = await userUseCase.updateUser(
         parseInt(req.params.id, 10),
         req.body,
@@ -61,6 +58,7 @@ export default function defineRoutes(expressApp: express.Application) {
   // delete user by id
   router.delete("/:id", async (req, res, next) => {
     try {
+      await authenticationCheck(req);
       await userUseCase.deleteUser(parseInt(req.params.id, 10));
       res.status(200).end();
     } catch (error) {
