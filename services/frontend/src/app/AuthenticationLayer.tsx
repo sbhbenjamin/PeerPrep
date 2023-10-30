@@ -16,21 +16,29 @@ const AuthenticationLayer = ({ children }: Props) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  useEffect(() => {
-    if (session) {
-      dispatch(
-        sessionSignIn({
-          currentUser: session.currentUser,
-          image: session.user?.image || null,
-          sessionToken: null,
-          isLoggedIn: true,
-        }),
-      );
+  const fetchSessionToken = async () => {
+    const response = await fetch("http://localhost:3000/api/me");
+    return response.json();
+  };
 
-      if (session.currentUser == null) {
-        router.push("/onboarding");
+  useEffect(() => {
+    const authenticator = async () => {
+      if (session) {
+        dispatch(
+          sessionSignIn({
+            currentUser: session.currentUser,
+            image: session.user?.image || null,
+            sessionToken: await fetchSessionToken(),
+            isLoggedIn: true,
+          }),
+        );
+
+        if (session.currentUser == null) {
+          router.push("/onboarding");
+        }
       }
-    }
+    };
+    authenticator();
   }, [session, dispatch, router]);
 
   return children;
