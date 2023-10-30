@@ -86,6 +86,8 @@ services:
     restart: on-failure
     build:
       context: ./services/collab-service
+    volumes:
+      - ./services/collab-service:/app
     ports:
       - '4001:4001'
 
