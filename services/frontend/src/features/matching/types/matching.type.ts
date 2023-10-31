@@ -4,15 +4,15 @@ import type {
 } from "@/features/questions/types/question.type";
 
 export enum Language {
-  COFFEESCRIPT = "coffescript",
-  CPP = "cpp",
-  CSHARP = "csharp",
-  JAVA = "java",
-  JAVASCRIPT = "javascript",
-  PHP = "php",
-  PYTHON = "python",
-  RUBY = "ruby",
-  TYPESCRIPT = "typescript",
+  CoffeeScript = "coffescript",
+  Cpp = "cpp",
+  CSharp = "csharp",
+  Java = "java",
+  JavaScript = "javascript",
+  Php = "php",
+  Python = "python",
+  Ruby = "ruby",
+  TypeScript = "typescript",
 }
 
 export type MatchRequest = {

@@ -212,7 +212,7 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
                 </FormControl>
                 <SelectContent>
                   {Object.keys(Language).map((lang) => (
-                    <SelectItem key={lang} value={lang.toLowerCase()}>
+                    <SelectItem key={lang} value={lang}>
                       {lang}
                     </SelectItem>
                   ))}
