@@ -15,10 +15,14 @@ export const QuestionRecordSchema = z.object({
 
 export const AddQuestionSchema = QuestionRecordSchema.omit({ id: true });
 
-export const GetQuestionSchema = QuestionRecordSchema.omit({
-  description: true,
-  link: true,
-}).partial();
+export const GetQuestionSchema = QuestionRecordSchema.extend({
+  getOne: z.boolean().optional(),
+})
+  .omit({
+    description: true,
+    link: true,
+  })
+  .partial();
 
 export const UpdateQuestionSchema = QuestionRecordSchema.omit({
   id: true,

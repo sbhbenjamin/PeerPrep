@@ -30,7 +30,11 @@ export default function defineRoutes(expressApp: express.Application) {
         difficulty: req.query.difficulty as Difficulty,
         categories: req.query.categories as Category[],
       });
-      res.json(response);
+      if (!req.query.getOne || !response) {
+        res.json(response);
+      } else {
+        res.json(response[Math.floor(Math.random() * response.length)]);
+      }
     } catch (error) {
       next(error);
     }
