@@ -5,7 +5,7 @@ import type { User } from "@/features/users";
 rootApi.enhanceEndpoints({ addTagTypes: ["User"] });
 
 const buildServiceUrl = (queryUrl: string) =>
-  `${process.env.NEXT_PUBLIC_USERS_MICROSERVICE_URL}${queryUrl}`;
+  `${process.env.NEXT_PUBLIC_SERVICE_USER_URL}${queryUrl}`;
 
 const userApi = rootApi.injectEndpoints({
   endpoints: (build) => ({

@@ -1,10 +1,28 @@
 import express from "express";
 import type { Server } from "http";
 import type { AddressInfo } from "net";
+import pinoHttp from "pino-http";
 
 import { errorHandler } from "../../../errorHandler";
 
 import defineRoutes from "./routes";
+
+const httpLogger = pinoHttp({
+  serializers: {
+    req(req) {
+      return {
+        id: req.id,
+        method: req.method,
+        url: req.url,
+      };
+    },
+    res(res) {
+      return {
+        statusCode: res.statusCode,
+      };
+    },
+  },
+});
 
 const cors = require("cors");
 
@@ -24,6 +42,7 @@ async function openConnection(
 
 function createWebApplication() {
   const expressApp = express();
+  expressApp.use(httpLogger);
   expressApp.use(cors());
   expressApp.use(express.urlencoded({ extended: true }));
   expressApp.use(express.json());
