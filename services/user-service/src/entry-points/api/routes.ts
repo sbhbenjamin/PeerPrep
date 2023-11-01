@@ -1,14 +1,13 @@
 import express from "express";
-
-import * as userUseCase from "../../domain/user-use-case";
-
 import * as jose from "jose";
 
-import { validateAddUserInput, validateUpdateUserInput } from "./validators";
 import {
   assertIsAuthenticated,
   assertIsSelfOrAdmin,
 } from "../../commons/auth/authenticator";
+import * as userUseCase from "../../domain/user-use-case";
+
+import { validateAddUserInput, validateUpdateUserInput } from "./validators";
 
 export default function defineRoutes(expressApp: express.Application) {
   const router = express.Router();
