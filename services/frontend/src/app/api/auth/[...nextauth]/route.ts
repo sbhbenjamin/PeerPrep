@@ -17,12 +17,12 @@ const handler = NextAuth({
             `http://${process.env.NEXT_PUBLIC_SERVICE_USER_URL}/user?email=${user.email}`,
           );
           const registeredUser = await res.json();
-          token.role = registeredUser[0]["role"];
-          token.userId = registeredUser[0]["id"];
+          token.role = registeredUser[0].role; // eslint-disable-line no-param-reassign
+          token.userId = registeredUser[0].id; // eslint-disable-line no-param-reassign
         }
         return token;
       } catch (error) {
-        console.log(error.message);
+        console.log("error");
       }
       return token;
     },
