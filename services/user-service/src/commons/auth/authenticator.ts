@@ -5,7 +5,6 @@ import { getToken } from "next-auth/jwt";
 import HttpError from "../error";
 
 export async function authenticationCheck(req: Request) {
-  // If you don't have NEXTAUTH_SECRET set, you will have to pass your secret as `secret` to `getToken`
   const token = await getToken({
     req,
     secret: process.env.NEXTAUTH_SECRET,
