@@ -15,7 +15,7 @@ async function extractToken(req: Request) {
 }
 
 function isAdmin(token) {
-  return token["role"] == "ADMIN";
+  return token.role === "ADMIN";
 }
 
 // assertIsAuthenticated
@@ -26,7 +26,7 @@ export async function assertIsAuthenticated(req: Request) {
 // assertIsSelf
 export async function assertIsSelfOrAdmin(req: Request, userId: number) {
   const token = await extractToken(req);
-  if (userId != token.userId && !isAdmin(token)) {
+  if (userId !== token.userId && !isAdmin(token)) {
     throw new HttpError("You do not have the correct permission", 404);
   }
 }

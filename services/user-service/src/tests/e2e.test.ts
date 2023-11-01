@@ -1,8 +1,8 @@
 import { loadEnvConfig } from "../commons/utils/env-config";
 import { getPrismaClient } from "../data-access/prisma-client-factory";
 import { createWebApplication } from "../entry-points/api/server";
-import { generateJwtToken } from "./helper/generateMockJwt";
 
+import { generateJwtToken } from "./helper/generateMockJwt";
 import resetDb from "./helper/resetDb";
 
 const request = require("supertest");
@@ -40,7 +40,7 @@ describe("POST /user", () => {
     console.log("token ", token);
     const res = await mockApp
       .post("/user")
-      .set("Authorization", "bearer " + token)
+      .set("Authorization", `bearer ${token}`)
       .send(createUserInputFull);
     const user = await prisma.user.findUnique({
       where: { ...createUserInputFull },
