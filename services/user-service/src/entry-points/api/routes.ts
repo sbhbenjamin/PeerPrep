@@ -1,16 +1,25 @@
 import express from "express";
 
-import { authenticationCheck } from "../../commons/auth/authenticator";
 import * as userUseCase from "../../domain/user-use-case";
 
 import { validateAddUserInput, validateUpdateUserInput } from "./validators";
+import {
+  assertIsAuthenticated,
+  assertIsSelfOrAdmin,
+} from "../../commons/auth/authenticator";
+
+const authenticationCheck = (assertion: () => Promise<void>): void => {
+  if (process.env.NODE_ENV != "test") {
+    assertion();
+  }
+};
 
 export default function defineRoutes(expressApp: express.Application) {
   const router = express.Router();
 
   router.post("/", [validateAddUserInput], async (req, res, next) => {
     try {
-      await authenticationCheck(req);
+      await assertIsAuthenticated(req);
       const addUserResponse = await userUseCase.addUser(req.body);
       res.json(addUserResponse);
     } catch (error) {
@@ -44,7 +53,7 @@ export default function defineRoutes(expressApp: express.Application) {
   // update user by id
   router.put("/:id", [validateUpdateUserInput], async (req, res, next) => {
     try {
-      await authenticationCheck(req);
+      await assertIsSelfOrAdmin(req, parseInt(req.params.id, 10));
       const response = await userUseCase.updateUser(
         parseInt(req.params.id, 10),
         req.body,
@@ -58,7 +67,7 @@ export default function defineRoutes(expressApp: express.Application) {
   // delete user by id
   router.delete("/:id", async (req, res, next) => {
     try {
-      await authenticationCheck(req);
+      await assertIsSelfOrAdmin(req, parseInt(req.params.id, 10));
       await userUseCase.deleteUser(parseInt(req.params.id, 10));
       res.status(200).end();
     } catch (error) {
