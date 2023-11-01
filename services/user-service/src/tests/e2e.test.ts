@@ -1,6 +1,7 @@
 import { loadEnvConfig } from "../commons/utils/env-config";
 import { getPrismaClient } from "../data-access/prisma-client-factory";
 import { createWebApplication } from "../entry-points/api/server";
+import { generateJwtToken } from "./helper/generateMockJwt";
 
 import resetDb from "./helper/resetDb";
 
@@ -35,11 +36,17 @@ const createUserInput2 = { name: "wei ming", email: "weiming@gmail.com" };
 describe("POST /user", () => {
   test("when valid name, email, bio and url are provided, return status 200 OK", async () => {
     // act
-    const res = await mockApp.post("/user").send(createUserInputFull);
+    const token = await generateJwtToken({ userId: "1" });
+    console.log("token ", token);
+    const res = await mockApp
+      .post("/user")
+      .set("Authorization", "bearer " + token)
+      .send(createUserInputFull);
     const user = await prisma.user.findUnique({
       where: { ...createUserInputFull },
     });
     // assert
+    console.log(res.status, "Status");
     expect(res.status).toBe(200);
     expect(user).not.toBe(null);
   });
