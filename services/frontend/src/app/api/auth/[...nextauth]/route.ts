@@ -9,7 +9,18 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, token }) {
+    async jwt({ token, user, account, profile }) {
+      // Check if there is a user
+      if (user) {
+        const res = await fetch(
+          `http://${process.env.NEXT_PUBLIC_SERVICE_USER_URL}/user?email=${user.email}`,
+        );
+        const registeredUser = await res.json();
+        token.role = registeredUser[0]["role"];
+      }
+      return token;
+    },
+    async session({ session }) {
       try {
         const res = await fetch(
           `http://${process.env.NEXT_PUBLIC_SERVICE_USER_URL}/user?email=${session.user?.email}`,
