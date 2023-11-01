@@ -2,17 +2,13 @@ import express from "express";
 
 import * as userUseCase from "../../domain/user-use-case";
 
+import * as jose from "jose";
+
 import { validateAddUserInput, validateUpdateUserInput } from "./validators";
 import {
   assertIsAuthenticated,
   assertIsSelfOrAdmin,
 } from "../../commons/auth/authenticator";
-
-const authenticationCheck = (assertion: () => Promise<void>): void => {
-  if (process.env.NODE_ENV != "test") {
-    assertion();
-  }
-};
 
 export default function defineRoutes(expressApp: express.Application) {
   const router = express.Router();
@@ -79,7 +75,10 @@ export default function defineRoutes(expressApp: express.Application) {
 
   expressApp.get("/health", async (req, res, next) => {
     try {
-      res.status(200).end("Healthy");
+      const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+      const jwt = await new jose.SignJWT({ userId: "dddsa" }).sign(secret);
+      console.log(jwt);
+      res.status(200).send("jwt");
     } catch (error) {
       next(error);
     }

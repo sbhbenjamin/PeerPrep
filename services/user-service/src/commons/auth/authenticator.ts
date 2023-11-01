@@ -38,4 +38,3 @@ export async function assertIsAdmin(req: Request) {
     throw new HttpError("This requires admin permission", 404);
   }
 }
-
