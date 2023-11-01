@@ -5,6 +5,7 @@ services:
     restart: on-failure
     build:
       context: ./services/question-service
+      dockerfile: Dockerfile.dev
     volumes:
       - ./services/question-service:/app
     depends_on:
@@ -36,6 +37,7 @@ services:
     restart: on-failure
     build: 
       context: ./services/user-service
+      dockerfile: Dockerfile.dev
     volumes:
       - ./services/user-service:/app
     depends_on:
@@ -72,6 +74,7 @@ services:
     restart: on-failure
     build:
       context: ./services/collab-service
+      dockerfile: Dockerfile.dev
     volumes:
       - ./services/collab-service:/app
     ports:
