@@ -9,6 +9,7 @@ export async function authenticationCheck(req: Request) {
     req,
     secret: process.env.NEXTAUTH_SECRET,
   });
+  console.log(token);
   if (token == null && process.env.NODE_ENV !== "test") {
     throw new HttpError("This is a protected route", 404);
   }
