@@ -11,12 +11,18 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user, account, profile }) {
       // Check if there is a user
-      if (user) {
-        const res = await fetch(
-          `http://${process.env.NEXT_PUBLIC_SERVICE_USER_URL}/user?email=${user.email}`,
-        );
-        const registeredUser = await res.json();
-        token.role = registeredUser[0]["role"];
+      try {
+        if (user) {
+          const res = await fetch(
+            `http://${process.env.NEXT_PUBLIC_SERVICE_USER_URL}/user?email=${user.email}`,
+          );
+          const registeredUser = await res.json();
+          token.role = registeredUser[0]["role"];
+          token.userId = registeredUser[0]["id"];
+        }
+        return token;
+      } catch (error) {
+        console.log(error.message);
       }
       return token;
     },
