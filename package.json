@@ -5,7 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "install:services": "npm run install:frontend && npm run install:collab-service && npm run install:matching-service && npm run install:question-service && npm run install:user-service",
+    "install:frontend": "cd services/frontend && npm install",
+    "install:collab-service": "cd services/collab-service && npm install",
+    "install:matching-service": "cd services/matching-service && npm install",
+    "install:question-service": "cd services/question-service && npm install",
+    "install:user-service": "cd services/user-service && npm install",
+    "start:dev": "docker-compose -f docker-compose.dev.yml up --build -d",
+    "start:prod": "docker-compose -f docker-compose.prod.yml up --build -d",
+    "stop:dev": "docker-compose -f docker-compose.dev.yml down",
+    "stop:prod": "docker-compose -f docker-compose.prod.yml down",
+    "logs:dev": "docker-compose -f docker-compose.dev.yml logs -f",
+    "logs:prod": "docker-compose -f docker-compose.prod.yml logs -f"
   },
   "keywords": [],
   "author": "",

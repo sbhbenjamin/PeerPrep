@@ -5,9 +5,9 @@ services:
     restart: on-failure
     build:
       context: ./services/question-service
+      dockerfile: Dockerfile.dev
     volumes:
       - ./services/question-service:/app
-      - /app/node_modules
     depends_on:
       - mongodb
     environment:
@@ -37,9 +37,9 @@ services:
     restart: on-failure
     build: 
       context: ./services/user-service
+      dockerfile: Dockerfile.dev
     volumes:
       - ./services/user-service:/app
-      - /app/node_modules
     depends_on:
       - user-db
     environment:
@@ -74,9 +74,9 @@ services:
     restart: on-failure
     build:
       context: ./services/collab-service
+      dockerfile: Dockerfile.dev
     volumes:
       - ./services/collab-service:/app
-      - /app/node_modules
     ports:
       - '4001:4001'
 
