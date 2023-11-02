@@ -46,7 +46,7 @@ const adminJwt = { role: "ADMIN" };
 const userJwt = { role: "USER" };
 
 describe("POST /user", () => {
-  test("when valid auth, name, email, bio and url are provided, return status 200 OK", async () => {
+  test("when valid name, email, bio, url and valid permission are provided , return status 200 OK", async () => {
     (getToken as jest.Mock).mockResolvedValue(userJwt);
     const res = await mockApp.post("/user").send(createUserInputFull);
     const user = await prisma.user.findUnique({
@@ -57,7 +57,7 @@ describe("POST /user", () => {
     expect(user).not.toBe(null);
   });
 
-  test("when valid auth name and email are provided, return status 200 OK", async () => {
+  test("when name, email and valid permission are provided, return status 200 OK", async () => {
     // act
     (getToken as jest.Mock).mockResolvedValue(userJwt);
     const res = await mockApp.post("/user").send(createUserInput);
@@ -69,17 +69,17 @@ describe("POST /user", () => {
     expect(user).not.toBe(null);
   });
 
-  test("when valid name and email are provided but no JWT is passed, return status 200 OK", async () => {
+  test("when valid name and email are provided but no valid permission, return status 401", async () => {
     // act
     const res = await mockApp.post("/user").send(createUserInput);
     await prisma.user.findUnique({
       where: { ...createUserInput },
     });
     // assert
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(401);
   });
 
-  test("when only email is provided, return status 400 Bad Request", async () => {
+  test("when only email and valid permission is provided, return status 400 Bad Request", async () => {
     // act
     (getToken as jest.Mock).mockResolvedValue(userJwt);
     const res = await mockApp.post("/user").send(invalidUserInputOnlyEmail);
@@ -91,7 +91,7 @@ describe("POST /user", () => {
     expect(user).toBe(null);
   });
 
-  test("when only name is provided, return status 400 Bad Request", async () => {
+  test("when only name and valid permission is provided, return status 400 Bad Request", async () => {
     // act
     (getToken as jest.Mock).mockResolvedValue(userJwt);
     const res = await mockApp.post("/user").send(invalidUserInputOnlyName);
@@ -170,17 +170,17 @@ describe("GET /user", () => {
 });
 
 describe("PUT /user", () => {
-  test("When editing users with the correct params, return status 200 OK", async () => {
+  test("When editing user with valid permission, return status 200 OK", async () => {
     // arrange
     await prisma.user.create({ data: createUserInput });
     const beforeModified = await prisma.user.findUnique({
       where: createUserInput,
     });
-    // action
     (getToken as jest.Mock).mockResolvedValue({
       userId: beforeModified!.id,
       ...adminJwt,
     });
+    // action
 
     const res = await mockApp
       .put(`/user/${beforeModified!.id}`)
@@ -196,8 +196,36 @@ describe("PUT /user", () => {
     expect(afterModified?.name).toBe("new name");
   });
 
-  test("PUT /user [No such user]", async () => {
+  test("When editing user with valid permission, return status 401 UNAUTHORIZED", async () => {
+    // arrange
+    await prisma.user.create({ data: createUserInput });
+    const beforeModified = await prisma.user.findUnique({
+      where: createUserInput,
+    });
+    (getToken as jest.Mock).mockResolvedValue({
+      userId: beforeModified!.id + 1,
+      ...userJwt,
+    });
     // action
+
+    const res = await mockApp
+      .put(`/user/${beforeModified!.id}`)
+      .send({ ...beforeModified, name: "new name" });
+
+    const afterModified = await prisma.user.findUnique({
+      where: {
+        id: beforeModified!.id,
+      },
+    });
+    // assert
+    expect(res.status).toBe(401);
+  });
+
+  test("When editing non-existant user, return status 404 NOT FOUND", async () => {
+    // action
+    (getToken as jest.Mock).mockResolvedValue({
+      ...adminJwt,
+    });
     const res = await mockApp
       .put(`/user/${0}`)
       .send({ id: 0, name: "new name" });
@@ -208,7 +236,7 @@ describe("PUT /user", () => {
 });
 
 describe("GET /user/id", () => {
-  test("GET /user/id", async () => {
+  test("when retrieving existing user based on their id, return 200 OK", async () => {
     // arrange
     const user = await prisma.user.create({ data: createUserInput });
     const { id } = user;
@@ -221,17 +249,16 @@ describe("GET /user/id", () => {
     expect(res.body).toEqual(user);
   });
 
-  test("GET /user/:id [No such user]", async () => {
+  test("when retrieving non-existing user based on their id, return 200 OK", async () => {
     // action
     const res = await mockApp.get(`/user/${0}`);
-
     // assert
     expect(res.status).toBe(404);
   });
 });
 
 describe("DELETE /user/:id", () => {
-  test("DELETE /user/:id", async () => {
+  test("When user delete his account, return 200 OK", async () => {
     // arrange
     const user = await prisma.user.create({ data: createUserInput });
     const { id } = user;
@@ -247,16 +274,59 @@ describe("DELETE /user/:id", () => {
         id,
       },
     });
-
     // assert
     expect(res.status).toBe(200);
     expect(checkUser).toBe(null);
   });
 
-  test("DELETE /user/:id [User does not exist]", async () => {
-    // action
-    const res = await mockApp.delete(`/user/${0}`);
+  test("When someone with incorrect id try to delete his account, return 401 Unauthorized", async () => {
+    // arrange
+    const user = await prisma.user.create({ data: createUserInput });
+    const { id } = user;
+    (getToken as jest.Mock).mockResolvedValue({
+      userId: id + 1,
+      ...userJwt,
+    });
 
+    // action
+    const res = await mockApp.delete(`/user/${id}`);
+    const checkUser = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    // assert
+    expect(res.status).toBe(401);
+  });
+
+  test("When admin deletes a account, return 200 OK", async () => {
+    // arrange
+    const user = await prisma.user.create({ data: createUserInput });
+    const { id } = user;
+    (getToken as jest.Mock).mockResolvedValue({
+      userId: id,
+      ...adminJwt,
+    });
+
+    // action
+    const res = await mockApp.delete(`/user/${id}`);
+    const checkUser = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    // assert
+    expect(res.status).toBe(200);
+    expect(checkUser).toBe(null);
+  });
+
+  test("When admin deletes a user that does not exist, return 404 Not Found", async () => {
+    // action
+    (getToken as jest.Mock).mockResolvedValue({
+      userId: 0,
+      ...adminJwt,
+    });
+    const res = await mockApp.delete(`/user/${0}`);
     // assert
     expect(res.status).toBe(404);
   });

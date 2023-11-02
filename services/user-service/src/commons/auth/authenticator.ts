@@ -11,7 +11,7 @@ export async function extractToken(req: Request) {
   });
 
   if (token == null) {
-    throw new HttpError("This is a protected route", 404);
+    throw new HttpError("This is a protected route", 401);
   }
   return token;
 }
@@ -32,13 +32,9 @@ function isSelfOrAdmin(token: JWT, id: number) {
 // assertIsSelf
 export async function assertIsSelfOrAdmin(req: Request, userId: number) {
   const token = await extractToken(req);
-  console.log(
-    "🚀 ~ file: authenticator.ts:34 ~ assertIsSelfOrAdmin ~ token:",
-    token,
-  );
 
   if (!isSelfOrAdmin(token, userId)) {
-    throw new HttpError("You do not have the correct permission", 404);
+    throw new HttpError("You do not have the correct permission", 401);
   }
 }
 
@@ -46,6 +42,6 @@ export async function assertIsSelfOrAdmin(req: Request, userId: number) {
 export async function assertIsAdmin(req: Request) {
   const token = await extractToken(req);
   if (!isAdmin(token)) {
-    throw new HttpError("This requires admin permission", 404);
+    throw new HttpError("This requires admin permission", 401);
   }
 }
