@@ -5,9 +5,22 @@ import { getToken } from "next-auth/jwt";
 import HttpError from "../error";
 
 async function extractToken(req: Request) {
+  try {
+    const etoken = await getToken({
+      req,
+    });
+    console.log(
+      "🚀 ~ file: authenticator.ts:12 ~ extractToken ~ etoken:",
+      etoken,
+    );
+  } catch (e) {
+    console.log(e);
+  }
   const token = await getToken({
     req,
   });
+  console.log("🚀 ~ file: authenticator.ts:11 ~ extractToken ~ token:", token);
+
   if (token == null) {
     throw new HttpError("This is a protected route", 404);
   }

@@ -37,7 +37,8 @@ describe("POST /user", () => {
   test("when valid name, email, bio and url are provided, return status 200 OK", async () => {
     // act
     const token = await generateJwtToken({ userId: "1" });
-    console.log("token ", token);
+
+    console.log(token);
     const res = await mockApp
       .post("/user")
       .set("Authorization", `bearer ${token}`)
