@@ -9,7 +9,11 @@ import type { Match } from "./types";
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
 
 const port = process.env.PORT || 6001;
 

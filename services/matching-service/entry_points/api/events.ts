@@ -14,8 +14,6 @@ import {
 
 export function defineEventListeners(io: Server) {
   io.on("connection", (socket) => {
-    socket.emit("reply", "hello from server");
-
     socket.on("register", (msg: MatchRequest) => {
       console.log(`${JSON.stringify(msg)} joined the queue!`);
 
@@ -24,12 +22,12 @@ export function defineEventListeners(io: Server) {
         socket.emit("error", "Invalid Difficulty!");
         return;
       }
-
       // Check valid Category
-      if (Category[msg.category] === undefined) {
-        socket.emit("error", "Invalid Category!");
-        return;
-      }
+      msg.categories.forEach((category) => {
+        if (Category[category] === undefined) {
+          socket.emit("error", "Invalid Category!");
+        }
+      });
 
       // Check valid Language
       if (Language[msg.language] === undefined) {
@@ -43,8 +41,10 @@ export function defineEventListeners(io: Server) {
         return;
       }
 
+      socket.emit("matchPending", true);
+
       const difficulty = msg.difficulty.toString();
-      const category = msg.category.toString();
+      const category = msg.categories[0].toString();
       const language = msg.language.toString();
 
       // Find match if exists, else create new queue and wait.
@@ -53,7 +53,7 @@ export function defineEventListeners(io: Server) {
       const thisMatch = {
         id: msg.id,
         difficulty: msg.difficulty,
-        category: msg.category,
+        categories: msg.categories,
         language: msg.language,
         sockAddr: socket.id,
       };
@@ -80,24 +80,26 @@ export function defineEventListeners(io: Server) {
             // eslint-disable-next-line consistent-return
             .then((response) => {
               if (response.headers.get("Content-Length") === "0") {
-                console.log("no question found");
+                console.log(`no question found for ${params}`);
                 io.to(peerSockAddr)
                   .to(socket.id)
                   .emit("error", "No questions meet your provided criteria");
+                io.to(peerSockAddr).to(socket.id).emit("matchPending", false);
+                io.to(peerSockAddr).to(socket.id).emit("queue_name", undefined);
               } else {
                 return response.json();
               }
             })
             .then((json) => {
-              if (json) {
-                console.log(json);
-                const roomId = uuidv4();
-                io.to(peerSockAddr).to(socket.id).emit("match", {
-                  question: json,
-                  roomId,
-                  language,
-                });
+              if (!json) {
+                return;
               }
+              const roomId = uuidv4();
+              io.to(peerSockAddr).to(socket.id).emit("match", {
+                question: json,
+                roomId,
+                language,
+              });
               peerSocket.disconnect();
               socket.disconnect();
             });
@@ -115,12 +117,20 @@ export function defineEventListeners(io: Server) {
           if (queues.has(matchName)) {
             queues.delete(matchName);
             console.log("matching timed out");
+            socket.emit("matchPending", false);
             socket.emit("error", "Sorry, we could not find you a match!");
-            socket.disconnect();
           }
         }, DELAY);
       }
-      socket.emit("reply", "You are in the queue!");
+      socket.emit("queue_name", matchName);
+    });
+
+    socket.on("unqueue", (matchName: string) => {
+      if (queues.has(matchName)) {
+        queues.delete(matchName);
+        socket.emit("queue_name", undefined);
+        socket.emit("matchPending", false);
+      }
     });
 
     socket.on("disconnect", () => {

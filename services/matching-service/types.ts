@@ -1,7 +1,7 @@
 export type Match = {
   id: number;
   difficulty: Difficulty;
-  category: Category;
+  categories: Category[];
   sockAddr: string;
   language: Language;
 };

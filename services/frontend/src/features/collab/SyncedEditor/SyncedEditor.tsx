@@ -2,17 +2,27 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import type { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
+import { v4 as uuidv4 } from "uuid";
 
 import { Editor, useMonaco } from "@monaco-editor/react";
 
 import { selectAuthData } from "@/features/auth";
-import { questionsStub } from "@/features/questions/stubs/questions.stub";
+import type { Language } from "@/features/match";
+import type { QuestionType } from "@/features/questions";
 
 import { QuestionDisplay } from "../QuestionDisplay";
 import type { Message, User } from "../types";
 import { ChatWindow } from "./ChatWindow";
 
-export function SyncedEditor({ roomId }: { roomId: string }) {
+export function SyncedEditor({
+  language,
+  question,
+  roomId,
+}: {
+  language: Language;
+  question: QuestionType;
+  roomId: string;
+}) {
   const auth = useSelector(selectAuthData);
   const monaco = useMonaco();
   const URL = "http://localhost:4001";
@@ -70,10 +80,7 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
   useEffect(() => {
     if (socketRef.current) {
       if (!currentUser) {
-        setCurrentUser(
-          auth.currentUser?.id.toString() ??
-            Math.floor(Math.random() * 100).toString(),
-        );
+        setCurrentUser(auth.currentUser?.id.toString() ?? uuidv4().toString());
       }
       socketRef.current.auth = {
         username: currentUser,
@@ -82,18 +89,6 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
       socketRef.current.emit("join", roomId);
     }
   }, [currentUser, socketRef.current]);
-
-  // const handleLanguageChange = (value: string) => {
-  //   monaco.editor.setModel;
-  //   const model = monacoInstance?.editor.getModel();
-  //   monacoInstance?.editor;
-  //   if (monacoInstance && monacoInstance.editor.getModel()) {
-  //     monacoInstance.editor.setModelLanguage(
-  //       monacoInstance.editor.getModel(),
-  //       value,
-  //     );
-  //   }
-  // };
 
   const handleOnEditorChange = (value: string | undefined) => {
     if (socketRef.current) {
@@ -122,13 +117,13 @@ export function SyncedEditor({ roomId }: { roomId: string }) {
   return (
     <div className="flex h-[80vh] gap-2">
       <div className="w-3/12">
-        <QuestionDisplay question={questionsStub[0]} />
+        <QuestionDisplay question={question} />
       </div>
       <div className="w-6/12 overflow-hidden rounded-lg border py-2 shadow-sm">
         {/* <input type="radio" value="javascript" onChange={e => handleLanguageChange(e.target.value)} /> */}
         <Editor
           value={editorContent}
-          defaultLanguage="javascript"
+          defaultLanguage={language}
           defaultValue="// some comment"
           onChange={handleOnEditorChange}
           options={monacoConfig}
