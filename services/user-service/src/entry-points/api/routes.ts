@@ -82,7 +82,6 @@ export default function defineRoutes(expressApp: express.Application) {
       res.status(200).send(token);
     } catch (error) {
       console.log(error);
-
       next(error);
     }
   });
