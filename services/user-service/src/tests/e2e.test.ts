@@ -219,6 +219,7 @@ describe("PUT /user", () => {
     });
     // assert
     expect(res.status).toBe(401);
+    expect(afterModified?.name).toBe(createUserInput.name);
   });
 
   test("When editing non-existant user, return status 404 NOT FOUND", async () => {
@@ -279,7 +280,7 @@ describe("DELETE /user/:id", () => {
     expect(checkUser).toBe(null);
   });
 
-  test("When someone with incorrect id try to delete his account, return 401 Unauthorized", async () => {
+  test("When someone with incorrect permission try to delete his account, return 401 Unauthorized", async () => {
     // arrange
     const user = await prisma.user.create({ data: createUserInput });
     const { id } = user;
@@ -297,6 +298,7 @@ describe("DELETE /user/:id", () => {
     });
     // assert
     expect(res.status).toBe(401);
+    expect(checkUser).toBe(checkUser);
   });
 
   test("When admin deletes a account, return 200 OK", async () => {
