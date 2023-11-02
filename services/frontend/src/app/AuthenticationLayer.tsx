@@ -22,7 +22,7 @@ const AuthenticationLayer = ({ children }: Props) => {
   };
 
   useEffect(() => {
-    const authenticator = async () => {
+    const getUserInfo = async () => {
       if (session) {
         dispatch(
           sessionSignIn({
@@ -38,7 +38,7 @@ const AuthenticationLayer = ({ children }: Props) => {
         }
       }
     };
-    authenticator();
+    getUserInfo();
   }, [session, dispatch, router]);
 
   return children;
