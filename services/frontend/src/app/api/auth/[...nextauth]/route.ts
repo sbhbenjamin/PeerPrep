@@ -10,7 +10,6 @@ const handler = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user, account, profile }) {
-      // Check if there is a user
       try {
         if (user) {
           const res = await fetch(
@@ -22,9 +21,9 @@ const handler = NextAuth({
         }
         return token;
       } catch (error) {
-        console.log("error");
+        // Check if done
+        return token;
       }
-      return token;
     },
     async session({ session }) {
       try {
