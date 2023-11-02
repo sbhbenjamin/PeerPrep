@@ -28,7 +28,7 @@ enum Category {
 }
 
 model Question {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(uuid()) @map("_id")
   title       String     @unique
   categories  Category[]
   difficulty  Difficulty

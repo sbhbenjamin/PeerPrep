@@ -12,6 +12,12 @@ export async function getQuestions(filter: QuestionFilter) {
   return response;
 }
 
+export async function getQuestionById(questionId: string) {
+  await assertQuestionExistsById(questionId);
+  const response = await questionRepo.getQuestionById(questionId);
+  return response;
+}
+
 export async function addQuestion(newQuestion: QuestionRequest) {
   await assertQuestionNotExistsByTitle(newQuestion.title);
   const validatedData = AddQuestionSchema.parse(newQuestion);

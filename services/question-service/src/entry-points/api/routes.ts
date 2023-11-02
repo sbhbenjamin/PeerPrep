@@ -36,6 +36,15 @@ export default function defineRoutes(expressApp: express.Application) {
     }
   });
 
+  router.get("/:id", async (req, res, next) => {
+    try {
+      const response = await questionUseCase.getQuestionById(req.params.id);
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  });
+
   router.patch("/:id", validateUpdateQuestionInput, async (req, res, next) => {
     try {
       const response = await questionUseCase.updateQuestion(
