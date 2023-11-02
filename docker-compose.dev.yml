@@ -13,9 +13,6 @@ services:
     environment:
       - DATABASE_URL=mongodb://mongodb-user:mongodb-pass@mongodb:27017/question-db?authSource=admin
       - PORT=5001
-    deploy:
-      restart_policy:
-        condition: on-failure
     ports:
       - '5001:5001'
       
@@ -50,7 +47,7 @@ services:
   
   user-db:
     restart: always
-    image: postgres:14.1-alpine
+    image: postgres
     volumes:
       - user-db-data:/var/lib/postgresql/data
     environment:
@@ -62,7 +59,7 @@ services:
   
   test-user-db:
     restart: always
-    image: postgres:14.1-alpine
+    image: postgres
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
@@ -79,9 +76,51 @@ services:
       - ./services/collab-service:/app
     ports:
       - '4001:4001'
+  
+  history-service:
+    restart: on-failure
+    build: 
+      context: ./services/history-service
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./services/history-service:/app
+    depends_on:
+      - history-db
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@history-db:5432/history-service?schema=public
+      - SERVER_PORT=1001
+      - USER_SERVICE_BASE_URL=http://user-service:2001
+      - QUESTION_SERVICE_BASE_URL=http://question-service:5001
+    ports:
+      - '1001:1001'
+  
+  history-db:
+    restart: always
+    image: postgres
+    volumes:
+      - history-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=history-service
+    ports:
+      - '1542:5432'
+  
+  test-history-db:
+    restart: always
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=test-history-service
+    ports:
+      - '1543:5432'
 
 volumes:
   mongodb_master_data:
     driver: local
+  history-db-data:
+    driver: local
   user-db-data:
     driver: local
+  

@@ -39,6 +39,17 @@ export async function getQuestions(
   });
 }
 
+export async function getQuestionById(
+  id: string,
+): Promise<QuestionRecord | null> {
+  const question = getPrismaClient().question.findUnique({
+    where: {
+      id,
+    },
+  });
+  return question;
+}
+
 export async function updateQuestion(
   id: string,
   updateUserRequest: Partial<QuestionRequest>,
