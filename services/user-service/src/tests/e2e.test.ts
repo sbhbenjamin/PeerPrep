@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { getToken } from "next-auth/jwt";
 
 import { loadEnvConfig } from "../commons/utils/env-config";
@@ -20,6 +21,12 @@ jest.mock("next-auth/jwt");
 
 beforeEach(async () => {
   await resetDb();
+  jest.clearAllMocks();
+  (getToken as jest.Mock).mockResolvedValue(null);
+});
+
+afterEach(async () => {
+  jest.clearAllMocks();
 });
 
 const invalidEmail = "che@ky";
@@ -40,20 +47,19 @@ const userJwt = { role: "USER" };
 
 describe("POST /user", () => {
   test("when valid auth, name, email, bio and url are provided, return status 200 OK", async () => {
-    (getToken as jest.Mock).mockResolvedValueOnce(userJwt);
+    (getToken as jest.Mock).mockResolvedValue(userJwt);
     const res = await mockApp.post("/user").send(createUserInputFull);
     const user = await prisma.user.findUnique({
       where: { ...createUserInputFull },
     });
     // assert
-    console.log(res.status, "Status");
     expect(res.status).toBe(200);
     expect(user).not.toBe(null);
   });
 
   test("when valid auth name and email are provided, return status 200 OK", async () => {
     // act
-    (getToken as jest.Mock).mockResolvedValueOnce(userJwt);
+    (getToken as jest.Mock).mockResolvedValue(userJwt);
     const res = await mockApp.post("/user").send(createUserInput);
     const user = await prisma.user.findUnique({
       where: { ...createUserInput },
@@ -66,7 +72,7 @@ describe("POST /user", () => {
   test("when valid name and email are provided but no JWT is passed, return status 200 OK", async () => {
     // act
     const res = await mockApp.post("/user").send(createUserInput);
-    const user = await prisma.user.findUnique({
+    await prisma.user.findUnique({
       where: { ...createUserInput },
     });
     // assert
@@ -75,7 +81,7 @@ describe("POST /user", () => {
 
   test("when only email is provided, return status 400 Bad Request", async () => {
     // act
-    (getToken as jest.Mock).mockResolvedValueOnce(userJwt);
+    (getToken as jest.Mock).mockResolvedValue(userJwt);
     const res = await mockApp.post("/user").send(invalidUserInputOnlyEmail);
     const user = await prisma.user.findUnique({
       where: { ...invalidUserInputOnlyEmail },
@@ -87,7 +93,7 @@ describe("POST /user", () => {
 
   test("when only name is provided, return status 400 Bad Request", async () => {
     // act
-    (getToken as jest.Mock).mockResolvedValueOnce(userJwt);
+    (getToken as jest.Mock).mockResolvedValue(userJwt);
     const res = await mockApp.post("/user").send(invalidUserInputOnlyName);
     const user = await prisma.user.findMany({
       where: { ...invalidUserInputOnlyName },
@@ -99,7 +105,7 @@ describe("POST /user", () => {
 
   test("when invalid email is provided, return status 400 Bad Request", async () => {
     // act
-    (getToken as jest.Mock).mockResolvedValueOnce(userJwt);
+    (getToken as jest.Mock).mockResolvedValue(userJwt);
     const res = await mockApp.post("/user").send(invalidUserInputOnlyName);
     const user = await prisma.user.findMany({
       where: { ...createUserInput, email: invalidEmail },
@@ -111,7 +117,7 @@ describe("POST /user", () => {
 
   test("when invalid url is provided, return status 400 Bad Request", async () => {
     // act
-    (getToken as jest.Mock).mockResolvedValueOnce(userJwt);
+    (getToken as jest.Mock).mockResolvedValue(userJwt);
     const res = await mockApp.post("/user").send(invalidUserInputOnlyName);
     const user = await prisma.user.findMany({
       where: { ...createUserInputFull, url: "help" },
@@ -123,7 +129,7 @@ describe("POST /user", () => {
 
   test("when there is already a user with the same email, return status 409 Conflict", async () => {
     // arrange
-    (getToken as jest.Mock).mockResolvedValueOnce(userJwt);
+    (getToken as jest.Mock).mockResolvedValue(userJwt);
     await mockApp.post("/user").send(createUserInput);
     // act
     const res = await mockApp.post("/user").send(createUserInput);
@@ -170,14 +176,11 @@ describe("PUT /user", () => {
     const beforeModified = await prisma.user.findUnique({
       where: createUserInput,
     });
-    console.log(beforeModified);
     // action
-
-    (getToken as jest.Mock).mockResolvedValueOnce({
+    (getToken as jest.Mock).mockResolvedValue({
       userId: beforeModified!.id,
       ...adminJwt,
     });
-    console.log({ userId: beforeModified!.id, ...adminJwt });
 
     const res = await mockApp
       .put(`/user/${beforeModified!.id}`)
@@ -232,6 +235,10 @@ describe("DELETE /user/:id", () => {
     // arrange
     const user = await prisma.user.create({ data: createUserInput });
     const { id } = user;
+    (getToken as jest.Mock).mockResolvedValue({
+      userId: id,
+      ...userJwt,
+    });
 
     // action
     const res = await mockApp.delete(`/user/${id}`);
