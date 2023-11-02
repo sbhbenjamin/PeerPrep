@@ -32,7 +32,6 @@ function isSelfOrAdmin(token: JWT, id: number) {
 // assertIsSelf
 export async function assertIsSelfOrAdmin(req: Request, userId: number) {
   const token = await extractToken(req);
-
   if (!isSelfOrAdmin(token, userId)) {
     throw new HttpError("You do not have the correct permission", 401);
   }
