@@ -1,12 +1,10 @@
 import express from "express";
-import { getToken } from "next-auth/jwt";
 
 import {
   assertIsAuthenticated,
   assertIsSelfOrAdmin,
 } from "../../commons/auth/authenticator";
 import * as userUseCase from "../../domain/user-use-case";
-import { generateJwtToken } from "../../tests/helper/generateMockJwt";
 
 import { validateAddUserInput, validateUpdateUserInput } from "./validators";
 
@@ -75,26 +73,8 @@ export default function defineRoutes(expressApp: express.Application) {
 
   expressApp.get("/health", async (req, res, next) => {
     try {
-      const token = await generateJwtToken({
-        name: "wei jun",
-        email: "weijun@gmail.com",
-      });
-      res.status(200).send(token);
+      res.status(200).send("healthy");
     } catch (error) {
-      console.log(error);
-      next(error);
-    }
-  });
-
-  expressApp.get("/testhealth", async (req, res, next) => {
-    try {
-      const decrypt = await getToken({
-        req,
-        secret: "RNhSa7yMYad0tp64xNhI/CWnPB/9neUnH7+fPFnba/w=",
-      });
-      res.status(200).send(decrypt);
-    } catch (error) {
-      console.log(error);
       next(error);
     }
   });
