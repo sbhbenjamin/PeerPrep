@@ -21,7 +21,6 @@ const handler = NextAuth({
         }
         return token;
       } catch (error) {
-        // Check if done
         return token;
       }
     },
