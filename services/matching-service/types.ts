@@ -1,12 +1,9 @@
 export type Match = {
-  id: number;
+  socketId: string;
   difficulty: Difficulty;
   categories: Category[];
-  sockAddr: string;
   language: Language;
 };
-
-export type MatchRequest = Omit<Match, "sockAddr">;
 
 export enum Difficulty {
   Easy,

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
@@ -8,10 +8,11 @@ import { Editor, useMonaco } from "@monaco-editor/react";
 
 import { selectAuthData } from "@/features/auth";
 import type { Language } from "@/features/match";
+import { NotificationType, setNotification } from "@/features/notifications";
 import type { QuestionType } from "@/features/questions";
 
 import { QuestionDisplay } from "../QuestionDisplay";
-import type { Message, User } from "../types";
+import type { Message } from "../types";
 import { ChatWindow } from "./ChatWindow";
 
 export function SyncedEditor({
@@ -23,15 +24,15 @@ export function SyncedEditor({
   question: QuestionType;
   roomId: string;
 }) {
-  const auth = useSelector(selectAuthData);
+  const dispatch = useDispatch();
   const monaco = useMonaco();
+  const auth = useSelector(selectAuthData);
   const URL = "http://localhost:4001";
-  const [currentUser, setCurrentUser] = useState<string>();
+  const [currentUser, setCurrentUser] = useState<string>(uuidv4().toString());
   const [editorContent, setEditorContent] = useState<string>(
     "// add your code here",
   );
 
-  const [numConnectedUsers, setNumConnectedUsers] = useState<number>(0);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const socketRef = useRef<Socket>();
 
@@ -41,24 +42,6 @@ export function SyncedEditor({
 
   useEffect(() => {
     const socket = io(URL, { autoConnect: false });
-
-    socket.on("connect_error", (err) => {
-      console.error(err);
-      if (err.message === "invalid username") {
-        setCurrentUser(undefined);
-      }
-    });
-
-    socket.on("users", (users: User[]) => {
-      console.log(`recv: ${users}`);
-      setNumConnectedUsers(users.length);
-    });
-
-    socket.on("user_connected", (newUser: User) => {
-      setNumConnectedUsers(
-        (prevNumConnectedUsers: number) => prevNumConnectedUsers - 1,
-      );
-    });
 
     socket.on("code_update", (content: string) => {
       setEditorContent(content);
@@ -74,13 +57,35 @@ export function SyncedEditor({
         ...messages,
       ]);
     });
+
+    socket.on("connected", (connectedUsername: string) => {
+      const notificationPayload = {
+        type: NotificationType.SUCCESS,
+        value: `${connectedUsername} has joined`,
+      };
+      dispatch(setNotification(notificationPayload));
+    });
+
+    socket.on("disconnected", (disconnectedUsername: string) => {
+      const notificationPayload = {
+        type: NotificationType.ERROR,
+        value: `${disconnectedUsername} has left`,
+      };
+      dispatch(setNotification(notificationPayload));
+    });
+
     socketRef.current = socket;
   }, []);
 
   useEffect(() => {
     if (socketRef.current) {
-      if (!currentUser) {
-        setCurrentUser(auth.currentUser?.id.toString() ?? uuidv4().toString());
+      if (socketRef.current.connected) {
+        return;
+      }
+      if (auth.currentUser?.id) {
+        setCurrentUser(auth.currentUser?.id.toString());
+      } else {
+        setCurrentUser(uuidv4());
       }
       socketRef.current.auth = {
         username: currentUser,
@@ -88,11 +93,10 @@ export function SyncedEditor({
       socketRef.current.connect();
       socketRef.current.emit("join", roomId);
     }
-  }, [currentUser, socketRef.current]);
+  }, [auth.currentUser?.id, currentUser, roomId]);
 
   const handleOnEditorChange = (value: string | undefined) => {
     if (socketRef.current) {
-      console.log("[Code] sending ", value, "to ", roomId);
       socketRef.current.emit("code_update", {
         content: value,
         to: roomId,
@@ -102,15 +106,11 @@ export function SyncedEditor({
 
   const sendMessage = (value: string | undefined) => {
     if (socketRef.current && value) {
-      console.log("sending ", value, "to ", roomId);
       socketRef.current.emit("message", {
         to: roomId,
         message: { username: currentUser, content: value } as Message,
       });
-      setChatMessages((messages: Message[]) => [
-        ...messages,
-        { username: currentUser, content: value } as Message,
-      ]);
+      setChatMessages((messages: Message[]) => [...messages]);
     }
   };
 
@@ -120,7 +120,6 @@ export function SyncedEditor({
         <QuestionDisplay question={question} />
       </div>
       <div className="w-6/12 overflow-hidden rounded-lg border py-2 shadow-sm">
-        {/* <input type="radio" value="javascript" onChange={e => handleLanguageChange(e.target.value)} /> */}
         <Editor
           value={editorContent}
           defaultLanguage={language}

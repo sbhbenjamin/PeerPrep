@@ -4,17 +4,11 @@ import { v4 as uuidv4 } from "uuid";
 // eslint-disable-next-line import/no-cycle
 import { checkIdExists } from "../../domain/match_validators";
 import { queues } from "../../start";
-import {
-  Category,
-  Difficulty,
-  Language,
-  type Match,
-  type MatchRequest,
-} from "../../types";
+import { Category, Difficulty, Language, type Match } from "../../types";
 
 export function defineEventListeners(io: Server) {
   io.on("connection", (socket) => {
-    socket.on("register", (msg: MatchRequest) => {
+    socket.on("register", (msg: Match) => {
       console.log(`${JSON.stringify(msg)} joined the queue!`);
 
       // Check Valid Difficulty
@@ -36,7 +30,7 @@ export function defineEventListeners(io: Server) {
       }
 
       // Check for duplicate ID
-      if (checkIdExists(msg.id)) {
+      if (checkIdExists(msg.socketId)) {
         socket.emit("error", "You are already in the queue!");
         return;
       }
@@ -51,18 +45,17 @@ export function defineEventListeners(io: Server) {
       const matchName = difficulty + category + language; // e.g. easyrecursionjavascript
 
       const thisMatch = {
-        id: msg.id,
+        socketId: msg.socketId,
         difficulty: msg.difficulty,
         categories: msg.categories,
         language: msg.language,
-        sockAddr: socket.id,
       };
 
       if (queues.has(matchName)) {
         const thisQueue: Match = queues.get(matchName) as Match;
 
         // Emit on paired user's socket
-        const peerSockAddr = thisQueue.sockAddr;
+        const peerSockAddr = thisQueue.socketId;
         const peerSocket = io.sockets.sockets.get(peerSockAddr);
 
         // Match found, remove from queues. (If peer connection lost => delete the queue and replace with current user.)

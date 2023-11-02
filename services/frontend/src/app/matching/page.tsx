@@ -50,7 +50,7 @@ const page = () => {
   const handleMatchingSubmit = (values: MatchRequest) => {
     if (socketRef.current && values) {
       const request = {
-        id: socketRef.current.id,
+        socketId: socketRef.current.id,
         ...values,
       };
       socketRef.current.emit("register", request);
