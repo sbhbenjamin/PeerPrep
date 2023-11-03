@@ -38,14 +38,18 @@ const handler = NextAuth({
       }
     },
     async session({ session }) {
-      if (session && session.user) {
-        const userInfo = await fetchUserFromUserService(session.user.email!);
-        return {
-          ...session,
-          currentUser: null,
-        };
+      try {
+        if (session && session.user) {
+          const userInfo = await fetchUserFromUserService(session.user.email!);
+          return {
+            ...session,
+            currentUser: userInfo,
+          };
+        }
+        return session;
+      } catch (e) {
+        return session;
       }
-      return session;
     },
     async signIn() {
       return true;

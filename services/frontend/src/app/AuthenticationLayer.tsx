@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { toast } from "sonner";
 
 import { sessionSignIn } from "@/features/auth";
 
@@ -22,29 +21,24 @@ const AuthenticationLayer = ({ children }: Props) => {
     return response.json();
   };
 
-  const dispatchSignInOrRedirect = async () => {
-    try {
-      if (session && session.currentUser) {
-        const sessionToken = await fetchSessionToken();
+  useEffect(() => {
+    const getUserInfo = async () => {
+      if (session) {
         dispatch(
           sessionSignIn({
             currentUser: session.currentUser,
             image: session.user?.image || null,
-            sessionToken,
+            sessionToken: await fetchSessionToken(),
             isLoggedIn: true,
           }),
         );
-      }
-      if (session && session.currentUser == null) {
-        router.push("/onboarding");
-      }
-    } catch (e) {
-      toast.error("Unable to fetch token");
-    }
-  };
 
-  useEffect(() => {
-    dispatchSignInOrRedirect();
+        if (session.currentUser == null) {
+          router.push("/onboarding");
+        }
+      }
+    };
+    getUserInfo();
   }, [session, dispatch, router]);
 
   return children;

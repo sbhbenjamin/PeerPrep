@@ -115,8 +115,8 @@ export function EditUserProfileForm({ userId }: { userId: number }) {
   }
 
   const deleteUserAccount = () => {
-    deleteUser(userId);
     dispatch(signOut());
+    deleteUser(userId);
   };
 
   return (
