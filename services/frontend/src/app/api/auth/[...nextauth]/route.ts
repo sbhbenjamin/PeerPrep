@@ -12,7 +12,7 @@ const fetchUserFromUserService = async (email: string) => {
     }
     return users[0];
   } catch (e) {
-    console.log("Unable to connect to User Service");
+    // console.log("Unable to connect to User Service");
     return null;
   }
 };
