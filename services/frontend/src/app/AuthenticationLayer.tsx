@@ -18,7 +18,7 @@ const AuthenticationLayer = ({ children }: Props) => {
   const router = useRouter();
 
   const fetchSessionToken = async () => {
-    const response = await fetch("http://localhost:3000/api/me");
+    const response = await fetch("/api/me");
     return response.json();
   };
 
