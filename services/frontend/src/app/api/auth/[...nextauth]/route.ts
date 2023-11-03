@@ -1,6 +1,22 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
+const fetchUserFromUserService = async (email: string) => {
+  try {
+    const res = await fetch(
+      `http://${process.env.NEXT_PUBLIC_SERVICE_USER_URL}/user?email=${email}`,
+    );
+    const users = await res.json();
+    if (users.length === 0) {
+      return null;
+    }
+    return users[0];
+  } catch (e) {
+    // console.log("Unable to connect to User Service");
+    return null;
+  }
+};
+
 const handler = NextAuth({
   providers: [
     GithubProvider({
@@ -9,17 +25,29 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      try {
+        if (user) {
+          const userInfo = await fetchUserFromUserService(user.email!);
+          token.role = userInfo.role; // eslint-disable-line no-param-reassign
+          token.userId = userInfo.id; // eslint-disable-line no-param-reassign
+        }
+        return token;
+      } catch (error) {
+        return token;
+      }
+    },
     async session({ session }) {
       try {
-        const res = await fetch(
-          `http://${process.env.NEXT_PUBLIC_SERVICE_USER_URL}/user?email=${session.user?.email}`,
-        );
-        const users = await res.json();
-        return {
-          ...session,
-          currentUser: users && users[0],
-        };
-      } catch (error) {
+        if (session && session.user) {
+          const userInfo = await fetchUserFromUserService(session.user.email!);
+          return {
+            ...session,
+            currentUser: userInfo,
+          };
+        }
+        return session;
+      } catch (e) {
         return session;
       }
     },

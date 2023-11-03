@@ -52,7 +52,6 @@ function createWebApplication() {
 }
 
 async function startWebServer(): Promise<AddressInfo> {
-  // ️️️✅ Best Practice: Declare a strict configuration schema and fail fast if the configuration is invalid
   const APIAddress = await openConnection(createWebApplication());
   return APIAddress;
 }
