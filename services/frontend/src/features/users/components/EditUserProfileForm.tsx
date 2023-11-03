@@ -27,7 +27,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { signOut } from "@/features/auth/state/authSlice";
+import { signOut } from "@/features/auth";
 import type { EditUseFormInput } from "@/features/users/types/user.type";
 
 import {
@@ -115,8 +115,8 @@ export function EditUserProfileForm({ userId }: { userId: number }) {
   }
 
   const deleteUserAccount = () => {
-    dispatch(signOut());
     deleteUser(userId);
+    dispatch(signOut());
   };
 
   return (

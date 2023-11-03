@@ -65,6 +65,7 @@ export default function defineRoutes(expressApp: express.Application) {
       await userUseCase.deleteUser(parseInt(req.params.id, 10));
       res.status(200).end();
     } catch (error) {
+      console.log(error);
       next(error);
     }
   });

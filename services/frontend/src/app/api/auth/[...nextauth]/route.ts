@@ -7,7 +7,6 @@ const fetchUserFromUserService = async (email: string) => {
       `http://${process.env.NEXT_PUBLIC_SERVICE_USER_URL}/user?email=${email}`,
     );
     const users = await res.json();
-    console.log(users);
     if (users.length === 0) {
       return null;
     }
@@ -43,7 +42,7 @@ const handler = NextAuth({
         const userInfo = await fetchUserFromUserService(session.user.email!);
         return {
           ...session,
-          currentUser: userInfo,
+          currentUser: null,
         };
       }
       return session;
