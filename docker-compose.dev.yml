@@ -116,6 +116,35 @@ services:
     ports:
       - '1543:5432'
 
+  matching-service-rabbitmq:
+    restart: on-failure
+    build: 
+      context: ./services/matching-service-rabbitmq
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./services/matching-service-rabbitmq:/app
+    depends_on:
+      - rabbitmq
+    environment:
+      - PORT=6001
+      - RABBITMQ_URL=amqp://rabbitmq
+    ports:
+      - '6001:6001'
+
+  rabbitmq:
+    image: rabbitmq:management
+    restart: always
+    ports:
+      - '15672:15672'  # Management Console
+      - '5672:5672'    # RabbitMQ service
+
+  rabbitmq-test:
+    image: rabbitmq:management
+    restart: always
+    ports:
+      - '15673:15672'  # Management Console
+      - '5673:5672'    # RabbitMQ service
+
 volumes:
   mongodb_master_data:
     driver: local
