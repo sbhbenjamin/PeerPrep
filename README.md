@@ -40,7 +40,7 @@ npm run dev:start
    NEXT_PUBLIC_GITHUB_ClIENT_ID=/** fill this in */
    NEXT_PUBLIC_GITHUB_CLIENT_SECRET=/** fill this in */
    NEXTAUTH_URL=http://localhost:3000
-   NEXTAUTH_SECRET=<FILL IN>
+   NEXTAUTH_SECRET=/** fill this in */
     ```
 
 3. Run frontend.
