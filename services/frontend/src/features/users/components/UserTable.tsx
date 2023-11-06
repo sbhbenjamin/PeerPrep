@@ -43,9 +43,12 @@ const columns: ColumnDef<User>[] = [
       const handleUpdate = () => {
         updateUser({ ...user, role: "ADMIN" });
       };
-      if (user.role === "USER") {
-        return <Button onClick={handleUpdate}>Set as admin</Button>;
-      }
+
+      return (
+        <Button disabled={user.role === "ADMIN"} onClick={handleUpdate}>
+          Set as admin
+        </Button>
+      );
     },
   },
 ];
