@@ -138,7 +138,7 @@ export const findMatch = async (match: Match, io: Server, socket: Socket) => {
   try {
     await assertQuestionExists(difficulty.toString(), categories[0].toString());
   } catch (error) {
-    io.emit(
+    io.to(socketId).emit(
       "error",
       `Unable to find a question with difficulty: ${difficulty} and category: ${categories[0]}. Please try again with different parameters`,
     );

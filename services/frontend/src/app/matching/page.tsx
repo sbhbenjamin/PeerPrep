@@ -18,13 +18,14 @@ const page = () => {
   const URL = "http://localhost:6001";
 
   const socketRef = useRef<Socket>();
-  const [currentQueueName, setCurrentQueueName] = useState<string>();
   const [matchPending, setMatchPending] = useState<boolean>(false);
 
   useEffect(() => {
-    const socket = io(URL, { autoConnect: true });
+    const socket = io(URL, { autoConnect: false });
 
     socket.on("error", (errorMessage: string) => {
+      socketRef.current?.disconnect();
+      setMatchPending(false);
       const notificationPayload = {
         type: NotificationType.ERROR,
         value: errorMessage,
@@ -32,15 +33,8 @@ const page = () => {
       dispatch(setNotification(notificationPayload));
     });
 
-    socket.on("matchPending", (isPending: boolean) => {
-      setMatchPending(isPending);
-    });
-
-    socket.on("queue_name", (queueName: string | undefined) => {
-      setCurrentQueueName(queueName);
-    });
-
     socket.on("match", (match: MatchDetails) => {
+      socketRef.current?.disconnect();
       dispatch(updateMatchDetails(match));
       push("/collab");
     });
@@ -49,17 +43,20 @@ const page = () => {
 
   const handleMatchingSubmit = (values: MatchRequest) => {
     if (socketRef.current && values) {
+      socketRef.current?.connect();
       const request = {
         socketId: socketRef.current.id,
         ...values,
       };
       socketRef.current.emit("register", request);
+      setMatchPending(true);
     }
   };
 
   const handleLeaveQueue = () => {
-    if (socketRef.current && currentQueueName) {
-      socketRef.current.emit("unqueue", currentQueueName);
+    if (socketRef.current && matchPending) {
+      socketRef.current?.disconnect();
+      setMatchPending(false);
     }
   };
 

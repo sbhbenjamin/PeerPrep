@@ -73,27 +73,22 @@ export function SyncedEditor({
       };
       dispatch(setNotification(notificationPayload));
     });
-
-    socketRef.current = socket;
-  }, []);
-
-  useEffect(() => {
-    if (socketRef.current) {
-      if (socketRef.current.connected) {
-        return;
-      }
-      if (auth.currentUser?.id) {
-        setCurrentUser(auth.currentUser?.id.toString());
-      } else {
-        setCurrentUser(uuidv4());
-      }
-      socketRef.current.auth = {
-        username: currentUser,
-      };
-      socketRef.current.connect();
-      socketRef.current.emit("join", roomId);
+    if (auth.currentUser?.id) {
+      setCurrentUser(auth.currentUser?.id.toString());
+    } else {
+      setCurrentUser(uuidv4());
     }
-  }, [auth.currentUser?.id, currentUser, roomId]);
+    socket.auth = {
+      username: currentUser,
+    };
+    socket.connect();
+    socket.emit("join", roomId);
+    socketRef.current = socket;
+    return () => {
+      socketRef.current?.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleOnEditorChange = (value: string | undefined) => {
     if (socketRef.current) {
