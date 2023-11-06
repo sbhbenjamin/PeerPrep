@@ -2,24 +2,18 @@
 
 import React from "react";
 
-import type { User } from "@/features/users";
 import UserTable from "@/features/users/components/UserTable";
 
-const data: User[] = [
-  {
-    id: 2,
-    name: "WeiJun",
-    email: "ang.weijun1999@gmail.com",
-    role: "Used",
-    url: null,
-    bio: "Hi",
-  },
-];
+import { useGetUsersQuery } from "@/services/userApi";
 
 const page = () => {
+  const { data: users, error, isLoading } = useGetUsersQuery();
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.toString()}</div>;
+
   return (
     <div>
-      <UserTable data={data} />
+      <UserTable data={users!} />
     </div>
   );
 };

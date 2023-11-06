@@ -36,13 +36,16 @@ const columns: ColumnDef<User>[] = [
   },
   {
     id: "actions",
+    header: "Assign Roles",
     cell: ({ row }) => {
       const [updateUser] = useUpdateUserRoleMutation();
       const user = row.original;
       const handleUpdate = () => {
         updateUser({ ...user, role: "ADMIN" });
       };
-      return <Button onClick={handleUpdate} />;
+      if (user.role === "USER") {
+        return <Button onClick={handleUpdate}>Set as admin</Button>;
+      }
     },
   },
 ];

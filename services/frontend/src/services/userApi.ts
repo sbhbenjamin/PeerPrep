@@ -9,6 +9,11 @@ const buildServiceUrl = (queryUrl: string) =>
 
 const userApi = rootApi.injectEndpoints({
   endpoints: (build) => ({
+    getUsers: build.query<User[], void>({
+      query: () => ({ url: buildServiceUrl(`/user`) }),
+      // @ts-expect-error
+      providesTags: ["User"],
+    }),
     getUserById: build.query<User, number>({
       query: (id) => ({ url: buildServiceUrl(`/user/${id}`) }),
       // @ts-expect-error
@@ -53,6 +58,7 @@ const userApi = rootApi.injectEndpoints({
 });
 
 export const {
+  useGetUsersQuery,
   useGetUserByIdQuery,
   useGetUserByEmailQuery,
   useCreateUserMutation,
