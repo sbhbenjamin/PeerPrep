@@ -1,37 +1,25 @@
+"use client";
+
 import React from "react";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import type { User } from "@/features/users";
+import UserTable from "@/features/users/components/UserTable";
+
+const data: User[] = [
+  {
+    id: 2,
+    name: "WeiJun",
+    email: "ang.weijun1999@gmail.com",
+    role: "Used",
+    url: null,
+    bio: "Hi",
+  },
+];
 
 const page = () => {
   return (
     <div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Display Name</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Url</TableHead>
-            <TableHead>Bio</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell>Wei Jun</TableCell>
-            <TableCell>Admin</TableCell>
-            <TableCell>ang.weijun1999@gmail.com</TableCell>
-            <TableCell>null</TableCell>
-            <TableCell>Wei Jun</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+      <UserTable data={data} />
     </div>
   );
 };

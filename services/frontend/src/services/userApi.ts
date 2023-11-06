@@ -1,6 +1,6 @@
 import { rootApi } from "@/app/RootApi.ts";
 
-import type { User } from "@/features/users";
+import type { UpdateUserRole, User } from "@/features/users";
 
 rootApi.enhanceEndpoints({ addTagTypes: ["User"] });
 
@@ -33,6 +33,13 @@ const userApi = rootApi.injectEndpoints({
       // @ts-expect-error
       invalidatesTags: ["User"],
     }),
+    updateUserRole: build.mutation<User, UpdateUserRole>({
+      query: (userData) => ({
+        url: buildServiceUrl(`/user/${userData.id}/role`),
+        method: "PUT",
+        body: { role: userData.role },
+      }),
+    }),
     deleteUser: build.mutation<void, number>({
       query: (userId) => ({
         url: buildServiceUrl(`/user/${userId}`),
@@ -51,4 +58,5 @@ export const {
   useCreateUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useUpdateUserRoleMutation,
 } = userApi;

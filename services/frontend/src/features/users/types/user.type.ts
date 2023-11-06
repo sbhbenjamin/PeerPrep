@@ -2,6 +2,7 @@ export type User = {
   id: number;
   name: string;
   email: string;
+  role?: string;
   url: string | null;
   bio: string | null;
 };
@@ -19,4 +20,9 @@ export type UserWithOptionalUrlAndBio = Omit<User, "url" | "bio"> &
 export type UserWithoutId = Partial<Omit<User, "id">> & {
   name: string;
   email: string;
+};
+
+export type UpdateUserRole = {
+  id: number;
+  role: number;
 };
