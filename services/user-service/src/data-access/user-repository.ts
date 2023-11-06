@@ -1,3 +1,5 @@
+import type { Role } from "@prisma/client";
+
 import type { UpdateUser, User, UserFilter, UserWihoutId } from "../../types";
 
 import { getPrismaClient } from "./prisma-client-factory";
@@ -54,6 +56,17 @@ export async function updateUser(
     data: { ...updateUserRequest },
   });
   return resultUser;
+}
+
+export async function updateUserRole(id: number, role: Role) {
+  const updatedUser = await getPrismaClient().user.update({
+    where: {
+      id,
+    },
+    data: { role },
+  });
+
+  return updatedUser;
 }
 
 export async function deleteUser(userIdToDelete: number): Promise<User> {

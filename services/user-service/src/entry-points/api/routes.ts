@@ -1,6 +1,7 @@
 import express from "express";
 
 import {
+  assertIsAdmin,
   assertIsAuthenticated,
   assertIsSelfOrAdmin,
 } from "../../commons/auth/authenticator";
@@ -51,6 +52,19 @@ export default function defineRoutes(expressApp: express.Application) {
       const response = await userUseCase.updateUser(
         parseInt(req.params.id, 10),
         req.body,
+      );
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.put("/:id/role", async (req, res, next) => {
+    try {
+      await assertIsAdmin(req);
+      const response = await userUseCase.updateUserRole(
+        parseInt(req.params.id, 10),
+        req.body.role,
       );
       res.status(200).json(response);
     } catch (error) {

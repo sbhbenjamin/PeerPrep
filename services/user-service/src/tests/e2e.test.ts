@@ -130,7 +130,7 @@ describe("POST /user", () => {
   test("when there is already a user with the same email, return status 409 Conflict", async () => {
     // arrange
     (getToken as jest.Mock).mockResolvedValue(userJwt);
-    await mockApp.post("/user").send(createUserInput);
+    await prisma.user.create({ data: createUserInput });
     // act
     const res = await mockApp.post("/user").send(createUserInput);
     const users = await prisma.user.findMany({ where: { ...createUserInput } });
@@ -306,7 +306,6 @@ describe("DELETE /user/:id", () => {
     const user = await prisma.user.create({ data: createUserInput });
     const { id } = user;
     (getToken as jest.Mock).mockResolvedValue({
-      userId: id,
       ...adminJwt,
     });
 
@@ -325,12 +324,41 @@ describe("DELETE /user/:id", () => {
   test("When admin deletes a user that does not exist, return 404 Not Found", async () => {
     // action
     (getToken as jest.Mock).mockResolvedValue({
-      userId: 0,
       ...adminJwt,
     });
     const res = await mockApp.delete(`/user/${0}`);
     // assert
     expect(res.status).toBe(404);
+  });
+
+  test("When admin modifies the user role, return 200 OK", async () => {
+    (getToken as jest.Mock).mockResolvedValue({
+      ...adminJwt,
+    });
+    const { id } = await prisma.user.create({ data: createUserInput });
+    // act
+    const res = await mockApp.put(`/user/${id}/role`).send({
+      role: "ADMIN",
+    });
+    // assert
+    const modifiedUser = await prisma.user.findUnique({ where: { id } });
+    expect(res.status).toBe(200);
+    expect(modifiedUser!.role).toBe("ADMIN");
+  });
+
+  test("When user modifies the user role, return 401 Unauthorize", async () => {
+    (getToken as jest.Mock).mockResolvedValue({
+      ...userJwt,
+    });
+    const { id } = await prisma.user.create({ data: createUserInput });
+    // act
+    const res = await mockApp.put(`/user/${id}/role`).send({
+      role: "ADMIN",
+    });
+    // assert
+    const modifiedUser = await prisma.user.findUnique({ where: { id } });
+    expect(res.status).toBe(401);
+    expect(modifiedUser!.role).toBe("USER");
   });
 });
 

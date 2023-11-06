@@ -1,3 +1,5 @@
+import type { Role } from "@prisma/client";
+
 import type { UpdateUser, UserFilter, UserWihoutId } from "../../types";
 import * as userRepository from "../data-access/user-repository";
 
@@ -57,6 +59,11 @@ export async function updateUser(
   await assertUserExistsById(userId);
   const validatedData = UpdateUserSchema.parse(updateUserRequest);
   return userRepository.updateUser(userId, validatedData);
+}
+
+export async function updateUserRole(userId: number, role: Role) {
+  await assertUserExistsById(userId);
+  return userRepository.updateUserRole(userId, role);
 }
 
 // Check if user is registered
