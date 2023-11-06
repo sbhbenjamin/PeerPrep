@@ -10,6 +10,8 @@ import {
 } from "../data-access/queue-repository";
 import { getQuestion } from "../services/question-service";
 
+import { assertQuestionExists } from "./match-validators";
+
 const logger = pino();
 
 const TIMEOUT_DURATION = 1 * 60 * 1000; // 1 minute
@@ -69,7 +71,7 @@ const processExistingMatch = async (
   channel,
   io,
   socket,
-  match,
+  match: Match,
 ) => {
   const { difficulty, categories, language } = match;
   const peerSocketId: any = existingMessage.content.toString();
@@ -129,6 +131,19 @@ const processExistingMatch = async (
 export const findMatch = async (match: Match, io: Server, socket: Socket) => {
   const channel = await getChannelInstance();
   const { difficulty, categories, language, socketId } = match;
+
+  logger.info(
+    `Fetching question with ${difficulty}, ${categories[0].toString()}`,
+  );
+  try {
+    await assertQuestionExists(difficulty.toString(), categories[0].toString());
+  } catch (error) {
+    io.emit(
+      "error",
+      `Unable to find a question with difficulty: ${difficulty} and category: ${categories[0]}. Please try again with different parameters`,
+    );
+    socket.disconnect();
+  }
 
   const queueName = generateQueueName(difficulty, categories, language);
 

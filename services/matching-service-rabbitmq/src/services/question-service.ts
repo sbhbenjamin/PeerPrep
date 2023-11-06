@@ -5,7 +5,7 @@ export const getQuestion = async (
 ): Promise<Response> => {
   const logger = pino();
   try {
-    logger.info("Getting question from questions repository...");
+    logger.info(`Getting question from questions repository...`);
     const res = await fetch(
       `http://question-service:5001/question/?${params.toString()}`,
     );

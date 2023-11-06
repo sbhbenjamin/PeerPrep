@@ -15,9 +15,11 @@ export const assertQuestionExists = async (
   });
 
   try {
-    await getQuestion(params);
-    logger.debug(
+    const res = await getQuestion(params);
+    const question = await res.json();
+    logger.info(
       `Successfully fetched question for difficulty: ${difficulty}, category: ${category}`,
+      question,
     );
   } catch (error) {
     logger.error(`Failed assertion: ${error.message}`);

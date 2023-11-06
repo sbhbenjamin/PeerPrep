@@ -22,7 +22,7 @@ export const defineEventListeners = (io: Server) => {
         return;
       }
 
-      logger.debug(`Input validation succeeded for socket id: ${socket.id}`);
+      logger.info(`Input validation succeeded for socket id: ${socket.id}`);
       await findMatch({ ...data, socketId: socket.id }, io, socket);
     });
 
