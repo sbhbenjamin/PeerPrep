@@ -62,6 +62,7 @@ export function SyncedEditor({
   };
 
   useEffect(() => {
+    socket.removeAllListeners();
     socket.on("code_update", (content: string) => {
       setEditorContent(content);
     });
@@ -77,10 +78,11 @@ export function SyncedEditor({
     socket.on("error", (errorMessage: string) => {
       setPartnerStatus(Status.Disconnected);
       const notificationPayload = {
-        type: NotificationType.SUCCESS,
+        type: NotificationType.ERROR,
         value: errorMessage,
       };
       dispatch(setNotification(notificationPayload));
+      push("/matching");
     });
 
     socket.on("connected", (connectedUsername: string) => {
