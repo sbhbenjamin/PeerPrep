@@ -15,11 +15,11 @@ export default withAuth({
         return true;
       }
 
-      // Check if the path is public.
       return false;
     },
   },
   pages: {
+    // TODO CHANGE
     signIn: "/",
     signOut: "/",
   },
