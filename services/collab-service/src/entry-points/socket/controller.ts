@@ -1,5 +1,5 @@
 import pino from "pino";
-import type { Server } from "socket.io";
+import { type Server } from "socket.io";
 
 import type { Message } from "../../commons/types";
 import {
@@ -16,7 +16,6 @@ export const defineEventListeners = (io: Server) => {
   io.on("connection", (socket) => {
     socket.on("join", (roomId: string) => {
       if (socket.rooms.has(roomId)) {
-        logger.error(`already joined ${roomId}`);
         return;
       }
       io.in(roomId)
@@ -86,7 +85,7 @@ export const defineEventListeners = (io: Server) => {
     socket.on("disconnecting", () => {
       for (const room of socket.rooms) {
         if (room === socket.id) {
-          return;
+          continue;
         }
         logger.info(`disconnecting from room: ${room}`);
         io.to(room).emit("disconnected", socket.handshake.auth.username);

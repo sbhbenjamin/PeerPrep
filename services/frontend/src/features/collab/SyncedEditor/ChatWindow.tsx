@@ -22,6 +22,7 @@ type ChatWindowProps = {
   sendMessage: (value: string | undefined) => void;
   contentClassName: string;
   currentUser: string;
+  partnerStatus: string;
 };
 
 export function ChatWindow({
@@ -29,6 +30,7 @@ export function ChatWindow({
   sendMessage,
   contentClassName,
   currentUser,
+  partnerStatus,
 }: ChatWindowProps) {
   const [input, setInput] = useState("");
   const inputLength = input.trim().length;
@@ -40,17 +42,24 @@ export function ChatWindow({
 
   return (
     <Card className="flex h-full flex-col">
-      <CardHeader className="flex flex-row items-center">
-        <div className="flex items-center space-x-4">
-          <Avatar>
-            <AvatarImage src="/avatars/01.png" alt="Image" />
-            <AvatarFallback>OM</AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="text-sm font-medium leading-none">Sofia Davis</p>
-            <p className="text-muted-foreground text-sm">m@example.com</p>
+      <CardHeader className="flex flex-col">
+        <div className="flex flex-row items-center">
+          <div className="flex items-center space-x-4">
+            <Avatar>
+              <AvatarImage src="/avatars/01.png" alt="Image" />
+              <AvatarFallback>OM</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm font-medium leading-none">Sofia Davis</p>
+              <p className="text-muted-foreground text-sm">m@example.com</p>
+            </div>
           </div>
         </div>
+        <hr className="mt-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
+        <p className="text-muted-foreground text-center text-sm">
+          Status: {partnerStatus}
+        </p>
+        <hr className="my-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
       </CardHeader>
       <CardContent className={`grow overflow-y-auto ${contentClassName}`}>
         <div className="space-y-4">
