@@ -5,7 +5,7 @@
 
   "compilerOptions": {
     "strictNullChecks":  true,
-    "lib": ["es2023"],
+    "lib": ["es2023", "DOM"],
     "module": "node16",
     "target": "es2022",
 

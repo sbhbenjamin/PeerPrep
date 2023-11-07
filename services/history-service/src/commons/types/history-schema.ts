@@ -5,6 +5,7 @@ export const HistoryRecordSchema = z.object({
   userId: z.number(),
   questionId: z.string(),
   timestamp: z.instanceof(Date).optional(),
+  submittedCode: z.string(),
 });
 
 export const HistoryRecordWithoutIdAndTimestampSchema =

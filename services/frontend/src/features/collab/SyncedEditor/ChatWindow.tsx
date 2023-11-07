@@ -1,6 +1,5 @@
 import { Send } from "lucide-react";
 import { useState } from "react";
-import { z } from "zod";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -18,41 +17,19 @@ import type { Message } from "../types";
 
 import "./styles.css";
 
-const FormSchema = z.object({
-  message: z.string(),
-});
-
 type ChatWindowProps = {
   messages: Message[];
   sendMessage: (value: string | undefined) => void;
+  contentClassName: string;
   currentUser: string;
 };
 
 export function ChatWindow({
   messages,
   sendMessage,
+  contentClassName,
   currentUser,
 }: ChatWindowProps) {
-  //   const [unsentMessage, setUnsentMessage] = useState<string>();
-
-  //   const [messages, setMessages] = useState([
-  //     {
-  //       role: "agent",
-  //       content: "Hi, how can I help you today?",
-  //     },
-  //     {
-  //       role: "user",
-  //       content: "Hey, I'm having trouble with my account.",
-  //     },
-  //     {
-  //       role: "agent",
-  //       content: "What seems to be the problem?",
-  //     },
-  //     {
-  //       role: "user",
-  //       content: "I can't log in.",
-  //     },
-  //   ]);
   const [input, setInput] = useState("");
   const inputLength = input.trim().length;
 
@@ -71,17 +48,17 @@ export function ChatWindow({
           </Avatar>
           <div>
             <p className="text-sm font-medium leading-none">Sofia Davis</p>
-            <p className="text-sm text-muted-foreground">m@example.com</p>
+            <p className="text-muted-foreground text-sm">m@example.com</p>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="grow overflow-y-auto">
+      <CardContent className={`grow overflow-y-auto ${contentClassName}`}>
         <div className="space-y-4">
           {messages.map((message, index) => (
             <div
               key={index}
               className={cn(
-                "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                "flex w-max max-w-[70%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
                 message.username === currentUser
                   ? "ml-auto bg-primary text-primary-foreground"
                   : "bg-muted",
