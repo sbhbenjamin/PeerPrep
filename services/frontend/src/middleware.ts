@@ -1,28 +1,38 @@
-import { withAuth } from "next-auth/middleware";
+// pages/_middleware.ts or pages/_middleware.js
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export default withAuth({
-  callbacks: {
-    authorized: async ({ token, req }) => {
-      const path = req.nextUrl.pathname;
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req });
+  const path = req.nextUrl.pathname;
 
-      const userOnlyPaths = ["/home", "/matching", "/onboarding", "/collab"];
+  const adminOnlyPaths = ["/admin", "/question"]; // paths that only admin can access
+  const userOnlyPaths = ["/matching", "/onboarding", "/collab"];
 
-      if (token && token.role === "ADMIN") {
-        return true;
-      }
+  // If the user has a valid token and is an admin, allow all routes
+  if (token && token.role === "ADMIN") {
+    return NextResponse.next();
+  }
 
-      if (token && userOnlyPaths.some((p) => path.startsWith(p))) {
-        return true;
-      }
+  if (token && userOnlyPaths.includes(path)) {
+    return NextResponse.next();
+  }
 
-      return false;
-    },
-  },
-  pages: {
-    signIn: "/",
-    signOut: "/",
-  },
-});
+  if (adminOnlyPaths.includes(path)) {
+    const unauthorizedUrl = new URL("/unauthorized", req.url);
+    unauthorizedUrl.searchParams.set("message", "Admin access only");
+    return NextResponse.redirect(unauthorizedUrl);
+  }
+
+  // If the user doesn't have a valid token and is trying to access protected routes, redirect to login
+  const unauthorizedUrl = new URL("/unauthorized", req.url);
+  unauthorizedUrl.searchParams.set(
+    "message",
+    "This is a protected page! Please login ",
+  );
+  return NextResponse.redirect(unauthorizedUrl);
+}
 
 export const config = {
   matcher: [
