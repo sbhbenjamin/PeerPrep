@@ -13,28 +13,6 @@ const messageCache: Map<string, Message[]> = new Map();
 const timeouts: Map<string, NodeJS.Timeout> = new Map();
 
 const setupSocket = (io: Server) => {
-  const getConnectedUsers = (roomId: string) =>
-    io
-      .in(roomId)
-      .fetchSockets()
-      .catch((e) => console.error(e))
-      .then(
-        (connectedSockets) =>
-          connectedSockets?.map((socket) => ({
-            userID: socket.id,
-            username: (socket as any).username,
-          })),
-      );
-
-  io.use((socket, next) => {
-    const { username } = socket.handshake.auth;
-    if (!username) {
-      return next(new Error("invalid username"));
-    }
-    (socket as any).username = username;
-    next();
-  });
-
   io.on("connection", (socket) => {
     socket.on("join", (roomId: string) => {
       if (socket.rooms.has(roomId)) {
@@ -43,17 +21,10 @@ const setupSocket = (io: Server) => {
       // join new room
       socket.join(roomId);
 
-      // updating list
-      socket.to(roomId).emit("user_connected", {
-        userID: socket.id,
-        username: (socket as any).username,
-      });
+      socket.to(roomId).emit("connected", socket.handshake.auth.username);
+
       console.log(`joined: ${roomId}`);
-      getConnectedUsers(roomId)
-        .catch((e) => console.error(e))
-        .then((users) => {
-          socket.emit("users", users);
-        });
+
       if (codeCache.has(roomId)) {
         socket.emit("code_update", codeCache.get(roomId));
       }
@@ -92,16 +63,16 @@ const setupSocket = (io: Server) => {
 
     socket.on("disconnecting", () => {
       for (const room of socket.rooms) {
-        if (room === socket.id) {
-          console.log("disconnecting from home socket");
-          continue;
-        } else {
+        if (room !== socket.id) {
           console.log(`disconnecting from room: ${room}`);
+          io.to(room).emit("disconnected", socket.handshake.auth.username);
         }
-        getConnectedUsers(room)
+
+        io.in(room)
+          .fetchSockets()
           .catch((e) => console.error(e))
-          .then((users) => {
-            if (!users || users.length === 1) {
+          .then((connectedSockets) => {
+            if (connectedSockets?.length && connectedSockets?.length < 2) {
               console.log(`setting cache timeout for empty room: ${room}`);
               const clearRoomCacheTimeout = setTimeout(() => {
                 messageCache.delete(room);
@@ -109,13 +80,7 @@ const setupSocket = (io: Server) => {
                 console.log(`cleared caches for room: ${room}`);
               }, 600000);
               timeouts.set(room, clearRoomCacheTimeout);
-              return;
             }
-            const remainingUsers = users?.filter(
-              (user) => user.userID !== socket.id,
-            );
-            console.log(`emitting to ${room}: ${remainingUsers}`);
-            io.to(room).emit("users", remainingUsers);
           });
       }
     });

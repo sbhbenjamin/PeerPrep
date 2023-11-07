@@ -24,11 +24,14 @@ export default function defineRoutes(expressApp: express.Application) {
 
   router.get("/", validateGetQuestionRequest, async (req, res, next) => {
     try {
+      const { categories } = req.query;
       const response = await questionUseCase.getQuestions({
         id: req.query.id as string,
         title: req.query.title as string,
         difficulty: req.query.difficulty as Difficulty,
-        categories: req.query.categories as Category[],
+        categories: (!categories || Array.isArray(categories)
+          ? categories
+          : [categories]) as Category[],
       });
       if (!req.query.getOne || !response) {
         res.json(response);

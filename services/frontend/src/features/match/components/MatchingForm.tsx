@@ -38,21 +38,21 @@ import {
 
 import { cn } from "@/lib/utils";
 
+import type { Category, Difficulty } from "@/features/questions";
 import { categoriesStub } from "@/features/questions/stubs/categories.stub";
-import type {
-  Category,
-  Difficulty,
-} from "@/features/questions/types/question.type";
 
 import { Match } from "../types/match.schema";
-import { Language, type MatchRequest } from "../types/matching.type";
+import type { MatchRequest } from "../types/match.type";
+import { Language } from "../types/match.type";
 
 interface MatchFormProps {
+  handleLeaveQueue: () => void;
   onSubmit: (values: MatchRequest) => void;
   matchPending: boolean;
 }
 
 export const MatchingForm: React.FC<MatchFormProps> = ({
+  handleLeaveQueue,
   onSubmit,
   matchPending,
 }) => {
@@ -222,15 +222,27 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          disabled={
-            !(form.getValues("difficulty") && form.getValues("language"))
-          }
-          isLoading={matchPending}
-        >
-          Submit
-        </Button>
+        <div className="flex gap-4">
+          <Button
+            type="submit"
+            disabled={
+              !(form.getValues("difficulty") && form.getValues("language"))
+            }
+            isLoading={matchPending}
+            loadingText="Waiting"
+          >
+            Submit
+          </Button>
+          {matchPending ? (
+            <Button
+              variant="destructive"
+              type="button"
+              onClick={handleLeaveQueue}
+            >
+              Leave Queue
+            </Button>
+          ) : null}
+        </div>
       </form>
     </Form>
   );
