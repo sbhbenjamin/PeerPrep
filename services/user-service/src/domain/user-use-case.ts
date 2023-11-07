@@ -25,6 +25,14 @@ export async function addUser(newUser: UserWihoutId) {
   // Validate newUser against the AddUserSchema
   await assertUserNotExistsByMail(newUser.email);
   const validatedResult = UserRecordWithoutIdSchema.parse(newUser);
+  const count = await userRepository.countUsers();
+  if (count === 0) {
+    const response = await userRepository.addUser({
+      ...newUser,
+      role: "ADMIN",
+    });
+    return response;
+  }
   const response = await userRepository.addUser(validatedResult);
   return response;
 }

@@ -24,5 +24,5 @@ export type UserWithoutId = Partial<Omit<User, "id">> & {
 
 export type UpdateUserRole = {
   id: number;
-  role: number;
+  role: string;
 };

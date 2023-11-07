@@ -55,6 +55,7 @@ describe("POST /user", () => {
     // assert
     expect(res.status).toBe(200);
     expect(user).not.toBe(null);
+    expect(user?.role).toBe("ADMIN");
   });
 
   test("when name, email and valid permission are provided, return status 200 OK", async () => {

@@ -1,8 +1,20 @@
 "use client";
 
+import { ChevronDown } from "lucide-react";
+import { useState } from "react";
+
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { DataTable } from "@/components/DataTable";
 
 import { type User } from "@/features/users";
@@ -23,8 +35,45 @@ const columns: ColumnDef<User>[] = [
     header: "Email",
   },
   {
+    id: "actions",
     accessorKey: "role",
     header: "Role",
+    cell: ({ row }) => {
+      const [updateUser] = useUpdateUserRoleMutation();
+      const user = row.original;
+      const [userRole, setUserRole] = useState(user.role);
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost">
+              {userRole}
+              <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Edit User Role</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuRadioGroup
+              value={userRole}
+              onValueChange={setUserRole}
+            >
+              <DropdownMenuRadioItem
+                onClick={() => updateUser({ ...user, role: "ADMIN" })}
+                value="ADMIN"
+              >
+                Admin
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem
+                onClick={() => updateUser({ ...user, role: "USER" })}
+                value="USER"
+              >
+                User
+              </DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
   {
     accessorKey: "url",
@@ -33,23 +82,6 @@ const columns: ColumnDef<User>[] = [
   {
     accessorKey: "bio",
     header: "Biography",
-  },
-  {
-    id: "actions",
-    header: "Assign Roles",
-    cell: ({ row }) => {
-      const [updateUser] = useUpdateUserRoleMutation();
-      const user = row.original;
-      const handleUpdate = () => {
-        updateUser({ ...user, role: "ADMIN" });
-      };
-
-      return (
-        <Button disabled={user.role === "ADMIN"} onClick={handleUpdate}>
-          Set as admin
-        </Button>
-      );
-    },
   },
 ];
 
