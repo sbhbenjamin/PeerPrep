@@ -19,7 +19,6 @@ export default withAuth({
     },
   },
   pages: {
-    // TODO CHANGE
     signIn: "/",
     signOut: "/",
   },
