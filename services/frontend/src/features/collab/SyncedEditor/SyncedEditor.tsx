@@ -121,6 +121,10 @@ export function SyncedEditor({
 
     socket.connect();
     socket.emit("join", { roomId, username: user.name });
+    return () => {
+      console.log("DISCONNECTING SOCKET");
+      socket.disconnect();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

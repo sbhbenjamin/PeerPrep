@@ -24,7 +24,7 @@ export const defineEventListeners = (io: Server) => {
           .fetchSockets()
           .catch((e) => logger.error(e))
           .then((connectedSockets) => {
-            if (!connectedSockets || connectedSockets.length > 1) {
+            if (!connectedSockets) {
               io.to(socket.id).emit(
                 "error",
                 "An error occurred with the session, please try to find another match again.",
