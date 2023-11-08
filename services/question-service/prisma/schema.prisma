@@ -28,10 +28,18 @@ enum Category {
 }
 
 model Question {
-  id          String     @id @default(uuid()) @map("_id")
-  title       String     @unique
-  categories  Category[]
-  difficulty  Difficulty
-  description String
-  link        String
+  id               String             @id @default(uuid()) @map("_id")
+  title            String             @unique
+  categories       Category[]
+  difficulty       Difficulty
+  description      String
+  link             String
+  QuestionOfTheDay QuestionOfTheDay[]
+}
+
+model QuestionOfTheDay {
+  id         String   @id @default(uuid()) @map("_id")
+  date       DateTime @unique
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId String
 }

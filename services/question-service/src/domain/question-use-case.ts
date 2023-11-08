@@ -1,4 +1,7 @@
+import { formatISO } from "date-fns";
+
 import type { QuestionFilter, QuestionRequest } from "../../types";
+import DomainError from "../commons/error/DomainError";
 import * as questionRepo from "../data-access/question-repository";
 
 import { AddQuestionSchema, UpdateQuestionSchema } from "./question-schema"; // Import your schemas here
@@ -37,4 +40,34 @@ export async function updateQuestion(
   await assertQuestionExistsById(questionId);
   const validatedData = UpdateQuestionSchema.parse(updateQuestionRequest);
   return questionRepo.updateQuestion(questionId, validatedData);
+}
+
+function dateToHash(date) {
+  const today = formatISO(date, { representation: "date" });
+  let hash = 0;
+  for (let i = 0; i < today.length; i += 1) {
+    const char = today.charCodeAt(i);
+    hash = hash * 31 + char;
+    hash = Math.sign(hash) * Math.trunc(Math.abs(hash));
+  }
+  return Math.abs(hash);
+}
+
+export async function getDailyQuestion() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const questionOfTheDay = await questionRepo.getQuestionOfTheDay(today);
+
+  if (questionOfTheDay) {
+    const question = await getQuestionById(questionOfTheDay.questionId);
+    return question;
+  }
+  const questions = await questionRepo.getQuestions({});
+  if (questions === null || questions!.length === 0) {
+    throw new DomainError("No questions in database", 404);
+  }
+  const questionIndex = dateToHash(new Date()) % questions.length;
+  await questionRepo.addQuestionOfTheDay(today, questions[questionIndex].id);
+
+  return questions[questionIndex];
 }
