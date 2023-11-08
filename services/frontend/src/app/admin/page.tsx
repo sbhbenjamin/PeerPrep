@@ -9,11 +9,10 @@ import { useGetUsersQuery } from "@/services/userApi";
 const page = () => {
   const { data: users, error, isLoading } = useGetUsersQuery();
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.toString()}</div>;
-
   return (
     <div>
-      <UserTable data={users!} />
+      {/* <h1>HI</h1> */}
+      <UserTable users={users!} />
     </div>
   );
 };

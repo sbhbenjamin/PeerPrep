@@ -1,14 +1,16 @@
+import { ArrowUpDown } from "lucide-react";
 import React from "react";
 
 import type { ColumnDef } from "@tanstack/react-table";
 
+import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/DataTable";
 
 import type { QuestionType } from "@/features/questions";
 
 type HistoryColumn = QuestionType & { timestamp: Date };
 
-const historyColumns: ColumnDef<HistoryColumn>[] = [
+const historyColumn: ColumnDef<HistoryColumn>[] = [
   {
     accessorKey: "title",
     header: "Title",
@@ -16,14 +18,63 @@ const historyColumns: ColumnDef<HistoryColumn>[] = [
   {
     accessorKey: "categories",
     header: "Categories",
+    cell: ({ row }) => {
+      const categories: string[] = row.getValue("categories");
+      return (
+        <div className="flex w-60 flex-row flex-wrap gap-x-2">
+          {categories.map((cat) => (
+            <p key={cat}>{cat}</p>
+          ))}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "difficulty",
-    header: "Difficulty",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Difficulty
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const order: { [key: string]: number } = { Hard: 3, Medium: 2, Easy: 1 }; // Define the order for sorting
+      const difficultyA = rowA.getValue("difficulty") as keyof typeof order;
+      const difficultyB = rowB.getValue("difficulty") as keyof typeof order;
+      return order[difficultyB] - order[difficultyA]; // Sort based on the defined order
+    },
   },
   {
     accessorKey: "timestamp",
-    header: "Date Completed",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date Completed
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const date: Date = row.getValue("timestamp");
+      const dateString = date.toDateString();
+      return <p>{dateString}</p>;
+    },
+    sortingFn: (rowA, rowB) => {
+      // Cast the values to Date using `as Date` because getValue returns `any`
+      const dateA = rowA.getValue("timestamp") as Date;
+      const dateB = rowB.getValue("timestamp") as Date;
+      return dateA.getTime() - dateB.getTime();
+    },
+    enableSorting: true,
   },
 ];
 
@@ -32,7 +83,14 @@ interface HistoryTableProps {
 }
 
 export const HistoryTable: React.FC<HistoryTableProps> = ({ histories }) => {
-  return <DataTable columns={historyColumns} data={histories} />;
+  return (
+    <DataTable
+      placeholder="Search by tile"
+      filterBy="title"
+      columns={historyColumn}
+      data={histories}
+    />
+  );
 };
 
 export default HistoryTable;

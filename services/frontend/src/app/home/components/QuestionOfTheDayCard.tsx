@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 
 import type { QuestionType } from "@/features/questions";
-import { categoryColors } from "@/features/questions/utils/categoryStyles";
 
 interface QuestionOfTheDayCardProps {
   question: QuestionType;
@@ -31,9 +30,7 @@ export const QuestionOfTheDayCard: React.FC<QuestionOfTheDayCardProps> = ({
           <div className="flex gap-2">
             {categories.map((category) => (
               <div key={category}>
-                <Badge className={categoryColors[category]} variant="outline">
-                  {category}
-                </Badge>
+                <Badge variant="outline">{category}</Badge>
               </div>
             ))}
           </div>
