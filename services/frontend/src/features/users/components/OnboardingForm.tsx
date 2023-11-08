@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -66,7 +66,7 @@ export const OnboardingForm = () => {
       .unwrap()
       .then((res) => {
         dispatch(register(res));
-        router.push(`/users/${res.id}`);
+        signIn("github", { callbackUrl: `/users/${res.id}` });
       })
       .catch(() => {
         throw new Error("Unable to register user!");

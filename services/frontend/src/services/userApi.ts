@@ -1,6 +1,6 @@
 import { rootApi } from "@/app/RootApi.ts";
 
-import type { User } from "@/features/users";
+import type { UpdateUserRole, User } from "@/features/users";
 
 rootApi.enhanceEndpoints({ addTagTypes: ["User"] });
 
@@ -9,6 +9,11 @@ const buildServiceUrl = (queryUrl: string) =>
 
 const userApi = rootApi.injectEndpoints({
   endpoints: (build) => ({
+    getUsers: build.query<User[], void>({
+      query: () => ({ url: buildServiceUrl(`/user`) }),
+      // @ts-expect-error
+      providesTags: ["User"],
+    }),
     getUserById: build.query<User, number>({
       query: (id) => ({ url: buildServiceUrl(`/user/${id}`) }),
       // @ts-expect-error
@@ -33,6 +38,13 @@ const userApi = rootApi.injectEndpoints({
       // @ts-expect-error
       invalidatesTags: ["User"],
     }),
+    updateUserRole: build.mutation<User, UpdateUserRole>({
+      query: (userData) => ({
+        url: buildServiceUrl(`/user/${userData.id}/role`),
+        method: "PUT",
+        body: { role: userData.role },
+      }),
+    }),
     deleteUser: build.mutation<void, number>({
       query: (userId) => ({
         url: buildServiceUrl(`/user/${userId}`),
@@ -46,9 +58,11 @@ const userApi = rootApi.injectEndpoints({
 });
 
 export const {
+  useGetUsersQuery,
   useGetUserByIdQuery,
   useGetUserByEmailQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useUpdateUserRoleMutation,
 } = userApi;

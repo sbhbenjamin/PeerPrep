@@ -1,13 +1,17 @@
-import type { UpdateUser, User, UserFilter, UserWihoutId } from "../../types";
+import type { Prisma, Role } from "@prisma/client";
+
+import type { UpdateUser, User, UserFilter } from "../../types";
 
 import { getPrismaClient } from "./prisma-client-factory";
 
-export async function addUser(newUserRequest: UserWihoutId): Promise<User> {
-  const resultUser = await getPrismaClient().user.create({
+export async function addUser(
+  newUserRequest: Prisma.UserCreateInput,
+): Promise<User> {
+  const res = await getPrismaClient().user.create({
     data: { ...newUserRequest },
   });
 
-  return resultUser;
+  return res;
 }
 
 export async function getAllUsers(filter: UserFilter): Promise<User[]> {
@@ -56,6 +60,17 @@ export async function updateUser(
   return resultUser;
 }
 
+export async function updateUserRole(id: number, role: Role) {
+  const updatedUser = await getPrismaClient().user.update({
+    where: {
+      id,
+    },
+    data: { role },
+  });
+
+  return updatedUser;
+}
+
 export async function deleteUser(userIdToDelete: number): Promise<User> {
   const deleteResult = await getPrismaClient().user.delete({
     where: {
@@ -63,6 +78,15 @@ export async function deleteUser(userIdToDelete: number): Promise<User> {
     },
   });
   return deleteResult;
+}
+
+export async function countUsers(
+  filter?: Prisma.UserWhereInput,
+): Promise<Number> {
+  const count = await getPrismaClient().user.count({
+    where: filter,
+  });
+  return count;
 }
 
 export async function cleanupData(): Promise<any> {
