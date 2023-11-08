@@ -31,5 +31,5 @@ export const Notifications = () => {
       dispatch(resetNotification());
     }
   }, [notification, dispatch]);
-  return <Toaster position="top-center" richColors />;
+  return <Toaster position="top-center" expand richColors />;
 };

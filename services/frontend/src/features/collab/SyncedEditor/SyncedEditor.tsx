@@ -11,6 +11,7 @@ import type { Language } from "@/features/match";
 import { resetMatchDetails } from "@/features/match/state/matchSlice";
 import { NotificationType, setNotification } from "@/features/notifications";
 import type { QuestionType } from "@/features/questions";
+import type { User } from "@/features/users";
 
 import { useAddHistoryMutation } from "@/services/historyApi";
 
@@ -26,13 +27,13 @@ export function SyncedEditor({
   language,
   question,
   roomId,
-  userId,
+  user,
 }: {
   socket: Socket;
   language: Language;
   question: QuestionType;
   roomId: string;
-  userId: number;
+  user: User;
 }) {
   const dispatch = useDispatch();
   const monaco = useMonaco();
@@ -85,8 +86,11 @@ export function SyncedEditor({
       push("/matching");
     });
 
-    socket.on("connected", (connectedUsername: string) => {
+    socket.on("connected", (connectedUsername: string | undefined) => {
       setPartnerStatus(Status.Connected);
+      if (!connectedUsername) {
+        return;
+      }
       const notificationPayload = {
         type: NotificationType.SUCCESS,
         value: `${connectedUsername} has joined`,
@@ -101,21 +105,22 @@ export function SyncedEditor({
         value: `${disconnectedUsername} has ended the session`,
       };
       dispatch(setNotification(notificationPayload));
+      socket.disconnect();
     });
 
-    socket.on("disconnected", (disconnectedUsername: string) => {
+    socket.on("disconnected", () => {
       if (partnerStatus !== Status.SessionEnded) {
         setPartnerStatus(Status.Disconnected);
       }
       const notificationPayload = {
         type: NotificationType.ERROR,
-        value: `${disconnectedUsername} has disconnected`,
+        value: "Your partner has disconnected",
       };
       dispatch(setNotification(notificationPayload));
     });
 
     socket.connect();
-    socket.emit("join", roomId);
+    socket.emit("join", { roomId, username: user.name });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -127,14 +132,15 @@ export function SyncedEditor({
   };
 
   const handleLeaveSession = () => {
-    socket.emit("leave", roomId);
+    socket.emit("leave", { roomId, username: user.name });
+    socket.disconnect();
     dispatch(resetMatchDetails());
     push("/");
   };
 
   const handleSubmitCode = () => {
     addHistory({
-      userId,
+      userId: user.id,
       questionId: question.id,
       question,
       submittedCode: editorContent,
@@ -144,7 +150,7 @@ export function SyncedEditor({
   const sendMessage = (value: string | undefined) => {
     if (value) {
       const message = {
-        username: userId.toString(),
+        userId: user.id.toString(),
         content: value,
       } as Message;
       socket.emit("message", {
@@ -173,7 +179,7 @@ export function SyncedEditor({
           contentClassName="max-h-[60vh]"
           messages={chatMessages}
           sendMessage={sendMessage}
-          currentUser={userId.toString()}
+          currentUser={user.id.toString()}
           partnerStatus={partnerStatus as string}
         />
         <div className="flex flex-row gap-x-2">

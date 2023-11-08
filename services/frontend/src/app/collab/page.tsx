@@ -46,13 +46,18 @@ const page = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return isClient && socketRef.current && language && question && roomId ? (
+  return isClient &&
+    socketRef.current &&
+    language &&
+    question &&
+    roomId &&
+    auth.currentUser ? (
     <SyncedEditor
       socket={socketRef.current}
       language={language}
       question={question}
       roomId={roomId}
-      userId={currentUser}
+      user={auth.currentUser}
     />
   ) : null;
 };

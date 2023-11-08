@@ -51,12 +51,12 @@ export function ChatWindow({
             </Avatar>
             <div>
               <p className="text-sm font-medium leading-none">Sofia Davis</p>
-              <p className="text-sm text-muted-foreground">m@example.com</p>
+              <p className="text-muted-foreground text-sm">m@example.com</p>
             </div>
           </div>
         </div>
         <hr className="mt-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-center text-sm">
           Status: {partnerStatus}
         </p>
         <hr className="my-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
@@ -68,7 +68,7 @@ export function ChatWindow({
               key={index}
               className={cn(
                 "flex w-max max-w-[70%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
-                message.username === currentUser
+                message.userId === currentUser
                   ? "ml-auto bg-primary text-primary-foreground"
                   : "bg-muted",
               )}

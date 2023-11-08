@@ -17,7 +17,7 @@ export type QuestionFilter = {
 };
 
 export type Message = {
-  username: string;
+  userId: string;
   content: string;
 };
 
