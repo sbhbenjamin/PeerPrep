@@ -18,7 +18,7 @@ const historyApi = rootApi.injectEndpoints({
       // @ts-expect-error
       providesTags: ["History"],
     }),
-    addHistory: builder.mutation<History, Omit<History, "id">>({
+    addHistory: builder.mutation<History, Omit<History, "id" | "timestamp">>({
       query: (newHistory) => ({
         url: buildServiceUrl("/history"),
         method: "POST",

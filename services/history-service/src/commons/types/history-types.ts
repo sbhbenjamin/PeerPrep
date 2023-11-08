@@ -3,6 +3,7 @@ export type History = {
   userId: number;
   questionId: string;
   timestamp: Date;
+  submittedCode: string;
 };
 
 export type HistoryFilter = {

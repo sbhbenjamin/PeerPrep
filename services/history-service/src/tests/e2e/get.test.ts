@@ -23,9 +23,9 @@ beforeEach(async () => {
   await prisma.history.deleteMany({});
   await prisma.history.createMany({
     data: [
-      { userId: 1, questionId: "Q1" },
-      { userId: 1, questionId: "Q2" },
-      { userId: 2, questionId: "Q1" },
+      { userId: 1, questionId: "Q1", submittedCode: "C1" },
+      { userId: 1, questionId: "Q2", submittedCode: "C2" },
+      { userId: 2, questionId: "Q1", submittedCode: "C1" },
     ],
   });
 });
@@ -53,6 +53,7 @@ describe("GET /history", () => {
           id: "Q1",
           title: "Question 1",
         },
+        submittedCode: "C1",
       }),
       expect.objectContaining({
         userId: 1,
@@ -61,6 +62,7 @@ describe("GET /history", () => {
           id: "Q2",
           title: "Question 2",
         },
+        submittedCode: "C2",
       }),
       expect.objectContaining({
         userId: 2,
@@ -69,6 +71,7 @@ describe("GET /history", () => {
           id: "Q1",
           title: "Question 1",
         },
+        submittedCode: "C1",
       }),
     ]);
   });
@@ -96,6 +99,7 @@ describe("GET /history", () => {
           id: "Q1",
           title: "Question 1",
         },
+        submittedCode: "C1",
         timestamp: expect.any(String),
       }),
     ]);
@@ -129,6 +133,7 @@ describe("GET /history", () => {
           id: "Q1",
           title: "Question 1",
         },
+        submittedCode: "C1",
         timestamp: expect.any(String),
       }),
       expect.objectContaining({
@@ -139,6 +144,7 @@ describe("GET /history", () => {
           id: "Q1",
           title: "Question 1",
         },
+        submittedCode: "C1",
         timestamp: expect.any(String),
       }),
     ]);
@@ -170,6 +176,7 @@ describe("GET /history", () => {
           id: "Q1",
           title: "Question 1",
         },
+        submittedCode: "C1",
         timestamp: expect.any(String),
       }),
     ]);

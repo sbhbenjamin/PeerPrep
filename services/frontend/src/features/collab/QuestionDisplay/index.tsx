@@ -13,9 +13,13 @@ import "./styles.css";
 
 type QuestionDisplayProps = {
   question: QuestionType;
+  contentClassName?: string;
 };
 
-export function QuestionDisplay({ question }: QuestionDisplayProps) {
+export function QuestionDisplay({
+  question,
+  contentClassName,
+}: QuestionDisplayProps) {
   const { title, categories, difficulty, description, link } = question;
   return (
     <Card className="h-full">
@@ -26,7 +30,9 @@ export function QuestionDisplay({ question }: QuestionDisplayProps) {
           <CategoryBadge categories={categories} />
         </CardDescription>
       </CardHeader>
-      <CardContent className="whitespace-pre-line">{description}</CardContent>
+      <CardContent className={`whitespace-pre-line ${contentClassName}`}>
+        {description}
+      </CardContent>
     </Card>
   );
 }

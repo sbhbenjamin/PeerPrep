@@ -6,6 +6,7 @@ export type History = {
   questionId: string;
   timestamp: Date;
   question: QuestionType;
+  submittedCode: string;
 };
 
 export type HistoryFilter = {

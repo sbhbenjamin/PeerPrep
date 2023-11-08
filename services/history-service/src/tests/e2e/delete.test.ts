@@ -18,9 +18,9 @@ beforeEach(async () => {
 beforeAll(async () => {
   await prisma.history.createMany({
     data: [
-      { userId: 1, questionId: "Q123" },
-      { userId: 1, questionId: "Q456" },
-      { userId: 2, questionId: "Q123" },
+      { userId: 1, questionId: "Q123", submittedCode: "C123" },
+      { userId: 1, questionId: "Q456", submittedCode: "C456" },
+      { userId: 2, questionId: "Q123", submittedCode: "C123" },
     ],
   });
 });
@@ -35,7 +35,7 @@ describe("DELETE /history", () => {
   test("deleting a history record with valid id | should return 200 OK and resource is deleted", async () => {
     // Create a record to delete
     const newHistory = await prisma.history.create({
-      data: { userId: 1, questionId: "Q789" },
+      data: { userId: 1, questionId: "Q789", submittedCode: "C789" },
     });
 
     const response = await mockApp.delete(`/history/${newHistory.id}`);

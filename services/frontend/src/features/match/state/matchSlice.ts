@@ -20,8 +20,9 @@ const matchSlice = createSlice({
       state.roomId = action.payload.roomId;
       state.question = action.payload.question;
     },
+    resetMatchDetails: () => initialState,
   },
 });
 
-export const { updateMatchDetails } = matchSlice.actions;
+export const { resetMatchDetails, updateMatchDetails } = matchSlice.actions;
 export const { reducer: matchReducer } = matchSlice;

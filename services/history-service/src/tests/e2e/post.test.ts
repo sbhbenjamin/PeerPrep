@@ -33,6 +33,7 @@ describe("POST /history", () => {
     const newHistory = {
       userId: 1,
       questionId: "Q1",
+      submittedCode: "C1",
     };
 
     const response = await mockApp.post("/history").send(newHistory);
@@ -61,6 +62,7 @@ describe("POST /history", () => {
     const newHistory = {
       userId: 999, // invalid user ID
       questionId: "Q1",
+      submittedCode: "C1",
     };
 
     const response = await mockApp.post("/history").send(newHistory);
@@ -90,6 +92,7 @@ describe("POST /history", () => {
     const newHistory = {
       userId: 1,
       questionId: "Q999", // invalid question ID
+      submittedCode: "C1",
     };
 
     const response = await mockApp.post("/history").send(newHistory);
@@ -119,6 +122,7 @@ describe("POST /history", () => {
       data: {
         userId: 1,
         questionId: "Q1",
+        submittedCode: "C1",
       },
     });
 
@@ -126,6 +130,7 @@ describe("POST /history", () => {
     const newHistory = {
       userId: 1,
       questionId: "Q1",
+      submittedCode: "C1",
     };
 
     const response = await mockApp.post("/history").send(newHistory);

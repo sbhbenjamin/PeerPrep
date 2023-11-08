@@ -11,10 +11,11 @@ datasource db {
 }
 
 model History {
-  id          Int       @id @default(autoincrement())
-  userId      Int       // Reference to User ID
-  questionId  String    // Reference to Question ID
-  timestamp   DateTime  @default(now())
+  id            Int      @id @default(autoincrement())
+  userId        Int // Reference to User ID
+  questionId    String // Reference to Question ID
+  timestamp     DateTime @default(now())
+  submittedCode String
 
   @@unique([userId, questionId])
 }
