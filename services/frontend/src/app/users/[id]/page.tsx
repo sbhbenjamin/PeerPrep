@@ -71,20 +71,21 @@ const page = ({ params }: { params: { id: number } }) => {
               <Loader2 className="mr-2 animate-spin" />
             </div>
           )}
-          {history && (
-            <Card>
-              <Table>
-                <TableCaption>A list of recent questions solved.</TableCaption>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[100px]">Date</TableHead>
-                    <TableHead>Question</TableHead>
-                    <TableHead>Categories</TableHead>
-                    <TableHead>URL</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {history.map(({ id, timestamp, question }: History) => (
+
+          <Card>
+            <Table>
+              <TableCaption>A list of recent questions solved.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Date</TableHead>
+                  <TableHead>Question</TableHead>
+                  <TableHead>Categories</TableHead>
+                  <TableHead>URL</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {history &&
+                  history.map(({ id, timestamp, question }: History) => (
                     <TableRow key={id}>
                       <TableCell className="font-medium">
                         {renderRelativeTime(new Date(timestamp))}
@@ -98,12 +99,11 @@ const page = ({ params }: { params: { id: number } }) => {
                       </TableCell>
                     </TableRow>
                   ))}
-                </TableBody>
-              </Table>
+              </TableBody>
+            </Table>
 
-              <CardContent />
-            </Card>
-          )}
+            <CardContent />
+          </Card>
         </div>
       </div>
     </div>
