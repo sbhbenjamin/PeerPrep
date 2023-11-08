@@ -43,6 +43,15 @@ export default function defineRoutes(expressApp: express.Application) {
     }
   });
 
+  router.get("/QOTD", async (req, res, next) => {
+    try {
+      const dailyQuestion = await questionUseCase.getDailyQuestion();
+      res.status(200).json(dailyQuestion);
+    } catch (error) {
+      next(error);
+    }
+  });
+
   router.get("/:id", async (req, res, next) => {
     try {
       const response = await questionUseCase.getQuestionById(req.params.id);
