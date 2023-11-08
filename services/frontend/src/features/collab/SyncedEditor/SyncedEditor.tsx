@@ -137,6 +137,7 @@ export function SyncedEditor({
       userId,
       questionId: question.id,
       question,
+      submittedCode: editorContent,
     });
   };
 
