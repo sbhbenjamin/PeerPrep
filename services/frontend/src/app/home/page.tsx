@@ -4,6 +4,9 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useGetHistoryQuery } from "@/services/historyApi";
 
+import { historiesStub } from "./historyStub";
+
+import HistoryTable from "./components/HistoryTable";
 import QuestionOfTheDayCard from "./components/QuestionOfTheDayCard";
 
 const questionStub = {
@@ -35,6 +38,7 @@ const page = () => {
         <QuestionOfTheDayCard question={questionStub} />
       </div>
       <h1 className="my-4 text-3xl font-semibold">Past Interview</h1>
+      <HistoryTable histories={historiesStub} />
     </div>
   );
 };
