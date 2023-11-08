@@ -55,10 +55,11 @@ function dateToHash(date) {
 
 export async function getDailyQuestion() {
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const questionOfTheDay = await questionRepo.getQuestionOfTheDay(today);
 
   if (questionOfTheDay) {
-    const question = getQuestionById(questionOfTheDay.id);
+    const question = await getQuestionById(questionOfTheDay.questionId);
     return question;
   }
   const questions = await questionRepo.getQuestions({});
