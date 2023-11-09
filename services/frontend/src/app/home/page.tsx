@@ -1,13 +1,12 @@
 "use client";
 
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-
 import { useGetHistoryQuery } from "@/services/historyApi";
 
 import { historiesStub } from "./historyStub";
 
-import HistoryTable from "./components/HistoryTable";
+import UsersHistoryTable from "./components/HistoryTable";
 import QuestionOfTheDayCard from "./components/QuestionOfTheDayCard";
+import { WeeklySummaryCard } from "./components/WeeklySummaryCard";
 
 const questionStub = {
   id: "7f73cab0-7a27-4d98-bbd6-6d09c1a3e1aa",
@@ -26,19 +25,11 @@ const page = () => {
       <h1 className="my-4 text-3xl font-semibold">Welcome Back, Wei Jun!</h1>
 
       <div className="flex w-full gap-x-5">
-        <Card className="flex min-w-[33%] gap-6">
-          <CardHeader>
-            <CardTitle>
-              <p className="text-xl">Completed This Week</p>
-            </CardTitle>
-            <p className="text-3xl font-semibold">5 Interviews</p>
-            <p>Nov 6, 2023 - Nov 12., 2023</p>
-          </CardHeader>
-        </Card>
+        <WeeklySummaryCard />
         <QuestionOfTheDayCard question={questionStub} />
       </div>
       <h1 className="my-4 text-3xl font-semibold">Past Interview</h1>
-      <HistoryTable histories={historiesStub} />
+      <UsersHistoryTable histories={historiesStub} />
     </div>
   );
 };

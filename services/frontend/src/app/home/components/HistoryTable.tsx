@@ -69,7 +69,6 @@ const historyColumn: ColumnDef<HistoryColumn>[] = [
       return <p>{dateString}</p>;
     },
     sortingFn: (rowA, rowB) => {
-      // Cast the values to Date using `as Date` because getValue returns `any`
       const dateA = rowA.getValue("timestamp") as Date;
       const dateB = rowB.getValue("timestamp") as Date;
       return dateA.getTime() - dateB.getTime();

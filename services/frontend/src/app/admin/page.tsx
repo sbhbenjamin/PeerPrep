@@ -11,7 +11,6 @@ const page = () => {
   if (isLoading) return <div>Loading...</div>;
   return (
     <div>
-      {/* <h1>HI</h1> */}
       <UserTable users={users!} />
     </div>
   );
