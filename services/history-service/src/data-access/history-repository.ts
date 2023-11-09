@@ -21,8 +21,6 @@ export async function getAllHistories(
 ): Promise<History[]> {
   const { userId, questionId, start, end } = filter;
 
-  const test = await getPrismaClient().history.findMany();
-
   const histories = await getPrismaClient().history.findMany({
     where: {
       ...(userId && { userId }), // Include in query only if defined
