@@ -12,7 +12,7 @@ const Match = z.object({
     message: "Language selection is required",
   }),
   categories: z
-    .array(z.string())
+    .string()
     .nonempty({ message: "At least one category should be selected" }),
   difficulty: Difficulty,
 });

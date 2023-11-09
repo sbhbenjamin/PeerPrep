@@ -1,13 +1,11 @@
 import { z } from "zod";
 
-import { Category, Difficulty } from "@prisma/client";
-
-const CategorySchema = z.nativeEnum(Category);
+import { Difficulty } from "@prisma/client";
 
 export const QuestionRecordSchema = z.object({
   id: z.string(),
   title: z.string(),
-  categories: z.array(CategorySchema),
+  categories: z.array(z.string()),
   description: z.string(),
   difficulty: z.nativeEnum(Difficulty),
   link: z.string().url(),

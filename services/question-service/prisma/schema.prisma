@@ -16,21 +16,10 @@ enum Difficulty {
   Hard
 }
 
-enum Category {
-  Strings
-  Algorithms
-  DataStructures
-  BitManipulation
-  Recursion
-  Databases
-  Brainteaser
-  Arrays
-}
-
 model Question {
   id               String             @id @default(uuid()) @map("_id")
   title            String             @unique
-  categories       Category[]
+  categories       String[]
   difficulty       Difficulty
   description      String
   link             String

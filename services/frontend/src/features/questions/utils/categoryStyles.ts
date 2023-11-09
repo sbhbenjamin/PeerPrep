@@ -1,5 +1,3 @@
-import { Category } from "../types/question.type";
-
 export const categoryColors = {
   [Category.Strings]:
     "bg-red-100 text-red-700 border-red-100 hover:bg-red-200 hover:text-red-900",

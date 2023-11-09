@@ -1,8 +1,4 @@
-import type {
-  Category,
-  Difficulty,
-  QuestionType,
-} from "@/features/questions/types/question.type";
+import type { Difficulty } from "@/features/questions/types/question.type";
 
 export enum Language {
   CoffeeScript = "coffescript",
@@ -19,7 +15,7 @@ export enum Language {
 export type MatchRequest = {
   difficulty: Difficulty;
   language: Language;
-  categories: Category[];
+  categories: string[];
 };
 
 export type MatchDetails = {

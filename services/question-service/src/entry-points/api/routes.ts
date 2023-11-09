@@ -1,6 +1,6 @@
 import express from "express";
 
-import type { Category, Difficulty } from "@prisma/client";
+import type { Difficulty } from "@prisma/client";
 
 import * as questionUseCase from "../../domain/question-use-case";
 
@@ -24,14 +24,11 @@ export default function defineRoutes(expressApp: express.Application) {
 
   router.get("/", validateGetQuestionRequest, async (req, res, next) => {
     try {
-      const { categories } = req.query;
       const response = await questionUseCase.getQuestions({
         id: req.query.id as string,
         title: req.query.title as string,
         difficulty: req.query.difficulty as Difficulty,
-        categories: (!categories || Array.isArray(categories)
-          ? categories
-          : [categories]) as Category[],
+        categories: req.query.categories as string[],
       });
       if (!req.query.getOne || !response) {
         res.json(response);
