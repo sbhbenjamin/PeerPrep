@@ -1,10 +1,7 @@
 import { loadEnvConfig } from "../../commons/utils/env-config";
 import { getPrismaClient } from "../../commons/utils/prisma-client-factory";
 import { createWebApplication } from "../../entry-points/api/history-server";
-import {
-  getAllQuestions,
-  getQuestionById,
-} from "../../services/question-service";
+import { getAllQuestions } from "../../services/question-service";
 import { getUserById } from "../../services/user-service";
 
 const request = require("supertest");
@@ -23,9 +20,24 @@ beforeEach(async () => {
   await prisma.history.deleteMany({});
   await prisma.history.createMany({
     data: [
-      { userId: 1, questionId: "Q1", submittedCode: "C1" },
-      { userId: 1, questionId: "Q2", submittedCode: "C2" },
-      { userId: 2, questionId: "Q1", submittedCode: "C1" },
+      {
+        userId: 1,
+        questionId: "Q1",
+        submittedCode: "C1",
+        timestamp: new Date("2023-11-06T00:00:00Z"),
+      },
+      {
+        userId: 1,
+        questionId: "Q2",
+        submittedCode: "C2",
+        timestamp: new Date("2023-11-10T00:00:00Z"),
+      },
+      {
+        userId: 2,
+        questionId: "Q1",
+        submittedCode: "C1",
+        timestamp: new Date("2023-11-12T00:00:00Z"),
+      },
     ],
   });
 });
@@ -72,6 +84,85 @@ describe("GET /history", () => {
           title: "Question 1",
         },
         submittedCode: "C1",
+      }),
+    ]);
+  });
+
+  test("with date range filter, return status 200 OK", async () => {
+    // mock responses
+    (getUserById as jest.Mock).mockResolvedValue({ id: 1 });
+    (getAllQuestions as jest.Mock).mockResolvedValue([
+      { id: "Q1", title: "Question 1" },
+      { id: "Q2", title: "Question 2" },
+    ]);
+
+    const response = await mockApp.get(
+      `/history?startDate=${new Date(
+        "2023-11-06T00:00:00Z",
+      )}&endDate=${new Date("2023-11-09T00:00:00Z")}`,
+    );
+
+    expect(response.body).toEqual([
+      expect.objectContaining({
+        userId: 1,
+        questionId: "Q1",
+        question: {
+          id: "Q1",
+          title: "Question 1",
+        },
+        submittedCode: "C1",
+        timestamp: new Date("2023-11-06T00:00:00Z").toISOString(),
+      }),
+    ]);
+  });
+
+  test("with date range filter (startDate only), return status 200 OK", async () => {
+    // mock responses
+    (getUserById as jest.Mock).mockResolvedValue({ id: 1 });
+    (getAllQuestions as jest.Mock).mockResolvedValue([
+      { id: "Q1", title: "Question 1" },
+      { id: "Q2", title: "Question 2" },
+    ]);
+
+    const response = await mockApp.get(
+      `/history?startDate=${new Date("2023-11-06T00:00:00Z").toISOString()}`,
+    );
+
+    console.log(
+      "🚀 ~ file: get.test.ts:141 ~ describe ~ response:",
+      response.body,
+    );
+
+    expect(response.body).toEqual([
+      expect.objectContaining({
+        userId: 1,
+        questionId: "Q1",
+        question: {
+          id: "Q1",
+          title: "Question 1",
+        },
+        submittedCode: "C1",
+        timestamp: new Date("2023-11-06T00:00:00Z").toISOString(),
+      }),
+      expect.objectContaining({
+        userId: 1,
+        questionId: "Q2",
+        question: {
+          id: "Q2",
+          title: "Question 2",
+        },
+        submittedCode: "C2",
+        timestamp: new Date("2023-11-10T00:00:00Z").toISOString(),
+      }),
+      expect.objectContaining({
+        userId: 2,
+        questionId: "Q1",
+        question: {
+          id: "Q1",
+          title: "Question 1",
+        },
+        submittedCode: "C1",
+        timestamp: new Date("2023-11-12T00:00:00Z").toISOString(),
       }),
     ]);
   });

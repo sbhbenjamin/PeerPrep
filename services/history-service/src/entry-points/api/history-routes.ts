@@ -23,6 +23,13 @@ export default function defineRoutes(expressApp: express.Application) {
   router.get("/", async (req, res, next) => {
     try {
       // if present, will be parsed accordingly, else undefined
+      const startDate = req.query.startDate as string | undefined; // Expecting a date string
+      const endDate = req.query.endDate as string | undefined; // Expecting a date string
+
+      const start = startDate ? new Date(startDate) : undefined;
+
+      const end = endDate ? new Date(endDate) : undefined;
+
       const userId = req.query.userId
         ? parseInt(req.query.userId as string, 10)
         : undefined;
@@ -31,6 +38,8 @@ export default function defineRoutes(expressApp: express.Application) {
       const response = await historyUseCase.getAllHistory({
         userId,
         questionId,
+        start,
+        end,
       });
       res.json(response);
     } catch (error) {

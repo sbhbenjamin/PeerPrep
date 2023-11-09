@@ -19,11 +19,16 @@ export async function addHistory(
 export async function getAllHistories(
   filter: HistoryFilter,
 ): Promise<History[]> {
-  const { userId, questionId } = filter;
+  const { userId, questionId, start, end } = filter;
+
+  const test = await getPrismaClient().history.findMany();
+
   const histories = await getPrismaClient().history.findMany({
     where: {
       ...(userId && { userId }), // Include in query only if defined
       ...(questionId && { questionId }), // Include in query only if defined
+      ...(start && { timestamp: { gte: new Date(start) } }),
+      ...(end && { timestamp: { lte: new Date(end) } }),
     },
   });
   return histories;
