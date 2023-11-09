@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { selectAuthData } from "@/features/auth";
 
 import LoginButton from "./LoginButton";
+import ModeToggle from "./ThemeToggle";
 import UserDropDownMenu from "./UserDropDownMenu";
 
 export const Navbar = () => {
@@ -18,7 +19,8 @@ export const Navbar = () => {
         PeerPrep
       </Link>
       <div className="flex gap-10">
-        {auth.isLoggedIn ? <UserDropDownMenu /> : <LoginButton />}
+        <ModeToggle />
+        <div>{auth.isLoggedIn ? <UserDropDownMenu /> : <LoginButton />}</div>
       </div>
     </div>
   );

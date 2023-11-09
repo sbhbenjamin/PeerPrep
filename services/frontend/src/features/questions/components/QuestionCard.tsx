@@ -20,7 +20,6 @@ import {
 
 import type { Category, Difficulty } from "../types/question.type";
 import { categoryColors } from "../utils/categoryStyles";
-import { difficultyColors } from "../utils/difficultyStyles";
 
 export interface QuestionCardProps {
   id: string;
@@ -62,16 +61,14 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       <Accordion type="single" collapsible>
         <AccordionItem value="description">
           <CardHeader>
-            <CardTitle className="flex flex-col">
-              <AccordionTrigger className="pb-0">
-                <div className="flex gap-2">
-                  <p>{title}</p>
-                  <Badge className={`${difficultyColors[difficulty]} text-xs`}>
-                    {difficulty}
-                  </Badge>
-                </div>
-              </AccordionTrigger>
-            </CardTitle>
+            <AccordionTrigger className="py-0">
+              <div className="flex flex-col items-start gap-2">
+                <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
+                  {difficulty}
+                </p>
+                <CardTitle>{title}</CardTitle>
+              </div>
+            </AccordionTrigger>
             <CardDescription>
               <div className="flex gap-2">
                 {categories.map((category) => (
