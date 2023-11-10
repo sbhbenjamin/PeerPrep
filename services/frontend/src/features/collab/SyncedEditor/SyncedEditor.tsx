@@ -58,9 +58,9 @@ export function SyncedEditor({
   useApiNotifications({
     isSuccess: isSubmitSuccess,
     isError: isSubmitError,
-    successMessage: "Attempt successfully submitted!",
+    successMessage: "Attempt successfully saved!",
     errorMessage:
-      "Something went wrong while submitting your attempt. Please try again later.",
+      "Something went wrong saving your attempt. Please try again later.",
   });
 
   const monacoConfig = {
@@ -109,6 +109,7 @@ export function SyncedEditor({
 
     socket.on("end_session", () => {
       setPartnerStatus(Status.SessionEnded);
+      setSessionActive(false);
       const notificationPayload = {
         type: NotificationType.ERROR,
         value: "Your partner has ended the session",
@@ -149,19 +150,28 @@ export function SyncedEditor({
     });
   };
 
-  const handleLeaveEndSession = async () => {
-    if (!sessionActive) {
-      return;
-    }
+  const handleEndSession = async () => {
     socket.emit("leave", roomId);
+    dispatch(resetMatchDetails());
     socket.disconnect();
-    await addHistory({
+    setPartnerStatus(Status.SessionEnded);
+    const history = await addHistory({
       userId: user.id,
       questionId: question.id,
       question,
       submittedCode: editorContent,
     });
-    dispatch(resetMatchDetails());
+    if (history) {
+      const notificationPayload = {
+        type: NotificationType.SUCCESS,
+        value: "Attempt successfully saved!",
+      };
+      dispatch(setNotification(notificationPayload));
+      push("/");
+    }
+  };
+
+  const handleLeave = () => {
     push("/");
   };
 
@@ -211,9 +221,15 @@ export function SyncedEditor({
           partnerDetails={partnerDetails}
           partnerStatus={partnerStatus as string}
         />
-        <Button variant="destructive" onClick={handleLeaveEndSession}>
-          {partnerStatus === Status.SessionEnded ? "Leave" : "End Session"}
-        </Button>
+        {sessionActive ? (
+          <Button variant="destructive" onClick={handleEndSession}>
+            End Session
+          </Button>
+        ) : (
+          <Button variant="destructive" onClick={handleLeave}>
+            Leave
+          </Button>
+        )}
       </div>
     </div>
   );
