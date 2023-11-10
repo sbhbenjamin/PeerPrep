@@ -44,6 +44,7 @@ export function SyncedEditor({
   const [partnerStatus, setPartnerStatus] = useState<Status>(
     Status.Disconnected,
   );
+  const [sessionActive, setSessionActive] = useState<boolean>(true);
   const [partnerDetails, setPartnerDetails] = useState<User>();
   const [editorContent, setEditorContent] = useState<string>(
     "// add your code here",
@@ -114,6 +115,12 @@ export function SyncedEditor({
       };
       dispatch(setNotification(notificationPayload));
       socket.disconnect();
+      addHistory({
+        userId: user.id,
+        questionId: question.id,
+        question,
+        submittedCode: editorContent,
+      });
     });
 
     socket.on("disconnected", () => {
@@ -135,16 +142,6 @@ export function SyncedEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (isSubmitSuccess) {
-      socket.emit("leave", roomId);
-      socket.disconnect();
-      dispatch(resetMatchDetails());
-      push("/");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSubmitSuccess]);
-
   const handleOnEditorChange = (value: string | undefined) => {
     socket.emit("code_update", {
       content: value,
@@ -152,13 +149,20 @@ export function SyncedEditor({
     });
   };
 
-  const handleLeaveSession = () => {
-    addHistory({
+  const handleLeaveEndSession = async () => {
+    if (!sessionActive) {
+      return;
+    }
+    socket.emit("leave", roomId);
+    socket.disconnect();
+    await addHistory({
       userId: user.id,
       questionId: question.id,
       question,
       submittedCode: editorContent,
     });
+    dispatch(resetMatchDetails());
+    push("/");
   };
 
   const sendMessage = (value: string | undefined) => {
@@ -207,11 +211,9 @@ export function SyncedEditor({
           partnerDetails={partnerDetails}
           partnerStatus={partnerStatus as string}
         />
-        <div className="flex flex-row gap-x-2">
-          <Button variant="destructive" onClick={handleLeaveSession}>
-            Submit and Leave
-          </Button>
-        </div>
+        <Button variant="destructive" onClick={handleLeaveEndSession}>
+          {partnerStatus === Status.SessionEnded ? "Leave" : "End Session"}
+        </Button>
       </div>
     </div>
   );
