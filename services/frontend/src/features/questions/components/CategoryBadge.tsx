@@ -13,10 +13,7 @@ export const CategoryBadge = ({ categories }: CategoryBadgeProps) => {
     <div className="flex gap-2">
       {categories.map((category) => (
         <div key={category}>
-          <Badge
-            className={`${hashStringToColour(category)}`}
-            variant="outline"
-          >
+          <Badge className={`${hashStringToColour(category)} flex text-center`}>
             {category}
           </Badge>
         </div>

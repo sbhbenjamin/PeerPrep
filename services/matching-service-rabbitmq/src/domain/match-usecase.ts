@@ -2,7 +2,7 @@ import pino from "pino";
 import type { Server, Socket } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 
-import type { Category, Difficulty, Language, Match } from "../commons/types";
+import type { Difficulty, Language, Match } from "../commons/types";
 import {
   getChannelInstance,
   getMessage,
@@ -18,11 +18,11 @@ const TIMEOUT_DURATION = 1 * 60 * 1000; // 1 minute
 
 const generateQueueName = (
   difficulty: Difficulty,
-  categories: Category[],
+  category: string,
   language: Language,
 ) => {
   const difficultyString = difficulty.toString();
-  const categoryString = categories[0].toString();
+  const categoryString = category.toString();
   const languageString = language.toString();
 
   const matchName = difficultyString + categoryString + languageString;
@@ -73,7 +73,7 @@ const processExistingMatch = async (
   socket,
   match: Match,
 ) => {
-  const { difficulty, categories, language } = match;
+  const { difficulty, category, language } = match;
   const peerSocketId: any = existingMessage.content.toString();
   const peerSocket = io.sockets.sockets.get(peerSocketId);
 
@@ -105,7 +105,7 @@ const processExistingMatch = async (
   // get question from question repo
   const params = new URLSearchParams({
     difficulty: difficulty.toString(),
-    category: categories[0].toString(),
+    category: category.toString(),
     getOne: "true",
   });
   const response = await getQuestion(params);
@@ -130,22 +130,20 @@ const processExistingMatch = async (
 
 export const findMatch = async (match: Match, io: Server, socket: Socket) => {
   const channel = await getChannelInstance();
-  const { difficulty, categories, language, socketId } = match;
+  const { difficulty, category, language, socketId } = match;
 
-  logger.info(
-    `Fetching question with ${difficulty}, ${categories[0].toString()}`,
-  );
+  logger.info(`Fetching question with ${difficulty}, ${category.toString()}`);
   try {
-    await assertQuestionExists(difficulty.toString(), categories[0].toString());
+    await assertQuestionExists(difficulty.toString(), category.toString());
   } catch (error) {
     io.to(socketId).emit(
       "error",
-      `Unable to find a question with difficulty: ${difficulty} and category: ${categories[0]}. Please try again with different parameters`,
+      `Unable to find a question with difficulty: ${difficulty} and category: ${category}. Please try again with different parameters`,
     );
     socket.disconnect();
   }
 
-  const queueName = generateQueueName(difficulty, categories, language);
+  const queueName = generateQueueName(difficulty, category, language);
 
   const existingMessage = await getMessage(queueName, channel);
   if (existingMessage) {

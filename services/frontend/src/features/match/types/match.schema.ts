@@ -11,9 +11,7 @@ const Match = z.object({
   language: z.string().refine((value) => value !== "", {
     message: "Language selection is required",
   }),
-  categories: z
-    .string()
-    .nonempty({ message: "At least one category should be selected" }),
+  category: z.string().nonempty({ message: "Category selection is required" }),
   difficulty: Difficulty,
 });
 

@@ -1,14 +1,7 @@
 export type Match = {
   socketId: string;
   difficulty: Difficulty;
-  categories: string[];
-  language: Language;
-};
-
-export type MatchWithSingleCategory = {
-  socketId: string;
-  difficulty: Difficulty;
-  categories: string;
+  category: string;
   language: Language;
 };
 

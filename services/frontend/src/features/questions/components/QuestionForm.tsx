@@ -132,7 +132,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
                       className="h-9"
                     />
                     <CommandEmpty>No category found.</CommandEmpty>
-                    <CommandGroup>
+                    <CommandGroup className="h-60 overflow-y-auto">
                       {categoriesStub.map((category) => (
                         <CommandItem
                           value={category}
