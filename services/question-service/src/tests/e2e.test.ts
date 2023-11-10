@@ -3,7 +3,7 @@ import assert from "assert";
 import { getToken } from "next-auth/jwt";
 import request from "supertest";
 
-import { Category, Difficulty } from "@prisma/client";
+import { Difficulty } from "@prisma/client";
 
 import { loadEnvConfig } from "../commons/utils/env-config";
 import { getPrismaClient } from "../data-access/prisma-client-factory";
@@ -29,7 +29,7 @@ beforeEach(async () => {
 
 const createQuestionInputFullOne = {
   title: "question-title",
-  categories: [Category.Algorithms],
+  categories: ["Algorithms"],
   description: "question-description",
   difficulty: Difficulty.Easy,
   link: "http://www.question-url.com",
@@ -37,7 +37,7 @@ const createQuestionInputFullOne = {
 
 const createQuestionInputFullTwo = {
   title: "question-title-two",
-  categories: [Category.Arrays],
+  categories: ["Arrays"],
   description: "question-description-two",
   difficulty: Difficulty.Medium,
   link: "http://www.question-url-two.com",
@@ -129,19 +129,19 @@ describe("GET /question", () => {
     (getToken as jest.Mock).mockResolvedValue(adminJwt);
     await prisma.question.create({ data: createQuestionInputFullOne });
     await prisma.question.create({ data: createQuestionInputFullTwo });
-    const questions = await prisma.question.findMany({
-      where: { title: createQuestionInputFullOne.title },
-    });
-    expect(questions.length).toBe(1);
+    const question = await prisma.question.findFirst();
+    assert(question != null);
     const params = new URLSearchParams({
-      id: questions[0].id,
-      ...createQuestionInputFullOne,
+      id: question.id,
+      title: question.title,
+      difficulty: question.difficulty,
+      category: question.categories[0],
     });
     // act
     const res = await mockApp.get(`/question?${params.toString()}`);
     // expect
     expect(res.status).toBe(200);
-    expect(res.body).toStrictEqual(questions);
+    expect(res.body).toStrictEqual([question]);
   });
   test("when get request with getOne is true, return only one of the results with status 200 OK", async () => {
     // setup
