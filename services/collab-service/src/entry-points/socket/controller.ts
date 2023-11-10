@@ -1,7 +1,7 @@
 import pino from "pino";
 import { type Server } from "socket.io";
 
-import type { Message } from "../../commons/types";
+import type { Message, User } from "../../commons/types";
 import {
   resetCacheTimeouts,
   sendCache,
@@ -16,7 +16,13 @@ export const defineEventListeners = (io: Server) => {
   io.on("connection", (socket) => {
     socket.on(
       "join",
-      ({ roomId, username }: { roomId: string; username: string }) => {
+      ({
+        roomId,
+        connectingUser,
+      }: {
+        roomId: string;
+        connectingUser: User;
+      }) => {
         if (socket.rooms.has(roomId)) {
           return;
         }
@@ -24,25 +30,30 @@ export const defineEventListeners = (io: Server) => {
           .fetchSockets()
           .catch((e) => logger.error(e))
           .then((connectedSockets) => {
-            if (!connectedSockets) {
+            sendCache(socket, roomId);
+            if (!connectedSockets || connectedSockets.length > 1) {
               io.to(socket.id).emit(
                 "error",
-                "An error occurred with the session, please try to find another match again.",
+                "The session is full, please try to find another match again.",
               );
               return;
             }
-
-            sendCache(socket, roomId);
             const connectedSocket = connectedSockets[0];
             socket.join(roomId);
 
             if (connectedSocket) {
-              io.to(connectedSocket.id).emit("connected", username);
-              io.to(socket.id).emit("connected");
+              socket.to(roomId).emit("joined", connectingUser);
             } else {
               resetCacheTimeouts(roomId);
             }
           });
+      },
+    );
+
+    socket.on(
+      "partner_intro_response",
+      ({ roomId, user }: { roomId: string; user: User }) => {
+        socket.to(roomId).emit("partner_intro_response", user);
       },
     );
 
@@ -65,22 +76,19 @@ export const defineEventListeners = (io: Server) => {
       },
     );
 
-    socket.on(
-      "leave",
-      ({ roomId, username }: { roomId: string; username: string }) => {
-        io.to(roomId).emit("end_session", username);
-        io.in(roomId)
-          .fetchSockets()
-          .catch((e) => logger.error(e))
-          .then((connectedSockets) => {
-            if (connectedSockets) {
-              connectedSockets.forEach((remainingSocket) => {
-                remainingSocket.disconnect();
-              });
-            }
-          });
-      },
-    );
+    socket.on("leave", (roomId: string) => {
+      io.to(roomId).emit("end_session");
+      io.in(roomId)
+        .fetchSockets()
+        .catch((e) => logger.error(e))
+        .then((connectedSockets) => {
+          if (connectedSockets) {
+            connectedSockets.forEach((remainingSocket) => {
+              remainingSocket.disconnect();
+            });
+          }
+        });
+    });
 
     socket.on("disconnecting", () => {
       for (const room of socket.rooms) {

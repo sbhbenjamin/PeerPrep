@@ -21,6 +21,15 @@ export type Message = {
   content: string;
 };
 
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+  role?: string;
+  url: string | null;
+  bio: string | null;
+};
+
 export enum Difficulty {
   Easy = "Easy",
   Medium = "Medium",
