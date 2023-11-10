@@ -114,8 +114,11 @@ export function EditUserProfileForm({ userId }: { userId: number }) {
       },
       {} as EditUseFormInput,
     );
-    updateUser({ id: userId, ...keys });
-    setIsOpen(false);
+    updateUser({ id: userId, ...keys })
+      .unwrap()
+      .then(() => {
+        setIsOpen(false);
+      });
   }
 
   const deleteUserAccount = () => {
