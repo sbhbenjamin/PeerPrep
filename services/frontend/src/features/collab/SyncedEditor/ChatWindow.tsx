@@ -65,7 +65,7 @@ export function ChatWindow({
             <p className="text-sm font-medium leading-none">
               {partnerDetails.name}
             </p>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-sm text-muted-foreground">
               {partnerDetails.email}
             </p>
           </div>
@@ -82,7 +82,7 @@ export function ChatWindow({
           <p className="text-sm font-medium leading-none">
             Waiting for partner to connect...
           </p>
-          <p className="text-muted-foreground text-sm">...</p>
+          <p className="text-sm text-muted-foreground">...</p>
         </div>
       </div>
     );

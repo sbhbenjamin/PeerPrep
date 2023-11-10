@@ -9,6 +9,8 @@ export type History = {
 export type HistoryFilter = {
   userId?: number;
   questionId?: string;
+  start?: Date;
+  end?: Date;
 };
 
 export type HistoryWithoutId = Omit<History, "id" | "timestamp">;
