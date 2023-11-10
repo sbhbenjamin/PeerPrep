@@ -24,7 +24,9 @@ export function QuestionDisplay({
   return (
     <Card className="h-full">
       <CardHeader>
-        <p className="text-xs font-bold text-gray-500">{difficulty}</p>
+        <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
+          {difficulty}
+        </p>
         <CardTitle className="text-2xl">{title}</CardTitle>
         <CardDescription>
           <CategoryBadge categories={categories} />

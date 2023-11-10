@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import type { Socket } from "socket.io-client";
@@ -37,7 +38,9 @@ export function SyncedEditor({
 }) {
   const dispatch = useDispatch();
   const monaco = useMonaco();
+  const { theme } = useTheme();
   const { push } = useRouter();
+
   const [partnerStatus, setPartnerStatus] = useState<Status>(
     Status.Disconnected,
   );
@@ -164,6 +167,16 @@ export function SyncedEditor({
       setChatMessages((messages: Message[]) => [...messages, message]);
     }
   };
+
+  useEffect(() => {
+    if (monaco) {
+      if (theme === "dark") {
+        monaco.editor.setTheme("vs-dark");
+      } else {
+        monaco.editor.setTheme("vs");
+      }
+    }
+  }, [monaco, theme]);
 
   return (
     <div className="flex h-[80vh] gap-2">
