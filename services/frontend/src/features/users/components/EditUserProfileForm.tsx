@@ -27,6 +27,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+import { persistor } from "@/app/store";
+
 import { signOut } from "@/features/auth";
 import type { EditUseFormInput } from "@/features/users/types/user.type";
 
@@ -118,6 +120,7 @@ export function EditUserProfileForm({ userId }: { userId: number }) {
     deleteUser(userId)
       .unwrap()
       .then(() => {
+        persistor.purge();
         dispatch(signOut());
       });
   };

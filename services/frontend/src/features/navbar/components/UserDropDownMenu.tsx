@@ -15,6 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { persistor } from "@/app/store";
+
 import { selectAuthData, signOut } from "@/features/auth";
 
 const UserDropDownMenu = () => {
@@ -24,6 +26,7 @@ const UserDropDownMenu = () => {
   const { data: session } = useSession();
 
   const handleSignOut = () => {
+    persistor.purge();
     dispatch(signOut());
     router.push("/");
   };
