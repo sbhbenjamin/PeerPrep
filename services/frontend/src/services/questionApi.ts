@@ -18,6 +18,17 @@ const questionApi = rootApi.injectEndpoints({
       // @ts-expect-error
       providesTags: ["Question"],
     }),
+    getQuestionOfTheDay: builder.query<
+      QuestionType,
+      Partial<QuestionType> | void
+    >({
+      query: () => ({
+        url: buildServiceUrl("/question/QOTD"),
+        method: "GET",
+      }),
+      // @ts-expect-error
+      providesTags: ["Question"],
+    }),
     addQuestion: builder.mutation<QuestionType, Omit<QuestionType, "id">>({
       query: (newQuestion) => ({
         url: buildServiceUrl("/question"),
@@ -41,6 +52,7 @@ const questionApi = rootApi.injectEndpoints({
 
 export const {
   useGetQuestionsQuery,
+  useGetQuestionOfTheDayQuery,
   useAddQuestionMutation,
   useDeleteQuestionMutation,
 } = questionApi;

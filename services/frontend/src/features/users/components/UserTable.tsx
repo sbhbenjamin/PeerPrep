@@ -21,7 +21,7 @@ import { type User } from "@/features/users";
 
 import { useUpdateUserRoleMutation } from "@/services/userApi";
 
-const columns: ColumnDef<User>[] = [
+const userColumn: ColumnDef<User>[] = [
   {
     accessorKey: "id",
     header: "Id",
@@ -86,9 +86,18 @@ const columns: ColumnDef<User>[] = [
 ];
 
 interface UserTableProps {
-  data: User[];
+  users: User[];
 }
 
-export default function UserTable({ data }: UserTableProps) {
-  return <DataTable columns={columns} data={data} />;
-}
+const UserTable: React.FC<UserTableProps> = ({ users }) => {
+  return (
+    <DataTable
+      columns={userColumn}
+      data={users}
+      placeholder="Search by name"
+      filterBy="name"
+    />
+  );
+};
+
+export default UserTable;

@@ -65,7 +65,7 @@ export function ChatWindow({
             <p className="text-sm font-medium leading-none">
               {partnerDetails.name}
             </p>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-sm text-muted-foreground">
               {partnerDetails.email}
             </p>
           </div>
@@ -82,7 +82,7 @@ export function ChatWindow({
           <p className="text-sm font-medium leading-none">
             Waiting for partner to connect...
           </p>
-          <p className="text-muted-foreground text-sm">...</p>
+          <p className="text-sm text-muted-foreground">...</p>
         </div>
       </div>
     );
@@ -95,7 +95,7 @@ export function ChatWindow({
           {partnerDetails ? renderPartnerDetails() : renderLoadingDetails()}
         </div>
         <hr className="mt-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
-        <p className="text-muted-foreground text-center text-sm">
+        <p className="text-center text-sm text-muted-foreground">
           Status: {partnerStatus}
         </p>
         <hr className="my-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
