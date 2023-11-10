@@ -51,12 +51,12 @@ export function ChatWindow({
             </Avatar>
             <div>
               <p className="text-sm font-medium leading-none">Sofia Davis</p>
-              <p className="text-muted-foreground text-sm">m@example.com</p>
+              <p className="text-sm text-muted-foreground">m@example.com</p>
             </div>
           </div>
         </div>
         <hr className="mt-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
-        <p className="text-muted-foreground text-center text-sm">
+        <p className="text-center text-sm text-muted-foreground">
           Status: {partnerStatus}
         </p>
         <hr className="my-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
