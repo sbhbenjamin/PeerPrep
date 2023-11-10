@@ -90,7 +90,7 @@ describe("POST /question", () => {
     expect(questions.length).toBe(1);
   });
 
-  test("when valid create question input are provided but no token, return status 401", async () => {
+  test("when valid create question input are provided but no auth token, return status 401", async () => {
     // act
     const res = await mockApp
       .post("/question")
