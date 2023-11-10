@@ -20,13 +20,7 @@ We automate `npm i` in all services through a convenience script that can be use
 npm run install:services
 ```
 
-## Start all services (other than frontend)
-The following command requires Docker (we recommend installing [Docker Desktop](https://www.docker.com/products/docker-desktop/)). This command will spin up the containers defined in the `docker-compose.dev.yml`
-```
-npm run dev:start
-```
-
-## Frontend
+## Setup Frontend
 1. Navigate to `services/frontend`.
    
    ```
@@ -43,11 +37,14 @@ npm run dev:start
    NEXTAUTH_SECRET=/** fill this in */
     ```
 
-3. Run frontend.
-   ```
-   npm run dev
-   ```
-4. Go to `http://localhost:3000` on your browser to access the frontend.
+## Start all services
+The following command requires Docker (we recommend installing [Docker Desktop](https://www.docker.com/products/docker-desktop/)). This command will spin up the containers defined in the `docker-compose.dev.yml`, as well as running the frontend.
+1. Run all services
+```
+npm run dev
+```
+2. Go to `http://localhost:3000` on your browser to access the frontend.
+3. If you encounter any odd issues, check that all of your containers are running via Docker Desktop
 
 # Troubleshooting
 ## Docker
@@ -56,11 +53,11 @@ If you encounter any issues with the containers, we have defined convenience scr
 /** in root directory */
 
 // stops all running containers
-npm run stop:dev
+npm run stop
 
 // restarts the containers
-npm run restart:dev
+npm run restart
 
 // removes the volumes attached to the containers and stops them
-npm run cleanup:dev
+npm run cleanup
 ```
