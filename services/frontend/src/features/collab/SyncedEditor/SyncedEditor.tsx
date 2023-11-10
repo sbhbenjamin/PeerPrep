@@ -172,6 +172,7 @@ export function SyncedEditor({
   };
 
   const handleLeave = () => {
+    dispatch(resetMatchDetails());
     push("/");
   };
 
