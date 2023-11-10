@@ -32,9 +32,12 @@ const AuthenticationLayer = ({ children }: Props) => {
             isLoggedIn: true,
           }),
         );
+        const isUserRegistered = session.currentUser;
 
-        if (session.currentUser == null) {
+        if (isUserRegistered) {
           router.push("/onboarding");
+        } else {
+          router.push("/home");
         }
       }
     };
