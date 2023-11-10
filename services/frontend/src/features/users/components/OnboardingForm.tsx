@@ -66,7 +66,7 @@ export const OnboardingForm = () => {
       .unwrap()
       .then((res) => {
         dispatch(register(res));
-        signIn("github", { callbackUrl: `/users/${res.id}` });
+        signIn("github", { callbackUrl: `/home` });
       })
       .catch(() => {
         throw new Error("Unable to register user!");
