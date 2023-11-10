@@ -43,8 +43,8 @@ describe("POST /history", () => {
     expect(response.body).toEqual(expect.objectContaining(newHistory));
 
     // validate db
-    const createdHistory = await prisma.history.findUnique({
-      where: { userId_questionId: { userId: 1, questionId: "Q1" } },
+    const createdHistory = await prisma.history.findFirst({
+      where: { userId: 1, questionId: "Q1" },
     });
     expect(createdHistory).toBeTruthy();
   });
@@ -73,8 +73,8 @@ describe("POST /history", () => {
     });
 
     // ensure the record has NOT been created in the database
-    const createdHistory = await prisma.history.findUnique({
-      where: { userId_questionId: { userId: 999, questionId: "Q1" } },
+    const createdHistory = await prisma.history.findFirst({
+      where: { userId: 999 },
     });
     expect(createdHistory).toBeNull();
   });
@@ -103,8 +103,8 @@ describe("POST /history", () => {
     });
 
     // ensure the record has NOT been created in the database
-    const createdHistory = await prisma.history.findUnique({
-      where: { userId_questionId: { userId: 1, questionId: "Q999" } },
+    const createdHistory = await prisma.history.findFirst({
+      where: { questionId: "Q999" },
     });
     expect(createdHistory).toBeNull();
   });
