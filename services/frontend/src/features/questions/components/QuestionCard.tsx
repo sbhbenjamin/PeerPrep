@@ -69,13 +69,13 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               </div>
             </AccordionTrigger>
             <CardDescription>
-              <div className="flex gap-2">
+              <div className="mb-8 flex gap-2 overflow-x-scroll">
                 <CategoryBadge categories={categories} />
               </div>
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <AccordionContent>
+            <AccordionContent className="break-words">
               {description.split("\n").map((line, index) => (
                 <React.Fragment key={`${line}-${index}`}>
                   {line}

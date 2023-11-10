@@ -111,16 +111,18 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
                         !field.value && "text-muted-foreground",
                       )}
                     >
-                      {field.value && field.value.length > 0
-                        ? field.value
-                            .map((val) =>
-                              categoriesStub.find(
-                                (category) => category === val,
-                              ),
-                            )
-                            .filter(Boolean)
-                            .join(", ")
-                        : "Select categories"}
+                      <p className="max-h-8 overflow-y-scroll">
+                        {field.value && field.value.length > 0
+                          ? field.value
+                              .map((val) =>
+                                categoriesStub.find(
+                                  (category) => category === val,
+                                ),
+                              )
+                              .filter(Boolean)
+                              .join(", ")
+                          : "Select categories"}
+                      </p>
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>

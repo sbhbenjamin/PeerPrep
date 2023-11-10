@@ -65,7 +65,7 @@ export function ChatWindow({
             <p className="text-sm font-medium leading-none">
               {partnerDetails.name}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {partnerDetails.email}
             </p>
           </div>
@@ -82,7 +82,7 @@ export function ChatWindow({
           <p className="text-sm font-medium leading-none">
             Waiting for partner to connect...
           </p>
-          <p className="text-sm text-muted-foreground">...</p>
+          <p className="text-muted-foreground text-sm">...</p>
         </div>
       </div>
     );
@@ -95,7 +95,7 @@ export function ChatWindow({
           {partnerDetails ? renderPartnerDetails() : renderLoadingDetails()}
         </div>
         <hr className="mt-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-center text-sm">
           Status: {partnerStatus}
         </p>
         <hr className="my-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
@@ -106,7 +106,7 @@ export function ChatWindow({
             <div
               key={index}
               className={cn(
-                "flex w-max max-w-[70%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                "break-words flex w-max max-w-[70%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
                 message.userId === currentUser
                   ? "ml-auto bg-primary text-primary-foreground"
                   : "bg-muted",

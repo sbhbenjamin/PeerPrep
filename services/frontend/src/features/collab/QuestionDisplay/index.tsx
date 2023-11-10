@@ -27,12 +27,14 @@ export function QuestionDisplay({
         <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
           {difficulty}
         </p>
-        <CardTitle className="text-2xl">{title}</CardTitle>
-        <CardDescription>
+        <CardTitle className="overflow-x-scroll text-2xl">{title}</CardTitle>
+        <CardDescription className="overflow-x-scroll">
           <CategoryBadge categories={categories} />
         </CardDescription>
       </CardHeader>
-      <CardContent className={`whitespace-pre-line ${contentClassName}`}>
+      <CardContent
+        className={`whitespace-pre-line break-words ${contentClassName}`}
+      >
         {description}
       </CardContent>
     </Card>
