@@ -36,6 +36,8 @@ const AuthenticationLayer = ({ children }: Props) => {
 
         if (!isUserRegistered) {
           router.push("/onboarding");
+        } else {
+          router.push("/home");
         }
       }
     };
