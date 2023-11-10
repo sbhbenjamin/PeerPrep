@@ -1,7 +1,7 @@
-import { Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 import { useState } from "react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 
 import { cn } from "@/lib/utils";
 
+import type { User } from "@/features/users";
+
 import type { Message } from "../types";
 
 import "./styles.css";
@@ -22,6 +24,7 @@ type ChatWindowProps = {
   sendMessage: (value: string | undefined) => void;
   contentClassName: string;
   currentUser: string;
+  partnerDetails: User | undefined;
   partnerStatus: string;
 };
 
@@ -30,6 +33,7 @@ export function ChatWindow({
   sendMessage,
   contentClassName,
   currentUser,
+  partnerDetails,
   partnerStatus,
 }: ChatWindowProps) {
   const [input, setInput] = useState("");
@@ -40,20 +44,55 @@ export function ChatWindow({
     setInput("");
   };
 
+  const getInitials = (name: string) => {
+    const names = name.split(" ");
+    let initials = names[0].substring(0, 1).toUpperCase();
+
+    if (names.length > 1) {
+      initials += names[names.length - 1].substring(0, 1).toUpperCase();
+    }
+    return initials;
+  };
+
+  const renderPartnerDetails = () => {
+    return partnerDetails ? (
+      <a href={`/users/${partnerDetails.id}`} target="_blank">
+        <div className="mb-2 flex items-center space-x-4">
+          <Avatar>
+            <AvatarFallback>{getInitials(partnerDetails.name)}</AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="text-sm font-medium leading-none">
+              {partnerDetails.name}
+            </p>
+            <p className="text-muted-foreground text-sm">
+              {partnerDetails.email}
+            </p>
+          </div>
+        </div>
+      </a>
+    ) : null;
+  };
+
+  const renderLoadingDetails = () => {
+    return (
+      <div className="mb-2 flex items-center space-x-4">
+        <Loader2 className="m-auto animate-spin" />
+        <div>
+          <p className="text-sm font-medium leading-none">
+            Waiting for partner to connect...
+          </p>
+          <p className="text-muted-foreground text-sm">...</p>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Card className="flex h-full flex-col">
       <CardHeader className="flex flex-col">
-        <div className="flex flex-row items-center">
-          <div className="flex items-center space-x-4">
-            <Avatar>
-              <AvatarImage src="/avatars/01.png" alt="Image" />
-              <AvatarFallback>OM</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-sm font-medium leading-none">Sofia Davis</p>
-              <p className="text-muted-foreground text-sm">m@example.com</p>
-            </div>
-          </div>
+        <div className="flex flex-row items-center overflow-x-scroll focus:scroll-auto">
+          {partnerDetails ? renderPartnerDetails() : renderLoadingDetails()}
         </div>
         <hr className="mt-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
         <p className="text-muted-foreground text-center text-sm">

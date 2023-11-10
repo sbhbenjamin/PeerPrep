@@ -44,6 +44,7 @@ export function SyncedEditor({
   const [partnerStatus, setPartnerStatus] = useState<Status>(
     Status.Disconnected,
   );
+  const [partnerDetails, setPartnerDetails] = useState<User>();
   const [editorContent, setEditorContent] = useState<string>(
     "// add your code here",
   );
@@ -89,23 +90,27 @@ export function SyncedEditor({
       push("/matching");
     });
 
-    socket.on("connected", (connectedUsername: string | undefined) => {
+    socket.on("partner_intro_response", (connectedUser: User) => {
       setPartnerStatus(Status.Connected);
-      if (!connectedUsername) {
-        return;
-      }
+      setPartnerDetails(connectedUser);
+    });
+
+    socket.on("joined", (connectingUser: User) => {
+      socket.emit("partner_intro_response", { roomId, user });
+      setPartnerStatus(Status.Connected);
+      setPartnerDetails(connectingUser);
       const notificationPayload = {
         type: NotificationType.SUCCESS,
-        value: `${connectedUsername} has joined`,
+        value: `${connectingUser.name} has joined`,
       };
       dispatch(setNotification(notificationPayload));
     });
 
-    socket.on("end_session", (disconnectedUsername: string) => {
+    socket.on("end_session", () => {
       setPartnerStatus(Status.SessionEnded);
       const notificationPayload = {
         type: NotificationType.ERROR,
-        value: `${disconnectedUsername} has ended the session`,
+        value: "Your partner has ended the session",
       };
       dispatch(setNotification(notificationPayload));
       socket.disconnect();
@@ -123,9 +128,8 @@ export function SyncedEditor({
     });
 
     socket.connect();
-    socket.emit("join", { roomId, username: user.name });
+    socket.emit("join", { roomId, connectingUser: user });
     return () => {
-      console.log("DISCONNECTING SOCKET");
       socket.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -139,7 +143,7 @@ export function SyncedEditor({
   };
 
   const handleLeaveSession = () => {
-    socket.emit("leave", { roomId, username: user.name });
+    socket.emit("leave", roomId);
     socket.disconnect();
     dispatch(resetMatchDetails());
     push("/");
@@ -197,6 +201,7 @@ export function SyncedEditor({
           messages={chatMessages}
           sendMessage={sendMessage}
           currentUser={user.id.toString()}
+          partnerDetails={partnerDetails}
           partnerStatus={partnerStatus as string}
         />
         <div className="flex flex-row gap-x-2">
