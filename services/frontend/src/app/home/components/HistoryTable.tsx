@@ -10,7 +10,7 @@ import type { QuestionType } from "@/features/questions";
 
 type HistoryColumn = QuestionType & { timestamp: Date };
 
-const historyColumn: ColumnDef<HistoryColumn>[] = [
+export const historyColumn: ColumnDef<HistoryColumn>[] = [
   {
     accessorKey: "title",
     header: "Title",
@@ -91,5 +91,3 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({ histories }) => {
     />
   );
 };
-
-export default HistoryTable;

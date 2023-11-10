@@ -43,5 +43,3 @@ export const QuestionOfTheDayCard: React.FC<QuestionOfTheDayCardProps> = ({
     </Card>
   );
 };
-
-export default QuestionOfTheDayCard;
