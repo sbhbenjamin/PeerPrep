@@ -139,7 +139,7 @@ export function DataTable<TData, TValue>({
           Next
         </Button>
       </div>
-      <div className="text-muted-foreground flex-1 text-sm">
+      <div className="flex-1 text-sm text-muted-foreground">
         showing {table.getPaginationRowModel().rows.length} out of{" "}
         {table.getPrePaginationRowModel().rows.length}
       </div>

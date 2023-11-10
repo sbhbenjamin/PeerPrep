@@ -95,7 +95,7 @@ export function ChatWindow({
           {partnerDetails ? renderPartnerDetails() : renderLoadingDetails()}
         </div>
         <hr className="mt-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
-        <p className="text-muted-foreground text-center text-sm">
+        <p className="text-center text-sm text-muted-foreground">
           Status: {partnerStatus}
         </p>
         <hr className="my-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
