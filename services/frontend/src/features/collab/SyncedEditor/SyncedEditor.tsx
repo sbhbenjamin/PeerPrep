@@ -135,6 +135,16 @@ export function SyncedEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (isSubmitSuccess) {
+      socket.emit("leave", roomId);
+      socket.disconnect();
+      dispatch(resetMatchDetails());
+      push("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSubmitSuccess]);
+
   const handleOnEditorChange = (value: string | undefined) => {
     socket.emit("code_update", {
       content: value,
@@ -143,13 +153,6 @@ export function SyncedEditor({
   };
 
   const handleLeaveSession = () => {
-    socket.emit("leave", roomId);
-    socket.disconnect();
-    dispatch(resetMatchDetails());
-    push("/");
-  };
-
-  const handleSubmitCode = () => {
     addHistory({
       userId: user.id,
       questionId: question.id,
@@ -206,9 +209,8 @@ export function SyncedEditor({
         />
         <div className="flex flex-row gap-x-2">
           <Button variant="destructive" onClick={handleLeaveSession}>
-            Leave
+            Submit and Leave
           </Button>
-          <Button onClick={handleSubmitCode}>Submit</Button>
         </div>
       </div>
     </div>
