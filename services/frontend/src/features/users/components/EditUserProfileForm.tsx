@@ -1,13 +1,12 @@
 "use client";
 
 import { Edit } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import type * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DialogClose } from "@radix-ui/react-dialog";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -84,6 +83,8 @@ export function EditUserProfileForm({ userId }: { userId: number }) {
     throw new Error("No such User");
   }
 
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof UserSchema>>({
     resolver: zodResolver(UserSchema),
     defaultValues: {
@@ -114,6 +115,7 @@ export function EditUserProfileForm({ userId }: { userId: number }) {
       {} as EditUseFormInput,
     );
     updateUser({ id: userId, ...keys });
+    setIsOpen(false);
   }
 
   const deleteUserAccount = () => {
@@ -126,7 +128,7 @@ export function EditUserProfileForm({ userId }: { userId: number }) {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
         <Button variant="outline" size="icon" className="ml-auto">
           <Edit size={15} />
@@ -199,16 +201,15 @@ export function EditUserProfileForm({ userId }: { userId: number }) {
                     </FormItem>
                   )}
                 />
-                <DialogClose className="w-full">
-                  <Button
-                    isLoading={isUpdateLoading}
-                    loadingText="Submitting"
-                    type="submit"
-                    className="w-full"
-                  >
-                    Submit
-                  </Button>
-                </DialogClose>
+                <Button
+                  disabled={!form.formState.isValid}
+                  isLoading={isUpdateLoading}
+                  loadingText="Submitting"
+                  type="submit"
+                  className="w-full"
+                >
+                  Submit
+                </Button>
                 <ConfirmDeleteDialog deleteUser={deleteUserAccount} />
               </form>
             </Form>

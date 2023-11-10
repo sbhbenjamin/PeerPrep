@@ -45,20 +45,20 @@ const page = ({ params }: { params: { id: number } }) => {
   return (
     <div className="w-full max-w-screen-xl">
       <div className="flex h-96 w-full gap-x-8">
-        <Card className="grow items-start">
+        <Card className="max-w-[25%] grow items-start">
           <CardContent className="flex flex-col items-start gap-4 p-5">
-            <div className="flex  w-full flex-row items-center justify-start gap-6">
+            <div className="flex w-full flex-row items-center justify-start gap-6">
               <h1 className="text-lg">{user?.name}</h1>
               {auth.currentUser && auth.currentUser.email === user!.email ? (
                 <EditUserProfileForm userId={params.id} />
               ) : null}
             </div>
             <Separator className="mb-3" />
-            <div className="mb-3 flex gap-3">
+            <div className="mb-3 flex gap-3 break-words">
               <Link href="#/" />
               <p>{user?.url || "User has yet to provide a url"}</p>
             </div>
-            <div className="mb-3 flex gap-3">
+            <div className="mb-3 flex gap-3 break-words">
               <BookMarked />
               <p>{user?.bio || "User has yet to provide a bio"}</p>
             </div>
