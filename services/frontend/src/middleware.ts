@@ -8,7 +8,7 @@ export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
   const adminOnlyPaths = ["/admin", "/question"]; // paths that only admin can access
-  const userOnlyPaths = ["/matching", "/onboarding", "/collab"];
+  const userOnlyPaths = ["/matching", "/onboarding", "/collab", "/home"];
 
   // If the user has a valid token and is an admin, allow all routes
   if (token && token.role === "ADMIN") {
