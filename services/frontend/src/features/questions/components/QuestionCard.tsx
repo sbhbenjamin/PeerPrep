@@ -7,7 +7,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,13 +17,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import type { Category, Difficulty } from "../types/question.type";
-import { categoryColors } from "../utils/categoryStyles";
+import type { Difficulty } from "../types/question.type";
+import { CategoryBadge } from "./CategoryBadge";
 
 export interface QuestionCardProps {
   id: string;
   title: string;
-  categories: Category[];
+  categories: Array<string>;
   description: string;
   difficulty: Difficulty;
   link: string;
@@ -71,16 +70,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             </AccordionTrigger>
             <CardDescription>
               <div className="flex gap-2">
-                {categories.map((category) => (
-                  <div key={category}>
-                    <Badge
-                      className={categoryColors[category]}
-                      variant="outline"
-                    >
-                      {category}
-                    </Badge>
-                  </div>
-                ))}
+                <CategoryBadge categories={categories} />
               </div>
             </CardDescription>
           </CardHeader>

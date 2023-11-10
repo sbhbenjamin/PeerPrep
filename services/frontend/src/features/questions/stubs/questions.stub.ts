@@ -1,11 +1,11 @@
 import type { QuestionType } from "../types/question.type";
-import { Category, Difficulty } from "../types/question.type";
+import { Difficulty } from "../types/question.type";
 
 export const questionsStub: QuestionType[] = [
   {
     id: "1",
     title: "Reverse a String",
-    categories: [Category.Strings, Category.Algorithms],
+    categories: ["Strings", "Algorithms"],
     difficulty: Difficulty.Easy,
     description: `Write a function that reverses a string. The input string is given as an array of characters char[]. Do not allocate extra space for another array, you must do this by modifying the input array in-place with O(1) extra memory.
     
@@ -25,7 +25,7 @@ export const questionsStub: QuestionType[] = [
   {
     id: "2",
     title: "Detect Cycle in a Linked List",
-    categories: [Category.DataStructures, Category.Algorithms],
+    categories: ["DataStructures", "Algorithms"],
     difficulty: Difficulty.Medium,
     description: `Given head, the head of a linked list, determine if the linked list has a cycle in it. There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer.
     Example:
@@ -41,7 +41,7 @@ export const questionsStub: QuestionType[] = [
   {
     id: "3",
     title: "Convert Roman to Integer",
-    categories: [Category.Algorithms],
+    categories: ["Algorithms"],
     difficulty: Difficulty.Medium,
     description: `Roman numerals are represented by seven different symbols: I, V, X, L, C, D, and M. For example, 2 is written as II in Roman numeral, just two one's added together. 12 is written as XII, which is simply X + II. The number 27 is written as XXVII, which is XX + V + II.
     Given a roman numeral, convert it to an integer.
@@ -57,7 +57,7 @@ export const questionsStub: QuestionType[] = [
   {
     id: "4",
     title: "Add Binary Numbers",
-    categories: [Category.BitManipulation, Category.Algorithms],
+    categories: ["BitManipulation", "Algorithms"],
     difficulty: Difficulty.Hard,
     description: `Given two binary strings a and b, return their sum as a binary string. The input strings are both non-empty and contain only characters 1 or 0.
     Example:
@@ -72,7 +72,7 @@ export const questionsStub: QuestionType[] = [
   {
     id: "5",
     title: "Compute nth Fibonacci Number",
-    categories: [Category.Recursion, Category.Algorithms],
+    categories: ["Recursion", "Algorithms"],
     difficulty: Difficulty.Medium,
     description: `The Fibonacci numbers, commonly denoted F(n) form a sequence, called the Fibonacci sequence, such that each number is the sum of the two preceding ones, starting from 0 and 1. Given n, calculate F(n).
     Example:

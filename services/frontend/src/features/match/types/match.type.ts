@@ -1,5 +1,4 @@
 import type {
-  Category,
   Difficulty,
   QuestionType,
 } from "@/features/questions/types/question.type";
@@ -19,7 +18,7 @@ export enum Language {
 export type MatchRequest = {
   difficulty: Difficulty;
   language: Language;
-  categories: Category[];
+  category: string;
 };
 
 export type MatchDetails = {

@@ -1,20 +1,38 @@
-import { Category } from "../types/question.type";
+import { createHash } from "crypto";
 
-export const categoryColors = {
-  [Category.Strings]:
-    "bg-red-100 text-red-700 border-red-100 hover:bg-red-200 hover:text-red-900",
-  [Category.Algorithms]:
-    "bg-green-100 text-green-700 border-green-100 hover:bg-green-200 hover:text-green-900",
-  [Category.DataStructures]:
-    "bg-blue-100 text-blue-700 border-blue-100 hover:bg-blue-200 hover:text-blue-900",
-  [Category.BitManipulation]:
-    "bg-yellow-100 text-yellow-700 border-yellow-100 hover:bg-yellow-200 hover:text-yellow-900",
-  [Category.Recursion]:
-    "bg-indigo-100 text-indigo-700 border-indigo-100 hover:bg-indigo-200 hover:text-indigo-900",
-  [Category.Databases]:
-    "bg-purple-100 text-purple-700 border-purple-100 hover:bg-purple-200 hover:text-purple-900",
-  [Category.Brainteaser]:
-    "bg-pink-100 text-pink-700 border-pink-100 hover:bg-pink-200 hover:text-pink-900",
-  [Category.Arrays]:
-    "bg-gray-100 text-gray-700 border-gray-100 hover:bg-gray-200 hover:text-gray-900",
+export const hashStringToColour = (str: string) => {
+  const hash = createHash("md5").update(str).digest("hex");
+  const colorClasses = [
+    "red",
+    "green",
+    "blue",
+    "yellow",
+    "purple",
+    "pink",
+    "indigo",
+    "fuchsia",
+    "cyan",
+    "rose",
+    "lime",
+  ];
+  const colorIndex = parseInt(hash.substring(0, 6), 16) % colorClasses.length;
+  const color = colorClasses[colorIndex];
+
+  // Define the base color intensity
+  const bgAndBorderIntensity = "100";
+  const textIntensity = "700";
+  const hoverBgAndBorderIntensity = "200"; // Darker background and border on hover in light mode
+  const hoverTextIntensity = "900"; // Darker text on hover in light mode
+
+  // Define the dark mode color intensity
+  const darkBgAndBorderIntensity = "800"; // Darker background and border in dark mode
+  const darkTextIntensity = "200"; // Lighter text in dark mode
+  const darkHoverBgAndBorderIntensity = "900"; // Darker background and border on hover in dark mode
+  const darkHoverTextIntensity = "100"; // Lighter text on hover in dark mode
+
+  return `bg-${color}-${bgAndBorderIntensity} text-${color}-${textIntensity} border-${color}-${bgAndBorderIntensity} 
+          hover:bg-${color}-${hoverBgAndBorderIntensity} hover:text-${color}-${hoverTextIntensity} hover:border-${color}-${hoverBgAndBorderIntensity}
+          dark:bg-${color}-${darkBgAndBorderIntensity} dark:text-${color}-${darkTextIntensity} 
+          dark:border-${color}-${darkBgAndBorderIntensity} 
+          dark:hover:bg-${color}-${darkHoverBgAndBorderIntensity} dark:hover:text-${color}-${darkHoverTextIntensity} dark:hover:border-${color}-${darkHoverBgAndBorderIntensity}`;
 };

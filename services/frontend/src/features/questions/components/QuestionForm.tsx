@@ -113,11 +113,10 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
                     >
                       {field.value && field.value.length > 0
                         ? field.value
-                            .map(
-                              (val) =>
-                                categoriesStub.find(
-                                  (category) => category.value === val,
-                                )?.label,
+                            .map((val) =>
+                              categoriesStub.find(
+                                (category) => category === val,
+                              ),
                             )
                             .filter(Boolean)
                             .join(", ")
@@ -133,19 +132,19 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
                       className="h-9"
                     />
                     <CommandEmpty>No category found.</CommandEmpty>
-                    <CommandGroup>
+                    <CommandGroup className="h-60 overflow-y-auto">
                       {categoriesStub.map((category) => (
                         <CommandItem
-                          value={category.label}
-                          key={category.value}
+                          value={category}
+                          key={category}
                           onSelect={() => {
                             const currentValues = form.getValues("categories");
                             const valueSet = new Set(currentValues);
 
-                            if (valueSet.has(category.value)) {
-                              valueSet.delete(category.value);
+                            if (valueSet.has(category)) {
+                              valueSet.delete(category);
                             } else {
-                              valueSet.add(category.value);
+                              valueSet.add(category);
                             }
 
                             form.setValue(
@@ -155,11 +154,11 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
                             );
                           }}
                         >
-                          {category.label}
+                          {category}
                           <CheckIcon
                             className={cn(
                               "ml-auto h-4 w-4",
-                              field.value.includes(category.value)
+                              field.value.includes(category)
                                 ? "opacity-100"
                                 : "opacity-0",
                             )}

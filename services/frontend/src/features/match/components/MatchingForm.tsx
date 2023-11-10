@@ -38,7 +38,7 @@ import {
 
 import { cn } from "@/lib/utils";
 
-import type { Category, Difficulty } from "@/features/questions";
+import type { Difficulty } from "@/features/questions";
 import { categoriesStub } from "@/features/questions/stubs/categories.stub";
 
 import { Match } from "../types/match.schema";
@@ -61,18 +61,17 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
     defaultValues: {
       difficulty: "",
       language: "",
-      categories: [],
+      category: "",
     },
     mode: "all",
   });
 
   const handleSubmit = (values: z.infer<typeof Match>) => {
+    console.log("Submitting", values);
     onSubmit({
       language: values.language as Language,
       difficulty: values.difficulty as Difficulty,
-      categories: values.categories.map(
-        (category: string) => category as Category,
-      ),
+      category: values.category,
     });
   };
 
@@ -81,7 +80,7 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="categories"
+          name="category"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Categories</FormLabel>
@@ -96,17 +95,7 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
                         !field.value && "text-muted-foreground",
                       )}
                     >
-                      {field.value && field.value.length > 0
-                        ? field.value
-                            .map(
-                              (val) =>
-                                categoriesStub.find(
-                                  (category) => category.value === val,
-                                )?.label,
-                            )
-                            .filter(Boolean)
-                            .join(", ")
-                        : "Select categories"}
+                      {field.value || "Select categories"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
@@ -118,32 +107,29 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
                       className="h-9"
                     />
                     <CommandEmpty>No category found.</CommandEmpty>
-                    <CommandGroup>
+                    <CommandGroup className="h-60 overflow-y-auto">
                       {categoriesStub.map((category) => (
                         <CommandItem
-                          value={category.label}
-                          key={category.value}
+                          value={category}
+                          key={category}
                           onSelect={() => {
-                            const currentValues = form.getValues("categories");
+                            const currentValues = form.getValues("category");
                             const valueSet = new Set(currentValues);
 
-                            if (valueSet.has(category.value)) {
-                              valueSet.delete(category.value);
+                            if (valueSet.has(category)) {
+                              valueSet.delete(category);
                             } else {
-                              valueSet.add(category.value);
+                              valueSet.add(category);
                             }
-                            form.setValue(
-                              "categories",
-                              // required to suppress zod compatibility issues with array objects
-                              Array.from(valueSet) as [string, ...string[]],
-                            );
+
+                            form.setValue("category", category);
                           }}
                         >
-                          {category.label}
+                          {category}
                           <CheckIcon
                             className={cn(
                               "ml-auto h-4 w-4",
-                              field.value.includes(category.value)
+                              field.value.includes(category)
                                 ? "opacity-100"
                                 : "opacity-0",
                             )}

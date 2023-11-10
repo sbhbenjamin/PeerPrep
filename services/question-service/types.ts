@@ -1,9 +1,9 @@
-import type { Category, Difficulty } from "@prisma/client";
+import type { Difficulty } from "@prisma/client";
 
 export type QuestionRecord = {
   id: string;
   title: string;
-  categories: Category[];
+  categories: string[];
   difficulty: Difficulty;
   description: string;
   link: string;

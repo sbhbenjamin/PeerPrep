@@ -26,14 +26,3 @@ export enum Difficulty {
   Medium = "Medium",
   Hard = "Hard",
 }
-
-export enum Category {
-  Strings = "Strings",
-  Algorithms = "Algorithms",
-  DataStructures = "DataStructures",
-  BitManipulation = "BitManipulation",
-  Recursion = "Recursion",
-  Databases = "Databases",
-  Brainteaser = "Brainteaser",
-  Arrays = "Arrays",
-}

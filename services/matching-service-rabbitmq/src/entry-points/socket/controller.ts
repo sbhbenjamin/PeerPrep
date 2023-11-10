@@ -1,6 +1,7 @@
 import pino from "pino";
 import type { Server } from "socket.io";
 
+import type { Match } from "../../commons/types";
 import { findMatch } from "../../domain/match-usecase";
 
 import { validateInput } from "./validators";
@@ -11,7 +12,7 @@ export const defineEventListeners = (io: Server) => {
   io.on("connection", (socket) => {
     logger.info(`User connected with socket id: ${socket.id}`);
 
-    socket.on("register", async (data) => {
+    socket.on("register", async (data: Match) => {
       logger.info(`Received register event from ${socket.id}`);
       logger.debug(`Register data: ${JSON.stringify(data)}`);
 
