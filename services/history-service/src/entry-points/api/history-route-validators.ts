@@ -1,10 +1,30 @@
 import type { NextFunction, Request, Response } from "express";
 
+import HttpError from "../../commons/error/HttpError";
 import {
   DeleteHistorySchema,
   HistoryRecordWithoutIdAndTimestampSchema,
   UpdateHistorySchema,
 } from "../../commons/types/history-schema";
+import { isValidIsoDate } from "../../commons/utils/validateIsoDate";
+
+export function validateIsoDate(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void {
+  const startDate = req.query.startDate as string | undefined;
+  const endDate = req.query.endDate as string | undefined;
+
+  if (startDate && !isValidIsoDate(startDate)) {
+    throw new HttpError("Not a valid ISO date string", 400);
+  }
+
+  if (endDate && !isValidIsoDate(endDate)) {
+    throw new HttpError("Not a valid ISO date string", 400);
+  }
+  next();
+}
 
 // Middleware to validate addHistory input
 export function validateAddHistoryInput(
