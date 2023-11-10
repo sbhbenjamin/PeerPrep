@@ -5,6 +5,7 @@ import * as historyUseCase from "../../domain/history-usecase";
 import {
   validateAddHistoryInput,
   validateDeleteHistoryInput,
+  validateIsoDate,
   validateUpdateHistoryInput,
 } from "./history-route-validators";
 
@@ -20,7 +21,7 @@ export default function defineRoutes(expressApp: express.Application) {
     }
   });
 
-  router.get("/", async (req, res, next) => {
+  router.get("/", validateIsoDate, async (req, res, next) => {
     try {
       // if present, will be parsed accordingly, else undefined
       const startDate = req.query.startDate as string | undefined; // Expecting a date string

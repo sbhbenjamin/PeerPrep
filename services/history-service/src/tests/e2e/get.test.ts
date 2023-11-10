@@ -102,7 +102,9 @@ describe("GET /history", () => {
     const response = await mockApp.get(
       `/history?startDate=${new Date(
         "2023-11-06T00:00:00Z",
-      )}&endDate=${new Date("2023-11-09T00:00:00Z")}`,
+      ).toISOString()}&endDate=${new Date(
+        "2023-11-09T00:00:00Z",
+      ).toISOString()}`,
     );
 
     expect(response.body).toEqual([
@@ -163,6 +165,21 @@ describe("GET /history", () => {
         timestamp: new Date("2023-11-12T00:00:00Z").toISOString(),
       }),
     ]);
+  });
+
+  test("with date range filter invalid date, return status 400 Bad Request", async () => {
+    // mock responses
+    (getUserById as jest.Mock).mockResolvedValue({ id: 1 });
+    (getAllQuestions as jest.Mock).mockResolvedValue([
+      { id: "Q1", title: "Question 1" },
+      { id: "Q2", title: "Question 2" },
+    ]);
+
+    const response = await mockApp.get(
+      `/history?startDate=${"2023-11-sdcd06T00:00:00Z"}`,
+    );
+
+    expect(response.status).toEqual(400);
   });
 
   test("with userId filter, should return histories matching userId", async () => {
