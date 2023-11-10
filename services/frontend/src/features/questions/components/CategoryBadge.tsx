@@ -2,21 +2,25 @@ import React from "react";
 
 import { Badge } from "@/components/ui/badge";
 
-import type { Category } from "@/features/questions";
-import { categoryColors } from "@/features/questions/utils/categoryStyles";
+import { hashStringToColour } from "../utils/categoryStyles";
 
 interface CategoryBadgeProps {
-  categories: Category[];
+  categories: Array<string>;
 }
 
-export const CategoryBadge = ({ categories }: CategoryBadgeProps) => (
-  <div className="flex gap-2">
-    {categories.map((category) => (
-      <div key={category}>
-        <Badge className={categoryColors[category]} variant="outline">
-          {category}
-        </Badge>
-      </div>
-    ))}
-  </div>
-);
+export const CategoryBadge = ({ categories }: CategoryBadgeProps) => {
+  return (
+    <div className="flex gap-2">
+      {categories.map((category) => (
+        <div key={category}>
+          <Badge
+            className={`${hashStringToColour(category)}`}
+            variant="outline"
+          >
+            {category}
+          </Badge>
+        </div>
+      ))}
+    </div>
+  );
+};
