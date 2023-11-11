@@ -52,6 +52,7 @@ export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
     startDate: dateRange.startOfWeek.toISOString(),
     endDate: dateRange.endOfWeek.toISOString(),
   });
+
   const historyCount = history?.length ?? 0;
 
   return (

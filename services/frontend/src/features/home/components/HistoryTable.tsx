@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/DataTable";
 
 import type { QuestionType } from "@/features/questions";
+import type { History } from "@/features/users";
 
 type HistoryColumn = QuestionType & { timestamp: Date };
 
@@ -64,9 +65,8 @@ export const historyColumn: ColumnDef<HistoryColumn>[] = [
       );
     },
     cell: ({ row }) => {
-      const date: Date = row.getValue("timestamp");
-      const dateString = date.toDateString();
-      return <p>{dateString}</p>;
+      const date: Date = new Date(row.getValue("timestamp"));
+      return <p>{date.getDate()}</p>;
     },
     sortingFn: (rowA, rowB) => {
       const dateA = rowA.getValue("timestamp") as Date;
@@ -78,7 +78,14 @@ export const historyColumn: ColumnDef<HistoryColumn>[] = [
 ];
 
 interface HistoryTableProps {
-  histories: HistoryColumn[];
+  histories: History[];
+}
+
+function formatHistory(history: History): HistoryColumn {
+  return {
+    ...history.question,
+    timestamp: history.timestamp,
+  };
 }
 
 export const HistoryTable: React.FC<HistoryTableProps> = ({ histories }) => {
@@ -87,7 +94,7 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({ histories }) => {
       placeholder="Search by tile"
       filterBy="title"
       columns={historyColumn}
-      data={histories}
+      data={histories.map((history) => formatHistory(history))}
     />
   );
 };
