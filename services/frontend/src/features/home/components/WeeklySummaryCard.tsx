@@ -1,6 +1,16 @@
+import { useSelector } from "react-redux";
+
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
+import { selectAuthData } from "@/features/auth";
 import type { User } from "@/features/users";
+
+import { useGetHistoryQuery } from "@/services/historyApi";
+
+type WeekRange = {
+  startOfWeek: Date;
+  endOfWeek: Date;
+};
 
 const getStartAndEndDateOfWeek = (date: Date = new Date()): WeekRange => {
   const currentDayOfWeek = date.getDay();
@@ -29,9 +39,20 @@ interface WeeklySummaryCardProps {
 export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
   user,
 }) => {
+  const currUser = useSelector(selectAuthData);
   const dateRange = getStartAndEndDateOfWeek();
   const startDate = dateFormatter.format(dateRange.startOfWeek);
   const endDate = dateFormatter.format(dateRange.endOfWeek);
+  const {
+    data: history,
+    isLoading: isGetHistoryLoading,
+    isError: isGetHistoryError,
+  } = useGetHistoryQuery({
+    userId: currUser.currentUser?.id,
+    startDate: dateRange.startOfWeek.toISOString(),
+    endDate: dateRange.endOfWeek.toISOString(),
+  });
+  const historyCount = history?.length ?? 0;
 
   return (
     <Card className="flex min-w-[33%] gap-6">
@@ -39,7 +60,7 @@ export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
         <CardTitle>
           <p className="text-xl">Completed This Week</p>
         </CardTitle>
-        <p className="text-3xl font-semibold">5 Interviews</p>
+        <p className="text-3xl font-semibold">{historyCount} Interviews</p>
         <div>
           {startDate} - {endDate}
         </div>
