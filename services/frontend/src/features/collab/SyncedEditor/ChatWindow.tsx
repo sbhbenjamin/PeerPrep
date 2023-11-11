@@ -91,7 +91,7 @@ export function ChatWindow({
   return (
     <Card className="flex h-full flex-col">
       <CardHeader className="flex flex-col">
-        <div className="flex flex-row items-center overflow-x-scroll focus:scroll-auto">
+        <div className="flex flex-row items-center overflow-x-auto focus:scroll-auto">
           {partnerDetails ? renderPartnerDetails() : renderLoadingDetails()}
         </div>
         <hr className="mt-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />

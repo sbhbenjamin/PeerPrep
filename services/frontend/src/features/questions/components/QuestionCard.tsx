@@ -69,7 +69,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               </div>
             </AccordionTrigger>
             <CardDescription>
-              <div className="mb-8 flex gap-2 overflow-x-scroll">
+              <div className="mb-8 flex gap-2 overflow-x-auto">
                 <CategoryBadge categories={categories} />
               </div>
             </CardDescription>

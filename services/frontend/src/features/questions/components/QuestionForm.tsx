@@ -111,7 +111,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
                         !field.value && "text-muted-foreground",
                       )}
                     >
-                      <p className="max-h-8 overflow-y-scroll">
+                      <p className="max-h-8 overflow-y-auto">
                         {field.value && field.value.length > 0
                           ? field.value
                               .map((val) =>
