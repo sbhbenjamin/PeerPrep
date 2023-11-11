@@ -1,6 +1,6 @@
 import { rootApi } from "@/app/RootApi.ts";
 
-import type { History } from "@/features/users";
+import type { History, HistoryFilter } from "@/features/users";
 
 rootApi.enhanceEndpoints({ addTagTypes: ["History"] });
 
@@ -9,7 +9,7 @@ const buildServiceUrl = (queryUrl: string) =>
 
 const historyApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
-    getHistory: builder.query<History[], Partial<History> | void>({
+    getHistory: builder.query<History[], Partial<HistoryFilter> | void>({
       query: (historyQuery) => ({
         url: buildServiceUrl("/history"),
         method: "GET",

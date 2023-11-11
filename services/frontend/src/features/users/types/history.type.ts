@@ -12,4 +12,6 @@ export type History = {
 export type HistoryFilter = {
   userId?: number;
   questionId?: string;
+  startDate?: String;
+  endDate?: String;
 };
