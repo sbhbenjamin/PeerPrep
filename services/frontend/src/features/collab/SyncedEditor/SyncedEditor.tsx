@@ -155,20 +155,30 @@ export function SyncedEditor({
     dispatch(resetMatchDetails());
     socket.disconnect();
     setPartnerStatus(Status.SessionEnded);
-    const history = await addHistory({
+    addHistory({
       userId: user.id,
       questionId: question.id,
       question,
       submittedCode: editorContent,
-    });
-    if (history) {
-      const notificationPayload = {
-        type: NotificationType.SUCCESS,
-        value: "Attempt successfully saved!",
-      };
-      dispatch(setNotification(notificationPayload));
-      push("/");
-    }
+    })
+      .unwrap()
+      .then((res) => {
+        dispatch(
+          setNotification({
+            type: NotificationType.SUCCESS,
+            value: "Attempt successfully saved!",
+          }),
+        );
+        push("/");
+      })
+      .catch((e) => {
+        dispatch(
+          setNotification({
+            type: NotificationType.ERROR,
+            value: "Unable to save!",
+          }),
+        );
+      });
   };
 
   const handleLeave = () => {
