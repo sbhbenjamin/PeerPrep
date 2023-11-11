@@ -17,6 +17,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -53,6 +54,7 @@ export const OnboardingForm = () => {
       url: "",
       bio: "",
     },
+    mode: "all",
   });
 
   React.useEffect(() => {
@@ -101,6 +103,7 @@ export const OnboardingForm = () => {
                 <FormDescription>
                   This is your public display name.
                 </FormDescription>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -116,6 +119,7 @@ export const OnboardingForm = () => {
                 <FormDescription>
                   This is the email your account is associated with.
                 </FormDescription>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -128,6 +132,7 @@ export const OnboardingForm = () => {
                 <FormControl>
                   <Input placeholder="https://example.com" {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -140,6 +145,7 @@ export const OnboardingForm = () => {
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
