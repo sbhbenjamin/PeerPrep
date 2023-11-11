@@ -4,11 +4,11 @@ import { useSelector } from "react-redux";
 
 import { selectAuthData } from "@/features/auth";
 
-import { HistoryTable } from "./components/HistoryTable";
-import { QuestionOfTheDayCard } from "./components/QuestionOfTheDayCard";
-import { WeeklySummaryCard } from "./components/WeeklySummaryCard";
-import { historiesStub } from "./stub/historyStub";
-import { questionStub } from "./stub/questionStub";
+import { HistoryTable } from "../features/home/components/HistoryTable";
+import { QuestionOfTheDayCard } from "../features/home/components/QuestionOfTheDayCard";
+import { WeeklySummaryCard } from "../features/home/components/WeeklySummaryCard";
+import { historiesStub } from "../features/home/stub/historyStub";
+import { questionStub } from "../features/home/stub/questionStub";
 
 const page = () => {
   const { currentUser } = useSelector(selectAuthData);
