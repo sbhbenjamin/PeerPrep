@@ -13,7 +13,6 @@ import * as questionService from "../services/question-service";
 
 import {
   assertHistoryExistsById,
-  assertHistoryNotExistsByUserIdAndQuestionId,
   assertValidQuestionId,
   assertValidUserId,
 } from "./history-usecase-validators";
@@ -57,11 +56,6 @@ export async function addHistory(newHistory: HistoryWithoutId) {
   // validate history
   const validatedResult =
     HistoryRecordWithoutIdAndTimestampSchema.parse(newHistory);
-
-  await assertHistoryNotExistsByUserIdAndQuestionId(
-    newHistory.userId,
-    newHistory.questionId,
-  );
 
   // validate userId and questionId
   if (userId) {

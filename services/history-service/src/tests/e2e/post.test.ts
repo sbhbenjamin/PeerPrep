@@ -43,8 +43,8 @@ describe("POST /history", () => {
     expect(response.body).toEqual(expect.objectContaining(newHistory));
 
     // validate db
-    const createdHistory = await prisma.history.findUnique({
-      where: { userId_questionId: { userId: 1, questionId: "Q1" } },
+    const createdHistory = await prisma.history.findFirst({
+      where: { userId: 1, questionId: "Q1" },
     });
     expect(createdHistory).toBeTruthy();
   });
@@ -73,8 +73,8 @@ describe("POST /history", () => {
     });
 
     // ensure the record has NOT been created in the database
-    const createdHistory = await prisma.history.findUnique({
-      where: { userId_questionId: { userId: 999, questionId: "Q1" } },
+    const createdHistory = await prisma.history.findFirst({
+      where: { userId: 999 },
     });
     expect(createdHistory).toBeNull();
   });
@@ -103,48 +103,9 @@ describe("POST /history", () => {
     });
 
     // ensure the record has NOT been created in the database
-    const createdHistory = await prisma.history.findUnique({
-      where: { userId_questionId: { userId: 1, questionId: "Q999" } },
+    const createdHistory = await prisma.history.findFirst({
+      where: { questionId: "Q999" },
     });
     expect(createdHistory).toBeNull();
-  });
-
-  test("with existing history record, should return 409 Conflict", async () => {
-    // Mocking the getUserById and getQuestionById calls
-    (getUserById as jest.Mock).mockResolvedValue({ id: 1 });
-    (getQuestionById as jest.Mock).mockResolvedValue({
-      id: "Q1",
-      title: "Question 1",
-    });
-
-    // create an existing history record
-    await prisma.history.create({
-      data: {
-        userId: 1,
-        questionId: "Q1",
-        submittedCode: "C1",
-      },
-    });
-
-    // sending a POST request with the same history data
-    const newHistory = {
-      userId: 1,
-      questionId: "Q1",
-      submittedCode: "C1",
-    };
-
-    const response = await mockApp.post("/history").send(newHistory);
-
-    // validating the response
-    expect(response.status).toBe(409);
-    expect(response.body).toEqual({
-      error: "History record with userId 1 and questionId Q1 already exists",
-    });
-
-    // ensure that only one record exists in the database (the one created initially)
-    const histories = await prisma.history.findMany({
-      where: { userId: 1, questionId: "Q1" },
-    });
-    expect(histories.length).toBe(1);
   });
 });

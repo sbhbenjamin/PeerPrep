@@ -16,6 +16,4 @@ model History {
   questionId    String // Reference to Question ID
   timestamp     DateTime @default(now())
   submittedCode String
-
-  @@unique([userId, questionId])
 }

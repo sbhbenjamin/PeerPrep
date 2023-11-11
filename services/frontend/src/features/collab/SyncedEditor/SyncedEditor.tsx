@@ -44,6 +44,7 @@ export function SyncedEditor({
   const [partnerStatus, setPartnerStatus] = useState<Status>(
     Status.Disconnected,
   );
+  const [sessionActive, setSessionActive] = useState<boolean>(true);
   const [partnerDetails, setPartnerDetails] = useState<User>();
   const [editorContent, setEditorContent] = useState<string>(
     "// add your code here",
@@ -57,9 +58,9 @@ export function SyncedEditor({
   useApiNotifications({
     isSuccess: isSubmitSuccess,
     isError: isSubmitError,
-    successMessage: "Attempt successfully submitted!",
+    successMessage: "Attempt successfully saved!",
     errorMessage:
-      "Something went wrong while submitting your attempt. Please try again later.",
+      "Something went wrong saving your attempt. Please try again later.",
   });
 
   const monacoConfig = {
@@ -108,12 +109,19 @@ export function SyncedEditor({
 
     socket.on("end_session", () => {
       setPartnerStatus(Status.SessionEnded);
+      setSessionActive(false);
       const notificationPayload = {
         type: NotificationType.ERROR,
         value: "Your partner has ended the session",
       };
       dispatch(setNotification(notificationPayload));
       socket.disconnect();
+      addHistory({
+        userId: user.id,
+        questionId: question.id,
+        question,
+        submittedCode: editorContent,
+      });
     });
 
     socket.on("disconnected", () => {
@@ -142,20 +150,40 @@ export function SyncedEditor({
     });
   };
 
-  const handleLeaveSession = () => {
+  const handleEndSession = async () => {
     socket.emit("leave", roomId);
-    socket.disconnect();
     dispatch(resetMatchDetails());
-    push("/");
-  };
-
-  const handleSubmitCode = () => {
+    socket.disconnect();
+    setPartnerStatus(Status.SessionEnded);
     addHistory({
       userId: user.id,
       questionId: question.id,
       question,
       submittedCode: editorContent,
-    });
+    })
+      .unwrap()
+      .then((res) => {
+        dispatch(
+          setNotification({
+            type: NotificationType.SUCCESS,
+            value: "Attempt successfully saved!",
+          }),
+        );
+        push("/");
+      })
+      .catch((e) => {
+        dispatch(
+          setNotification({
+            type: NotificationType.ERROR,
+            value: "Unable to save!",
+          }),
+        );
+      });
+  };
+
+  const handleLeave = () => {
+    dispatch(resetMatchDetails());
+    push("/");
   };
 
   const sendMessage = (value: string | undefined) => {
@@ -204,12 +232,15 @@ export function SyncedEditor({
           partnerDetails={partnerDetails}
           partnerStatus={partnerStatus as string}
         />
-        <div className="flex flex-row gap-x-2">
-          <Button variant="destructive" onClick={handleLeaveSession}>
+        {sessionActive ? (
+          <Button variant="destructive" onClick={handleEndSession}>
+            End Session
+          </Button>
+        ) : (
+          <Button variant="destructive" onClick={handleLeave}>
             Leave
           </Button>
-          <Button onClick={handleSubmitCode}>Submit</Button>
-        </div>
+        )}
       </div>
     </div>
   );
