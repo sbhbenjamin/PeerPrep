@@ -7,7 +7,7 @@ import { CategoryBadge, type QuestionType } from "@/features/questions";
 import { MatchingDialog } from "./MatchingDialog";
 
 interface QuestionOfTheDayCardProps {
-  question: QuestionType;
+  question: QuestionType | undefined;
 }
 
 export const QuestionOfTheDayCard: React.FC<QuestionOfTheDayCardProps> = ({
