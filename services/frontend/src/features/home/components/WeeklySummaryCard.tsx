@@ -1,11 +1,8 @@
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { selectAuthData } from "@/features/auth";
-import type { User } from "@/features/users";
-
-import { useGetHistoryQuery } from "@/services/historyApi";
+import type { History } from "@/features/users";
 
 type WeekRange = {
   startOfWeek: Date;
@@ -26,6 +23,15 @@ const getStartAndEndDateOfWeek = (date: Date = new Date()): WeekRange => {
   };
 };
 
+const isHistoryItemWithinRange = (
+  historyItem: History,
+  start: Date,
+  end: Date,
+): boolean => {
+  const timestamp = new Date(historyItem.timestamp);
+  return timestamp >= start && timestamp <= end;
+};
+
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -33,27 +39,24 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 interface WeeklySummaryCardProps {
-  user?: User;
+  history: History[];
 }
 
 export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
-  user,
+  history,
 }) => {
-  const currUser = useSelector(selectAuthData);
   const dateRange = getStartAndEndDateOfWeek();
   const startDate = dateFormatter.format(dateRange.startOfWeek);
   const endDate = dateFormatter.format(dateRange.endOfWeek);
-  const {
-    data: history,
-    isLoading: isGetHistoryLoading,
-    isError: isGetHistoryError,
-  } = useGetHistoryQuery({
-    userId: currUser.currentUser?.id,
-    startDate: dateRange.startOfWeek.toISOString(),
-    endDate: dateRange.endOfWeek.toISOString(),
-  });
 
-  const historyCount = history?.length ?? 0;
+  const [historyCount, setHistoryCount] = useState(0);
+
+  useEffect(() => {
+    const filteredHistory = history.filter((x) =>
+      isHistoryItemWithinRange(x, dateRange.startOfWeek, dateRange.endOfWeek),
+    );
+    setHistoryCount(filteredHistory.length);
+  }, [history, dateRange.startOfWeek, dateRange.endOfWeek]);
 
   return (
     <Card className="flex min-w-[33%] gap-6">

@@ -6,7 +6,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/DataTable";
 
-import type { QuestionType } from "@/features/questions";
+import { CategoryBadge, type QuestionType } from "@/features/questions";
 import type { History } from "@/features/users";
 
 type HistoryColumn = QuestionType & { timestamp: Date };
@@ -23,9 +23,7 @@ export const historyColumn: ColumnDef<HistoryColumn>[] = [
       const categories: string[] = row.getValue("categories");
       return (
         <div className="flex w-60 flex-row flex-wrap gap-x-2">
-          {categories.map((cat) => (
-            <p key={cat}>{cat}</p>
-          ))}
+          <CategoryBadge categories={categories} />
         </div>
       );
     },

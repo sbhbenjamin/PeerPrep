@@ -28,7 +28,7 @@ const page = () => {
       <div>
         <h1 className="my-4 text-3xl font-semibold">Welcome Back, Wei Jun!</h1>
         <div className="flex w-full gap-x-5">
-          <WeeklySummaryCard />
+          <WeeklySummaryCard history={history ?? []} />
           <QuestionOfTheDayCard question={questionStub} />
         </div>
         <h1 className="my-4 text-3xl font-semibold">Past Interview</h1>
