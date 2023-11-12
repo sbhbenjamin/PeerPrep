@@ -24,6 +24,6 @@ function isAdmin(token: JWT) {
 export async function assertIsAdmin(req: Request) {
   const token = await extractToken(req);
   if (!isAdmin(token)) {
-    throw new HttpError("This requires admin permission", 401);
+    throw new HttpError("This requires admin permission", 403);
   }
 }
