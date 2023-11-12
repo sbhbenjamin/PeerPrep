@@ -64,11 +64,18 @@ export const historyColumn: ColumnDef<HistoryColumn>[] = [
     },
     cell: ({ row }) => {
       const date: Date = new Date(row.getValue("timestamp"));
-      return <p>{date.getDate()}</p>;
+      const formattedDate = new Intl.DateTimeFormat("en-SG", {
+        year: "numeric",
+        month: "long",
+        day: "2-digit",
+      }).format(date);
+      return <p>{formattedDate}</p>;
     },
     sortingFn: (rowA, rowB) => {
-      const dateA = rowA.getValue("timestamp") as Date;
-      const dateB = rowB.getValue("timestamp") as Date;
+      // Convert ISO string to Date object
+      const dateA = new Date(rowA.getValue("timestamp") as string);
+      const dateB = new Date(rowB.getValue("timestamp") as string);
+      // Compare the time values of the dates
       return dateA.getTime() - dateB.getTime();
     },
     enableSorting: true,
@@ -87,6 +94,10 @@ function formatHistory(history: History): HistoryColumn {
 }
 
 export const HistoryTable: React.FC<HistoryTableProps> = ({ histories }) => {
+  console.log(
+    "🚀 ~ file: HistoryTable.tsx:90 ~ histories:",
+    histories.map((history) => formatHistory(history)),
+  );
   return (
     <DataTable
       placeholder="Search by tile"
