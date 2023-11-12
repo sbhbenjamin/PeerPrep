@@ -15,18 +15,16 @@ const page = () => {
   const { currentUser } = useSelector(selectAuthData);
 
   const auth = useSelector(selectAuthData);
-  const {
-    data: history,
-    isLoading: isGetHistoryLoading,
-    isError: isGetHistoryError,
-  } = useGetHistoryQuery({
+  const { data: history } = useGetHistoryQuery({
     userId: auth.currentUser?.id,
   });
 
   if (currentUser) {
     return (
       <div>
-        <h1 className="my-4 text-3xl font-semibold">Welcome Back, Wei Jun!</h1>
+        <h1 className="my-4 text-3xl font-semibold">
+          Welcome Back, {currentUser.name}!
+        </h1>
         <div className="flex w-full gap-x-5">
           <WeeklySummaryCard history={history ?? []} />
           <QuestionOfTheDayCard question={questionStub} />
