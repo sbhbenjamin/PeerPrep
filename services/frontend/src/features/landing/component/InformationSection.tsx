@@ -30,11 +30,11 @@ export const InformationSection = () => {
                 </div>
                 Unlock Our Extensive Question Database
               </dt>
-              <dd className="mt-2 text-base leading-7 text-gray-600">
+              <p className="mt-2 text-base leading-7 text-gray-600">
                 Explore our comprehensive question database, tailored to cover a
                 wide range of technical interview categories and varying levels
                 of difficulty.
-              </dd>
+              </p>
             </div>
             <div className="relative pl-16">
               <dt className="text-base font-semibold leading-7 text-gray-900">
@@ -71,12 +71,12 @@ export const InformationSection = () => {
                 </div>
                 Realistic Interview Experience
               </dt>
-              <dd className="mt-2 text-base leading-7 text-gray-600">
+              <p className="mt-2 text-base leading-7 text-gray-600">
                 Experience the authenticity of real technical interviews with
                 our chat-based communication feature. Engage in conversations
                 with interviewers through our platform, simulating real
                 interview scenarios.
-              </dd>
+              </p>
             </div>
             <div className="relative pl-16">
               <dt className="text-base font-semibold leading-7 text-gray-900">
@@ -92,12 +92,12 @@ export const InformationSection = () => {
                 </div>
                 Instant Feedback and Analysis
               </dt>
-              <dd className="mt-2 text-base leading-7 text-gray-600">
+              <p className="mt-2 text-base leading-7 text-gray-600">
                 Receive immediate feedback and in-depth performance analysis
                 after each interview session. Understand your strengths and
                 areas for improvement. Focus your preparation where it matters
                 most.
-              </dd>
+              </p>
             </div>
           </dl>
         </div>
