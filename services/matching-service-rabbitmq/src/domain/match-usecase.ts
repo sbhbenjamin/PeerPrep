@@ -59,7 +59,7 @@ const setMatchTimeout = (
       );
       await channel.ack(timedOutMessage);
       io.to(socketId).emit(
-        "timeout",
+        "error",
         "No match found within the timeout period.",
       );
       socket.disconnect();
