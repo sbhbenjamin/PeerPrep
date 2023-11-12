@@ -17,16 +17,11 @@ const page = () => {
   const { currentUser } = useSelector(selectAuthData);
 
   const auth = useSelector(selectAuthData);
-  const {
-    data: history,
-    isError: isGetHistoryError,
-    isSuccess: isGetHistorySuccess,
-  } = useGetHistoryQuery({
+  const { data: history, isError: isGetHistoryError } = useGetHistoryQuery({
     userId: auth.currentUser?.id,
   });
 
   useApiNotifications({
-    isSuccess: isGetHistorySuccess,
     isError: isGetHistoryError,
     errorMessage: "Unable to fetch history",
   });
