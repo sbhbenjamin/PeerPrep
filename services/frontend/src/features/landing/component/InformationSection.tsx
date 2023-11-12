@@ -53,8 +53,8 @@ export const InformationSection = () => {
               <p className="mt-2 text-base leading-7 text-gray-600">
                 Our intelligent matching system pairs you with interview
                 questions based on your preferences. Select from various
-                question categories and difficulty levels, and we'll curate the
-                perfect experience
+                question categories and difficulty levels, and we will curate
+                the perfect experience
               </p>
             </div>
             <div className="relative pl-16">
