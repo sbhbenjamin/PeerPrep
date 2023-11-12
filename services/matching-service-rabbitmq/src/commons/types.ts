@@ -1,8 +1,8 @@
 export type Match = {
-  socketId: string;
-  difficulty: Difficulty;
-  category: string;
   language: Language;
+  difficulty?: Difficulty;
+  category?: string;
+  questionId?: string;
 };
 
 export enum Difficulty {
@@ -12,6 +12,7 @@ export enum Difficulty {
 }
 
 export const categories = new Set([
+  "Strings",
   "Array",
   "Hash Table",
   "Linked List",
