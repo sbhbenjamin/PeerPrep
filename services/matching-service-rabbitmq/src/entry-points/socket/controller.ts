@@ -16,7 +16,7 @@ export const defineEventListeners = (io: Server) => {
       logger.info(`Received register event from ${socket.id}`);
       logger.debug(`Register data: ${JSON.stringify(data)}`);
 
-      // validate inputs
+      // Validate inputs for both match types
       const isValid = await validateInput(data, socket);
       if (!isValid) {
         logger.warn(`Input validation failed for socket id: ${socket.id}`);
@@ -24,7 +24,7 @@ export const defineEventListeners = (io: Server) => {
       }
 
       logger.info(`Input validation succeeded for socket id: ${socket.id}`);
-      await findMatch({ ...data, socketId: socket.id }, io, socket);
+      await findMatch(data, io, socket);
     });
 
     socket.on("disconnect", () => {
