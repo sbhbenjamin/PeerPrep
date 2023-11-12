@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -32,7 +31,6 @@ import { useApiNotifications } from "@/hooks/useApiNotifications";
 
 export const OnboardingForm = () => {
   const { data: session } = useSession();
-  const router = useRouter();
   const dispatch = useDispatch();
   const [createUser, { isLoading, isError, isSuccess }] =
     useCreateUserMutation();
@@ -57,6 +55,17 @@ export const OnboardingForm = () => {
     },
   });
 
+  React.useEffect(() => {
+    if (session) {
+      form.reset({
+        name: session.user?.name ?? "",
+        email: session.user?.email ?? "",
+        url: "",
+        bio: "",
+      });
+    }
+  }, [session, form]);
+
   async function onSubmit(values: z.infer<typeof CreateUserSchema>) {
     createUser({
       ...values,
@@ -66,7 +75,7 @@ export const OnboardingForm = () => {
       .unwrap()
       .then((res) => {
         dispatch(register(res));
-        signIn("github", { callbackUrl: `/home` });
+        signIn("github", { callbackUrl: `/` });
       })
       .catch(() => {
         throw new Error("Unable to register user!");

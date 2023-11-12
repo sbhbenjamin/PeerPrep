@@ -42,6 +42,14 @@ const UserDropDownMenu = () => {
       <DropdownMenuContent className="mr-4">
         <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
+        {auth.isLoggedIn && auth.currentUser === null && (
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/onboarding" className="flex items-center gap-2">
+              <UserSquare2 size={15} />
+              Onboarding
+            </Link>
+          </DropdownMenuItem>
+        )}
         {auth.currentUser !== null && (
           <>
             <DropdownMenuItem asChild className="cursor-pointer">

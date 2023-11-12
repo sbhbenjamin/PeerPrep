@@ -1,6 +1,13 @@
+import { useEffect, useState } from "react";
+
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
-import type { User } from "@/features/users";
+import type { History } from "@/features/users";
+
+type WeekRange = {
+  startOfWeek: Date;
+  endOfWeek: Date;
+};
 
 const getStartAndEndDateOfWeek = (date: Date = new Date()): WeekRange => {
   const currentDayOfWeek = date.getDay();
@@ -16,6 +23,15 @@ const getStartAndEndDateOfWeek = (date: Date = new Date()): WeekRange => {
   };
 };
 
+const isHistoryItemWithinRange = (
+  historyItem: History,
+  start: Date,
+  end: Date,
+): boolean => {
+  const timestamp = new Date(historyItem.timestamp);
+  return timestamp >= start && timestamp <= end;
+};
+
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -23,15 +39,24 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 interface WeeklySummaryCardProps {
-  user?: User;
+  history: History[];
 }
 
 export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
-  user,
+  history,
 }) => {
   const dateRange = getStartAndEndDateOfWeek();
   const startDate = dateFormatter.format(dateRange.startOfWeek);
   const endDate = dateFormatter.format(dateRange.endOfWeek);
+
+  const [historyCount, setHistoryCount] = useState(0);
+
+  useEffect(() => {
+    const filteredHistory = history.filter((x) =>
+      isHistoryItemWithinRange(x, dateRange.startOfWeek, dateRange.endOfWeek),
+    );
+    setHistoryCount(filteredHistory.length);
+  }, [history, dateRange.startOfWeek, dateRange.endOfWeek]);
 
   return (
     <Card className="flex min-w-[33%] gap-6">
@@ -39,7 +64,7 @@ export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
         <CardTitle>
           <p className="text-xl">Completed This Week</p>
         </CardTitle>
-        <p className="text-3xl font-semibold">5 Interviews</p>
+        <p className="text-3xl font-semibold">{historyCount} Interviews</p>
         <div>
           {startDate} - {endDate}
         </div>
