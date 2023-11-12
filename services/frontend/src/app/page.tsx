@@ -11,12 +11,24 @@ import { QuestionOfTheDayCard } from "../features/home/components/QuestionOfTheD
 import { WeeklySummaryCard } from "../features/home/components/WeeklySummaryCard";
 import { questionStub } from "../features/home/stub/questionStub";
 
+import { useApiNotifications } from "@/hooks/useApiNotifications";
+
 const page = () => {
   const { currentUser } = useSelector(selectAuthData);
 
   const auth = useSelector(selectAuthData);
-  const { data: history } = useGetHistoryQuery({
+  const {
+    data: history,
+    isError: isGetHistoryError,
+    isSuccess: isGetHistorySuccess,
+  } = useGetHistoryQuery({
     userId: auth.currentUser?.id,
+  });
+
+  useApiNotifications({
+    isSuccess: isGetHistorySuccess,
+    isError: isGetHistoryError,
+    errorMessage: "Unable to fetch history",
   });
 
   if (currentUser) {

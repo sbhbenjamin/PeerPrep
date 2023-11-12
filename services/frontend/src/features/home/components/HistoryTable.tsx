@@ -94,10 +94,6 @@ function formatHistory(history: History): HistoryColumn {
 }
 
 export const HistoryTable: React.FC<HistoryTableProps> = ({ histories }) => {
-  console.log(
-    "🚀 ~ file: HistoryTable.tsx:90 ~ histories:",
-    histories.map((history) => formatHistory(history)),
-  );
   return (
     <DataTable
       placeholder="Search by tile"
