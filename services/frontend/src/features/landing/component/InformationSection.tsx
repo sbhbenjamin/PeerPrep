@@ -50,12 +50,12 @@ export const InformationSection = () => {
                 </div>
                 Smart Matching by Category and Difficulty
               </dt>
-              <dd className="mt-2 text-base leading-7 text-gray-600">
+              <p className="mt-2 text-base leading-7 text-gray-600">
                 Our intelligent matching system pairs you with interview
                 questions based on your preferences. Select from various
                 question categories and difficulty levels, and we'll curate the
                 perfect experience
-              </dd>
+              </p>
             </div>
             <div className="relative pl-16">
               <dt className="text-base font-semibold leading-7 text-gray-900">
