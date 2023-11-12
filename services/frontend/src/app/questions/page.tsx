@@ -29,11 +29,6 @@ const page = () => {
   const { data: questions = [], isError: isGetQuestionsError } =
     useGetQuestionsQuery();
 
-  if (isAddError) {
-    // TODO: Redirect user to error page
-    throw new Error("No such User");
-  }
-
   useApiNotifications({
     isSuccess: isAddSuccess,
     isError: isAddError,

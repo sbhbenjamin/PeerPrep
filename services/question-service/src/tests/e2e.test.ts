@@ -99,7 +99,7 @@ describe("POST /question", () => {
     expect(res.status).toBe(401);
   });
 
-  test("when valid create question input are provided but no valid permission, return status 401", async () => {
+  test("when valid create question input are provided but invalid permission, return status 403", async () => {
     // setup
     (getToken as jest.Mock).mockResolvedValue(userJwt);
     // act
@@ -107,7 +107,7 @@ describe("POST /question", () => {
       .post("/question")
       .send(createQuestionInputFullOne);
     // expect
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(403);
   });
 });
 
@@ -281,7 +281,7 @@ describe("PATCH /question", () => {
     assert(questionsAfter.length === 1);
     expect(questionsAfter[0].title === questionsBefore[0].title);
   });
-  test("when valid patch inputs are provided with no valid permissions, return 401", async () => {
+  test("when valid patch inputs are provided with invalid permissions, return 403", async () => {
     // setup
     (getToken as jest.Mock).mockResolvedValue(userJwt);
     const newTitle = "new-title";
@@ -294,7 +294,7 @@ describe("PATCH /question", () => {
       title: newTitle,
     });
     // expect
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(403);
     const questionsAfter = await prisma.question.findMany();
     assert(questionsAfter.length === 1);
     expect(questionsAfter[0].title === questionsBefore[0].title);
@@ -337,7 +337,6 @@ describe("DELETE /question", () => {
   });
   test("when valid patch inputs are provided with no auth token, return 401", async () => {
     // setup
-    (getToken as jest.Mock).mockResolvedValue(userJwt);
     await prisma.question.create({ data: createQuestionInputFullOne });
     // assert before
     const questionsBefore = await prisma.question.findMany();
@@ -349,7 +348,7 @@ describe("DELETE /question", () => {
     const questionsAfter = await prisma.question.findMany();
     expect(questionsAfter.length).toBe(questionsBefore.length);
   });
-  test("when valid patch inputs are provided with no valid permissions, return 401", async () => {
+  test("when valid patch inputs are provided with invalid permissions, return 403", async () => {
     // setup
     (getToken as jest.Mock).mockResolvedValue(userJwt);
     await prisma.question.create({ data: createQuestionInputFullOne });
@@ -359,7 +358,7 @@ describe("DELETE /question", () => {
     // act
     const res = await mockApp.delete(`/question/${questionsBefore[0].id}`);
     // expect
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(403);
     const questionsAfter = await prisma.question.findMany();
     expect(questionsAfter.length).toBe(questionsBefore.length);
   });
