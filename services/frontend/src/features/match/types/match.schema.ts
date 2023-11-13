@@ -15,4 +15,11 @@ const Match = z.object({
   difficulty: Difficulty,
 });
 
-export { Match };
+const MatchByQuestionId = z.object({
+  questionId: z.string().nonempty({ message: "Question Id is required" }),
+  language: z.string().refine((value) => value !== "", {
+    message: "Language selection is required",
+  }),
+});
+
+export { Match, MatchByQuestionId };

@@ -9,7 +9,7 @@ const initialState: MatchState = {
   question: undefined,
   roomId: undefined,
   language: undefined,
-  sessionEnded: false,
+  hasOngoingSession: false,
 };
 
 const matchSlice = createSlice({
@@ -20,10 +20,10 @@ const matchSlice = createSlice({
       state.language = action.payload.language;
       state.roomId = action.payload.roomId;
       state.question = action.payload.question;
-      state.sessionEnded = false;
+      state.hasOngoingSession = true;
     },
     updateSessionEnded: (state) => {
-      state.sessionEnded = true;
+      state.hasOngoingSession = false;
     },
     resetMatchDetails: () => initialState,
   },

@@ -62,12 +62,10 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           <CardHeader>
             <AccordionTrigger className="py-0">
               <div className="flex flex-col items-start gap-2">
-                <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
+                <p className="font-mono text-xs font-bold uppercase tracking-tighter text-gray-500 dark:text-gray-400">
                   {difficulty}
                 </p>
-                <CardTitle className="max-h-[8vh] overflow-y-auto">
-                  {title}
-                </CardTitle>
+                <CardTitle>{title}</CardTitle>
               </div>
             </AccordionTrigger>
             <CardDescription>

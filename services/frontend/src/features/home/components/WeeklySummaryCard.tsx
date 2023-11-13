@@ -62,10 +62,12 @@ export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
     <Card className="flex min-w-[33%] gap-6">
       <CardHeader>
         <CardTitle>
-          <p className="text-xl">Completed This Week</p>
+          <p className="text-base font-normal tracking-tight">
+            Recent Interviews
+          </p>
         </CardTitle>
-        <p className="text-3xl font-semibold">{historyCount} Interviews</p>
-        <div>
+        <p className="text-2xl font-bold">{historyCount} Interviews</p>
+        <div className="text-xs text-muted-foreground">
           {startDate} - {endDate}
         </div>
       </CardHeader>

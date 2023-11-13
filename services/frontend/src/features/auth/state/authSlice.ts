@@ -1,6 +1,6 @@
 import { signIn as NextSignIn, signOut as NextSignOut } from "next-auth/react";
 
-import type { PayloadAction } from "@reduxjs/toolkit";
+import type { Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
 import type { User } from "@/features/users";
@@ -26,10 +26,7 @@ const authSlice = createSlice({
     signOut: () => {
       NextSignOut({ callbackUrl: "/" });
       return {
-        currentUser: null,
-        image: null,
-        sessionToken: null,
-        isLoggedIn: false,
+        ...initialState,
       };
     },
     register: (state, action: PayloadAction<User>) => ({
@@ -40,4 +37,10 @@ const authSlice = createSlice({
 });
 
 export const { signIn, signOut, sessionSignIn, register } = authSlice.actions;
+
+export const logoutAndResetState = () => (dispatch: Dispatch) => {
+  dispatch(signOut());
+  dispatch({ type: "RESET_APP" });
+};
+
 export const { reducer: authReducer } = authSlice;

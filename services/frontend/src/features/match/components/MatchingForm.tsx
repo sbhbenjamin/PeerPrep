@@ -110,7 +110,7 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "justify-between",
+                        "justify-between bg-background",
                         !field.value && "text-muted-foreground",
                       )}
                     >
@@ -248,6 +248,11 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
               Leave Queue
             </Button>
           ) : null}
+        </div>
+        <div className="text-center">
+          <p className="text-muted-foreground text-xs font-normal">
+            Warning: Leaving this page will remove you from the queue.
+          </p>
         </div>
       </form>
     </Form>

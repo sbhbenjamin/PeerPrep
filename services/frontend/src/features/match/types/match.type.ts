@@ -31,5 +31,5 @@ export type MatchState = {
   question: QuestionType | undefined;
   roomId: string | undefined;
   language: Language | undefined;
-  sessionEnded: boolean;
+  hasOngoingSession: boolean;
 };

@@ -11,6 +11,10 @@ const page = () => {
   if (isLoading) return <div>Loading...</div>;
   return (
     <div>
+      <h2 className="text-4xl font-bold tracking-tight">Users</h2>
+      <p className="mb-4 text-muted-foreground">
+        A list of all users on the app.
+      </p>
       <UserTable users={users!} />
     </div>
   );

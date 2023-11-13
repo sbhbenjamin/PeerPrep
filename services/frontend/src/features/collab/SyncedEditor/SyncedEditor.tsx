@@ -157,7 +157,7 @@ export function SyncedEditor({
   const handleEndSession = async () => {
     socket.emit("leave", roomId);
     socket.disconnect();
-    dispatch(updateSessionEnded());
+    dispatch(resetMatchDetails());
     setSessionActive(false);
     setPartnerStatus(Status.SessionEnded);
     addHistory({
@@ -222,13 +222,14 @@ export function SyncedEditor({
           currentUser={user.id.toString()}
           partnerDetails={partnerDetails}
           partnerStatus={partnerStatus as string}
+          isDisabled={!sessionActive}
         />
         {sessionActive ? (
           <Button variant="destructive" onClick={handleEndSession}>
             End Session
           </Button>
         ) : (
-          <Button variant="destructive" onClick={handleLeave}>
+          <Button variant="secondary" onClick={handleLeave}>
             Leave
           </Button>
         )}

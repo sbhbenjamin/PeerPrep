@@ -3,23 +3,10 @@
 import { BookMarked, Link, Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 
-import { renderRelativeTime } from "@/utils/date";
-
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 import { selectAuthData } from "@/features/auth";
-import { CategoryBadge } from "@/features/questions";
-import type { History } from "@/features/users";
+import { HistoryTable } from "@/features/home/components/HistoryTable";
 import { EditUserProfileForm } from "@/features/users";
 
 import { useGetHistoryQuery } from "@/services/historyApi";
@@ -47,74 +34,52 @@ const page = ({ params }: { params: { id: number } }) => {
   };
 
   return (
-    <div className="w-full max-w-screen-xl break-words">
-      <div className="flex h-96 w-full gap-x-8">
-        <Card className="max-w-[25%] grow items-start">
-          <CardContent className="flex flex-col items-start gap-4 p-5">
-            <div className="flex w-full flex-row items-center justify-start gap-6">
-              <h1 className="text-lg">{user?.name}</h1>
-              {auth.currentUser && auth.currentUser.email === user!.email ? (
-                <EditUserProfileForm userId={params.id} />
-              ) : null}
-            </div>
-            <Separator className="mb-3" />
-            <div className="mb-3 flex flex-col gap-5">
-              <div className="flex flex-row gap-3">
-                <Link href="#/" />
-                {user?.url ? (
-                  <a href={user?.url} target="_blank" rel="noopener noreferrer">
-                    {user?.url}
-                  </a>
-                ) : (
-                  <p>User has yet to provide a url</p>
-                )}
-              </div>
+    <div className="flex gap-x-8">
+      <Card className="h-2/5 max-w-[350px]">
+        <CardHeader>
+          <div className="flex flex-row items-center justify-between">
+            <h1 className="text-2xl font-semibold tracking-tight">
+              {user?.name}
+            </h1>
+            {auth.currentUser && auth.currentUser.email === user!.email ? (
+              <EditUserProfileForm userId={params.id} />
+            ) : null}
+          </div>
+        </CardHeader>
 
-              <div className="mb-3 flex gap-3">
-                <BookMarked />
-                <p>{user?.bio || "User has yet to provide a bio"}</p>
-              </div>
+        <CardContent className="flex flex-col gap-4">
+          <div className="flex gap-3 text-sm">
+            <div>
+              <Link href="#/" />
             </div>
-          </CardContent>
-        </Card>
-        <div className="grow-[8]">
-          <h2 className="mb-4 text-2xl font-bold">History</h2>
-          {isGetHistoryLoading && (
-            <div className="flex justify-center">
-              <Loader2 className="mr-2 animate-spin" />
+            <p className="break-all">
+              {user?.url || "User has yet to provide a url"}
+            </p>
+          </div>
+
+          <div className="flex gap-3 text-sm">
+            <div>
+              <BookMarked />
             </div>
-          )}
+            <p className="break-all">
+              {user?.bio || "User has yet to provide a bio"}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
-          <Card className="w-full">
-            <Table>
-              <TableCaption>A list of recent questions solved.</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[100px]">Date</TableHead>
-                  <TableHead>Question</TableHead>
-                  <TableHead>Categories</TableHead>
-                  <TableHead>URL</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {history &&
-                  history.map(({ id, timestamp, question }: History) => (
-                    <TableRow key={id} onClick={handleClickHistoryRow}>
-                      <TableCell className="font-medium">
-                        {renderRelativeTime(new Date(timestamp))}
-                      </TableCell>
-                      <TableCell>{question.title}</TableCell>
-                      <TableCell>
-                        <CategoryBadge categories={question.categories} />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
+      <div className="grow">
+        <h2 className="text-4xl font-bold tracking-tight">History</h2>
+        <p className="mb-4 text-muted-foreground">
+          A list of all the questions that you have solved.
+        </p>
+        {isGetHistoryLoading && (
+          <div className="flex justify-center">
+            <Loader2 className="mr-2 animate-spin" />
+          </div>
+        )}
 
-            <CardContent />
-          </Card>
-        </div>
+        <HistoryTable histories={history || []} />
       </div>
     </div>
   );

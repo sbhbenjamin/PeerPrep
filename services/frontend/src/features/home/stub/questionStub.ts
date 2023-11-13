@@ -1,9 +1,9 @@
 import { Difficulty } from "@/features/questions";
 
 export const questionStub = {
-  id: "7f73cab0-7a27-4d98-bbd6-6d09c1a3e1aa",
-  title: "asdas",
-  categories: ["Strings"],
+  id: "64232d8e-d7d2-449d-8f5b-2281bdb224d3",
+  title: "Two Sum",
+  categories: ["Strings", "Algorithms"],
   difficulty: Difficulty.Easy,
   description: "dasdasd",
   link: "http://localhost:3000/questions",

@@ -73,6 +73,7 @@ const disconnectWithError = (
   message: string,
   socketId: string,
 ) => {
+  logger.error(message);
   io.to(socketId).emit("error", message);
   socket.disconnect();
 };

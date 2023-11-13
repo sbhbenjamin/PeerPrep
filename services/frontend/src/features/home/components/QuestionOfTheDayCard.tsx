@@ -1,15 +1,10 @@
 import React from "react";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-import type { QuestionType } from "@/features/questions";
+import { CategoryBadge, type QuestionType } from "@/features/questions";
+
+import { MatchingDialog } from "./MatchingDialog";
 
 interface QuestionOfTheDayCardProps {
   question: QuestionType;
@@ -19,27 +14,21 @@ export const QuestionOfTheDayCard: React.FC<QuestionOfTheDayCardProps> = ({
   question,
 }) => {
   const { title, categories, difficulty, link } = question;
-  return (
-    <Card className=" flex min-w-[33%]">
-      <CardHeader className="w-full">
-        <div className="flex w-full  justify-between gap-2">
-          <CardTitle>{title}</CardTitle>
-          <Badge>{difficulty}</Badge>
-        </div>
-        <CardDescription>
-          <div className="flex gap-2">
-            {categories.map((category) => (
-              <div key={category}>
-                <Badge variant="outline">{category}</Badge>
-              </div>
-            ))}
-          </div>
-        </CardDescription>
 
-        <Button className="ml-auto justify-end align-bottom" variant="outline">
-          Begin Matching
-        </Button>
+  return (
+    <Card className="min-w-[33%]">
+      <CardHeader>
+        <div className="flex justify-between gap-2">
+          <CardTitle>{title}</CardTitle>
+          <p className="font-mono text-xs font-bold uppercase tracking-tighter text-gray-500 dark:text-gray-400">
+            {difficulty}
+          </p>
+        </div>
+        <CategoryBadge categories={categories} />
       </CardHeader>
+      <CardFooter className="flex items-end justify-end">
+        <MatchingDialog question={question} />
+      </CardFooter>
     </Card>
   );
 };
