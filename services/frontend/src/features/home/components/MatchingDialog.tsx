@@ -200,7 +200,7 @@ export const MatchingDialog = ({ question }: MatchingDialogProps) => {
                 Find Match
               </Button>
             </DialogFooter>
-            <p className="text-muted-foreground text-xs font-normal">
+            <p className="text-xs font-normal text-muted-foreground">
               Warning: Closing this popup will remove you from the queue.
             </p>
           </form>

@@ -67,7 +67,7 @@ export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
           </p>
         </CardTitle>
         <p className="text-2xl font-bold">{historyCount} Interviews</p>
-        <div className="text-muted-foreground text-xs">
+        <div className="text-xs text-muted-foreground">
           {startDate} - {endDate}
         </div>
       </CardHeader>

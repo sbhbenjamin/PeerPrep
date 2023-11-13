@@ -116,7 +116,7 @@ export function DataTable<TData, TValue>({
       </Table>
 
       <div className="flex items-end">
-        <div className="text-muted-foreground flex-1 text-sm">
+        <div className="flex-1 text-sm text-muted-foreground">
           {table.getPaginationRowModel().rows.length} out of{" "}
           {table.getPrePaginationRowModel().rows.length} entries
         </div>

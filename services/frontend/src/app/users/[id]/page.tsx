@@ -70,7 +70,7 @@ const page = ({ params }: { params: { id: number } }) => {
 
       <div className="grow">
         <h2 className="text-4xl font-bold tracking-tight">History</h2>
-        <p className="text-muted-foreground mb-4">
+        <p className="mb-4 text-muted-foreground">
           A list of all the questions that you have solved.
         </p>
         {isGetHistoryLoading && (

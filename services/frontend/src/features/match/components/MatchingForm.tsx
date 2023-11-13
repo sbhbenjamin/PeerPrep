@@ -251,7 +251,7 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
           </div>
         </div>
         <div className="text-center">
-          <p className="text-muted-foreground text-xs font-normal">
+          <p className="text-xs font-normal text-muted-foreground">
             Warning: Leaving this page will remove you from the queue.
           </p>
         </div>

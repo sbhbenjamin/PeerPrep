@@ -14,15 +14,15 @@ import UserDropDownMenu from "./UserDropDownMenu";
 export const Navbar = () => {
   const auth = useSelector(selectAuthData);
   return (
-    <div className="bg-card flex flex-row justify-between border-b border-gray-200 px-8 py-4  dark:border-gray-800">
+    <div className="flex flex-row justify-between border-b border-gray-200 bg-card px-8 py-4  dark:border-gray-800">
       <div className="flex gap-1">
-      <Image src="/logo.svg" alt="PeerPrep" width={25} height={25} />
-      <Link
-        className="flex items-center text-center text-lg font-black"
-        href="/"
-      >
-        PeerPrep
-      </Link>
+        <Image src="/logo.svg" alt="PeerPrep" width={25} height={25} />
+        <Link
+          className="flex items-center text-center text-lg font-black"
+          href="/"
+        >
+          PeerPrep
+        </Link>
       </div>
       <div className="flex gap-10">
         <ModeToggle />

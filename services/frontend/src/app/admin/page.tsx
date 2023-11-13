@@ -12,7 +12,7 @@ const page = () => {
   return (
     <div>
       <h2 className="text-4xl font-bold tracking-tight">Users</h2>
-      <p className="text-muted-foreground mb-4">
+      <p className="mb-4 text-muted-foreground">
         A list of all users on the app.
       </p>
       <UserTable users={users!} />
