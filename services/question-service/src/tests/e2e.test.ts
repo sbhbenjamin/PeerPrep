@@ -55,7 +55,7 @@ describe("POST /question", () => {
       .post("/question")
       .send(createQuestionInputFullOne);
     // expect
-    const question = await prisma.question.findUnique({
+    const question = await prisma.question.findFirst({
       where: { title: createQuestionInputFullOne.title },
     });
     expect(res.status).toBe(200);
@@ -313,7 +313,9 @@ describe("DELETE /question", () => {
     const res = await mockApp.delete(`/question/${questionsBefore[0].id}`);
     // expect
     expect(res.status).toBe(200);
-    const questionsAfter = await prisma.question.findMany();
+    const questionsAfter = await prisma.question.findMany({
+      where: { isDeleted: false },
+    });
     expect(questionsAfter.length).toBe(0);
   });
   test("when invalid delete id is provided with valid permissions, return 404", async () => {

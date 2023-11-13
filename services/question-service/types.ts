@@ -7,6 +7,13 @@ export type QuestionRecord = {
   difficulty: Difficulty;
   description: string;
   link: string;
+  isDeleted: boolean;
+};
+
+export type QuestionGetQueryParams = Partial<
+  Omit<QuestionRecord, "isDeleted">
+> & {
+  isDeleted?: string;
 };
 
 export type QuestionRequest = Omit<QuestionRecord, "id">;

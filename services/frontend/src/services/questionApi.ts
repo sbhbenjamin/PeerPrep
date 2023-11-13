@@ -13,7 +13,7 @@ const questionApi = rootApi.injectEndpoints({
       query: (questionQuery) => ({
         url: buildServiceUrl("/question"),
         method: "GET",
-        params: { ...questionQuery },
+        params: { ...questionQuery, isDeleted: false },
       }),
       // @ts-expect-error
       providesTags: ["Question"],
