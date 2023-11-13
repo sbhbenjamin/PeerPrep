@@ -4,19 +4,22 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
 
 import { selectAuthData } from "@/features/auth";
 import { SyncedEditor } from "@/features/collab/SyncedEditor/SyncedEditor";
 import { selectMatchState } from "@/features/match/state/matchSelector";
+import { resetMatchDetails } from "@/features/match/state/matchSlice";
 
 import "./styles.css";
 
 const page = () => {
   const { push } = useRouter();
-  const { language, question, roomId } = useSelector(selectMatchState);
+  const dispatch = useDispatch();
+  const { sessionEnded, language, question, roomId } =
+    useSelector(selectMatchState);
   const [isClient, setIsClient] = useState(false);
   const socketRef = useRef<Socket>();
   const [currentUser, setCurrentUser] = useState<number>(
@@ -28,6 +31,10 @@ const page = () => {
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     setIsClient(true);
+    if (sessionEnded) {
+      dispatch(resetMatchDetails());
+      push("/matching");
+    }
     if (!(language && question && roomId)) {
       push("/matching");
     }
