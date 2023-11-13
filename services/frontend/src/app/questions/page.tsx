@@ -58,10 +58,14 @@ const page = () => {
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-screen-xl">
-        <h1 className="mb-8 flex text-3xl font-bold">Questions Repository</h1>
-        <div className="flex gap-8">
+        <h1 className="mb-4 text-4xl font-bold tracking-tight">
+          Questions Repository
+        </h1>
+        <div className="mt-4 flex gap-8">
           <div className="w-1/2">
-            <h1 className="mb-8 flex text-2xl">Add New Question</h1>
+            <h1 className="mb-2 text-2xl font-semibold tracking-tight">
+              Add New Question
+            </h1>
             <QuestionForm
               onSubmit={handleAddQuestion}
               formSubmitStatus={{
@@ -72,8 +76,10 @@ const page = () => {
             />
           </div>
           <div className="w-1/2">
-            <h1 className="mb-8 flex text-2xl">All Questions</h1>
-            <div className="mr-4 flex max-h-[60vh] flex-col gap-4 overflow-y-auto">
+            <h1 className="mb-2 text-2xl font-semibold tracking-tight">
+              All Questions
+            </h1>
+            <div className="flex flex-col gap-4">
               {questions.map(
                 ({ id, title, categories, difficulty, description, link }) => (
                   <div key={id.toString()}>

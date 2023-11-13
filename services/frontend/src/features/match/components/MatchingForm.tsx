@@ -110,7 +110,7 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "justify-between",
+                        "justify-between bg-background",
                         !field.value && "text-muted-foreground",
                       )}
                     >
@@ -227,27 +227,33 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
             </FormItem>
           )}
         />
-        <div className="flex gap-4">
-          <Button
-            className="w-[20%]"
-            type="submit"
-            disabled={
-              !(form.getValues("difficulty") && form.getValues("language"))
-            }
-            isLoading={matchPending}
-            loadingText={buttonText}
-          >
-            Submit
-          </Button>
-          {matchPending ? (
+        <div className="flex flex-row-reverse">
+          <div className="flex gap-4">
             <Button
-              variant="destructive"
-              type="button"
-              onClick={handleLeaveQueue}
+              type="submit"
+              disabled={
+                !(form.getValues("difficulty") && form.getValues("language"))
+              }
+              isLoading={matchPending}
+              loadingText="Waiting"
             >
-              Leave Queue
+              Submit
             </Button>
-          ) : null}
+            {matchPending ? (
+              <Button
+                variant="destructive"
+                type="button"
+                onClick={handleLeaveQueue}
+              >
+                Leave Queue
+              </Button>
+            ) : null}
+          </div>
+        </div>
+        <div className="text-center">
+          <p className="text-muted-foreground text-xs font-normal">
+            Warning: Leaving this page will remove you from the queue.
+          </p>
         </div>
       </form>
     </Form>

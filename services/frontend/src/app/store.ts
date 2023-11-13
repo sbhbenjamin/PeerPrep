@@ -1,3 +1,4 @@
+import { useDispatch } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";
 
 import { configureStore } from "@reduxjs/toolkit";
@@ -27,6 +28,7 @@ const store = configureStore({
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch: () => AppDispatch = useDispatch;
 
 export default store;
 export const persistor = persistStore(store);

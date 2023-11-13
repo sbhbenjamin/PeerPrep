@@ -96,7 +96,7 @@ function formatHistory(history: History): HistoryColumn {
 export const HistoryTable: React.FC<HistoryTableProps> = ({ histories }) => {
   return (
     <DataTable
-      placeholder="Search by tile"
+      placeholder="Search by Title"
       filterBy="title"
       columns={historyColumn}
       data={histories.map((history) => formatHistory(history))}

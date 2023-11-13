@@ -26,6 +26,7 @@ type ChatWindowProps = {
   currentUser: string;
   partnerDetails: User | undefined;
   partnerStatus: string;
+  isDisabled: boolean;
 };
 
 export function ChatWindow({
@@ -35,6 +36,7 @@ export function ChatWindow({
   currentUser,
   partnerDetails,
   partnerStatus,
+  isDisabled,
 }: ChatWindowProps) {
   const [input, setInput] = useState("");
   const inputLength = input.trim().length;
@@ -56,7 +58,7 @@ export function ChatWindow({
 
   const renderPartnerDetails = () => {
     return partnerDetails ? (
-      <a href={`/users/${partnerDetails.id}`} target="_blank">
+      <a href={`/users/${partnerDetails.id}`}>
         <div className="mb-2 flex items-center space-x-4">
           <Avatar>
             <AvatarFallback>{getInitials(partnerDetails.name)}</AvatarFallback>
@@ -91,7 +93,7 @@ export function ChatWindow({
   return (
     <Card className="flex h-full flex-col">
       <CardHeader className="flex flex-col">
-        <div className="flex flex-row items-center overflow-x-auto focus:scroll-auto">
+        <div className="flex flex-row items-center overflow-x-auto">
           {partnerDetails ? renderPartnerDetails() : renderLoadingDetails()}
         </div>
         <hr className="mt-8 h-px border-0 bg-gray-200 dark:bg-gray-700" />
@@ -132,6 +134,7 @@ export function ChatWindow({
             autoComplete="off"
             value={input}
             onChange={(event) => setInput(event.target.value)}
+            disabled={isDisabled}
           />
           <Button type="submit" size="icon" disabled={inputLength === 0}>
             <Send className="h-4 w-4" />

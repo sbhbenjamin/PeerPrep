@@ -3,12 +3,12 @@
 import { useSelector } from "react-redux";
 
 import { selectAuthData } from "@/features/auth";
+import { WeeklySummaryCard } from "@/features/home/components/WeeklySummaryCard";
 
 import { useGetHistoryQuery } from "@/services/historyApi";
 
 import { HistoryTable } from "../features/home/components/HistoryTable";
 import { QuestionOfTheDayCard } from "../features/home/components/QuestionOfTheDayCard";
-import { WeeklySummaryCard } from "../features/home/components/WeeklySummaryCard";
 import { questionStub } from "../features/home/stub/questionStub";
 
 import { useApiNotifications } from "@/hooks/useApiNotifications";
@@ -29,14 +29,36 @@ const page = () => {
   if (currentUser) {
     return (
       <div>
-        <h1 className="my-4 text-3xl font-semibold">
-          Welcome Back, {currentUser.name}!
+        <h1 className="mb-6 mt-4 text-4xl font-bold tracking-tight">
+          Welcome Back,{" "}
+          <span className="text-accent-foreground">
+            {currentUser.name.split(" ")[0]} 🚀
+          </span>
         </h1>
-        <div className="flex w-full gap-x-5">
+        <div className="flex flex-row gap-x-5">
           <WeeklySummaryCard history={history ?? []} />
-          <QuestionOfTheDayCard question={questionStub} />
+          <div className="flex grow flex-row gap-6 rounded-sm bg-indigo-50 p-4 dark:bg-slate-900">
+            <div className="flex-1">
+              <h2 className="text-2xl font-semibold tracking-tight text-indigo-600 dark:text-indigo-400">
+                Question Of The Day
+              </h2>
+              <p className="text-muted-foreground mb-4">
+                Join fellow coders in tackling today&apos;s featured coding
+                challenge!
+              </p>
+            </div>
+            <div className="grow">
+              <QuestionOfTheDayCard question={questionStub} />
+            </div>
+          </div>
         </div>
-        <h1 className="my-4 text-3xl font-semibold">Past Interview</h1>
+        <div className="flex w-full gap-x-5" />
+        <h2 className="mt-12 text-2xl font-semibold tracking-tight">
+          Interviews This Week
+        </h2>
+        <p className="text-muted-foreground mb-4">
+          A list of the questions that you have solved this week.
+        </p>
         <HistoryTable histories={history || []} />
       </div>
     );

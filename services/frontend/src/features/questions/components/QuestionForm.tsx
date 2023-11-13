@@ -107,7 +107,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "justify-between",
+                        "justify-between bg-background",
                         !field.value && "text-muted-foreground",
                       )}
                     >

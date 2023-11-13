@@ -38,6 +38,10 @@ const page = () => {
       push("/collab");
     });
     socketRef.current = socket;
+
+    return () => {
+      socketRef.current?.disconnect();
+    };
   }, []);
 
   const handleMatchingSubmit = (values: MatchRequest) => {
@@ -60,20 +64,17 @@ const page = () => {
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="w-full max-w-screen-xl">
-        <h1 className="mb-8 flex text-3xl font-bold">Partner Search</h1>
-        <div className="flex gap-8">
-          <div className="w-1/2">
-            <h1 className="mb-8 flex text-2xl">Find a session</h1>
-            <MatchingForm
-              handleLeaveQueue={handleLeaveQueue}
-              onSubmit={handleMatchingSubmit}
-              matchPending={queueTime !== undefined}
-              queueTime={queueTime}
-            />
-          </div>
-        </div>
+    <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
+      <div className="min-w-[450px]">
+        <h2 className="text-4xl font-bold tracking-tight">Find a Match</h2>
+        <p className="text-muted-foreground mb-4">
+          Find a partner to solve a question together!
+        </p>
+        <MatchingForm
+          handleLeaveQueue={handleLeaveQueue}
+          onSubmit={handleMatchingSubmit}
+          matchPending={matchPending}
+        />
       </div>
     </div>
   );
