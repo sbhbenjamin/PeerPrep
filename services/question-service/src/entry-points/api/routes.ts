@@ -50,7 +50,6 @@ export default function defineRoutes(expressApp: express.Application) {
 
   router.get("/QOTD", async (req, res, next) => {
     try {
-      console.log("/QOTD");
       const dailyQuestion = await questionUseCase.getDailyQuestion();
       res.status(200).json(dailyQuestion);
     } catch (error) {

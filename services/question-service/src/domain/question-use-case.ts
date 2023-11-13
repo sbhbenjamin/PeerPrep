@@ -57,20 +57,13 @@ export async function getDailyQuestion() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const questionOfTheDay = await questionRepo.getQuestionOfTheDay(today);
-  console.log(
-    "🚀 ~ file: question-use-case.ts:60 ~ getDailyQuestion ~ questionOfTheDay:",
-    questionOfTheDay,
-  );
 
   if (questionOfTheDay) {
     const question = await getQuestionById(questionOfTheDay.questionId);
     return question;
   }
   const questions = await questionRepo.getQuestions({ isDeleted: false });
-  console.log(
-    "🚀 ~ file: question-use-case.ts:66 ~ getDailyQuestion ~ questions:",
-    questions,
-  );
+
   if (questions === null || questions!.length === 0) {
     throw new HttpError("No questions in database", 404);
   }
