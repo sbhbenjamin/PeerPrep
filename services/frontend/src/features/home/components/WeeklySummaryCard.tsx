@@ -14,9 +14,10 @@ const getStartAndEndDateOfWeek = (date: Date = new Date()): WeekRange => {
   const diffToMonday = currentDayOfWeek === 0 ? -6 : 1 - currentDayOfWeek;
   const startOfWeek = new Date(date);
   startOfWeek.setDate(date.getDate() + diffToMonday);
+  startOfWeek.setHours(0, 0, 0, 0); // Set to the start of the day
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(startOfWeek.getDate() + 6);
-
+  endOfWeek.setHours(23, 59, 59, 999); // Set to the end of the day
   return {
     startOfWeek,
     endOfWeek,
