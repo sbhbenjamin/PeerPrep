@@ -26,3 +26,10 @@ export type MatchDetails = {
   roomId: string | undefined;
   language: Language | undefined;
 };
+
+export type MatchState = {
+  question: QuestionType | undefined;
+  roomId: string | undefined;
+  language: Language | undefined;
+  sessionEnded: boolean;
+};

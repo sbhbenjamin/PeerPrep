@@ -62,7 +62,7 @@ const CardContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("p-6 pt-0 overflow-y-scroll", className)}
+    className={cn("p-6 pt-0 overflow-y-auto", className)}
     {...props}
   />
 ));

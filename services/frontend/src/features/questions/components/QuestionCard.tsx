@@ -65,17 +65,19 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
                   {difficulty}
                 </p>
-                <CardTitle>{title}</CardTitle>
+                <CardTitle className="max-h-[8vh] overflow-y-auto">
+                  {title}
+                </CardTitle>
               </div>
             </AccordionTrigger>
             <CardDescription>
-              <div className="flex gap-2">
+              <div className="mb-8 flex gap-2 overflow-x-auto">
                 <CategoryBadge categories={categories} />
               </div>
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <AccordionContent>
+            <AccordionContent className="break-words">
               {description.split("\n").map((line, index) => (
                 <React.Fragment key={`${line}-${index}`}>
                   {line}
