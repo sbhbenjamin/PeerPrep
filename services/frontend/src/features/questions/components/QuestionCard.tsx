@@ -65,7 +65,9 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
                   {difficulty}
                 </p>
-                <CardTitle>{title}</CardTitle>
+                <CardTitle className="max-h-[8vh] overflow-y-auto">
+                  {title}
+                </CardTitle>
               </div>
             </AccordionTrigger>
             <CardDescription>

@@ -73,7 +73,7 @@ const page = () => {
           </div>
           <div className="w-1/2">
             <h1 className="mb-8 flex text-2xl">All Questions</h1>
-            <div className="flex flex-col gap-4">
+            <div className="mr-4 flex max-h-[60vh] flex-col gap-4 overflow-y-auto">
               {questions.map(
                 ({ id, title, categories, difficulty, description, link }) => (
                   <div key={id.toString()}>
