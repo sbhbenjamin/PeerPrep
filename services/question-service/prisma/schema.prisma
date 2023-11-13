@@ -29,7 +29,7 @@ model Question {
 
 model QuestionOfTheDay {
   id         String   @id @default(uuid()) @map("_id")
-  date       DateTime @unique
+  date       DateTime 
   question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId String
   isDeleted Boolean @default(false)

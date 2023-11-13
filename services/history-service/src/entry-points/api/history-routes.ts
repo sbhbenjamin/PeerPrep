@@ -34,6 +34,7 @@ export default function defineRoutes(expressApp: express.Application) {
       const userId = req.query.userId
         ? parseInt(req.query.userId as string, 10)
         : undefined;
+
       const questionId = req.query.questionId as string | undefined;
 
       const response = await historyUseCase.getAllHistory({

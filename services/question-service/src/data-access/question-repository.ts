@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 import type {
   QuestionFilter,
   QuestionRecord,
@@ -7,7 +9,7 @@ import type {
 import { getPrismaClient } from "./prisma-client-factory";
 
 export async function addNewQuestion(
-  newQuestionRecordRequest: QuestionRequest,
+  newQuestionRecordRequest: Prisma.QuestionCreateInput,
 ): Promise<QuestionRecord> {
   return getPrismaClient().question.create({
     data: newQuestionRecordRequest,
@@ -63,7 +65,7 @@ export async function updateQuestion(
 }
 
 export async function deleteQuestion(id: string): Promise<QuestionRecord> {
-  getPrismaClient().questionOfTheDay.updateMany({
+  await getPrismaClient().questionOfTheDay.updateMany({
     where: {
       questionId: id,
     },
