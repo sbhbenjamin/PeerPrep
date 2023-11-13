@@ -227,31 +227,30 @@ export const MatchingForm: React.FC<MatchFormProps> = ({
             </FormItem>
           )}
         />
-        <div className="flex flex-row-reverse">
-          <div className="flex gap-4">
+        <div className="flex gap-4">
+          <Button
+            className="w-[20%]"
+            type="submit"
+            disabled={
+              !(form.getValues("difficulty") && form.getValues("language"))
+            }
+            isLoading={matchPending}
+            loadingText={buttonText}
+          >
+            Submit
+          </Button>
+          {matchPending ? (
             <Button
-              type="submit"
-              disabled={
-                !(form.getValues("difficulty") && form.getValues("language"))
-              }
-              isLoading={matchPending}
-              loadingText="Waiting"
+              variant="destructive"
+              type="button"
+              onClick={handleLeaveQueue}
             >
-              Submit
+              Leave Queue
             </Button>
-            {matchPending ? (
-              <Button
-                variant="destructive"
-                type="button"
-                onClick={handleLeaveQueue}
-              >
-                Leave Queue
-              </Button>
-            ) : null}
-          </div>
+          ) : null}
         </div>
         <div className="text-center">
-          <p className="text-xs font-normal text-muted-foreground">
+          <p className="text-muted-foreground text-xs font-normal">
             Warning: Leaving this page will remove you from the queue.
           </p>
         </div>

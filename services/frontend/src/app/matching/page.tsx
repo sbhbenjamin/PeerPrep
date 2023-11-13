@@ -67,13 +67,14 @@ const page = () => {
     <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
       <div className="min-w-[450px]">
         <h2 className="text-4xl font-bold tracking-tight">Find a Match</h2>
-        <p className="mb-4 text-muted-foreground">
+        <p className="text-muted-foreground mb-4">
           Find a partner to solve a question together!
         </p>
         <MatchingForm
           handleLeaveQueue={handleLeaveQueue}
           onSubmit={handleMatchingSubmit}
-          matchPending={matchPending}
+          matchPending={queueTime !== undefined}
+          queueTime={queueTime}
         />
       </div>
     </div>

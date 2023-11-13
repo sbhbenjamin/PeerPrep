@@ -18,11 +18,13 @@ import {
 import { persistor, useAppDispatch } from "@/app/store";
 
 import { logoutAndResetState, selectAuthData } from "@/features/auth";
+import { selectMatchState } from "@/features/match/state/matchSelector";
 
 const UserDropDownMenu = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const auth = useSelector(selectAuthData);
+  const { hasOngoingSession } = useSelector(selectMatchState);
   const { data: session } = useSession();
 
   const handleSignOut = async () => {
@@ -65,7 +67,10 @@ const UserDropDownMenu = () => {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild className="cursor-pointer">
-              <Link href="/collab" className="flex items-center gap-2">
+              <Link
+                href={hasOngoingSession ? "/collab" : "/matching"}
+                className="flex items-center gap-2"
+              >
                 <Users2 size={15} />
                 Find Match
               </Link>
