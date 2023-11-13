@@ -85,7 +85,7 @@ const page = ({ params }: { params: { id: number } }) => {
             </div>
           )}
 
-          <Card className="w-[100%]">
+          <Card className="w-full">
             <Table>
               <TableCaption>A list of recent questions solved.</TableCaption>
               <TableHeader>
