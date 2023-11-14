@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "addQuestion": "node ./scripts/populateQuestionService.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
     "install:services": "npm-run-all --parallel install:frontend install:collab-service install:matching-service install:question-service install:user-service install:history-service",
