@@ -37,9 +37,7 @@ const page = () => {
       <div>
         <h1 className="mb-6 mt-4 text-4xl font-bold tracking-tight">
           Welcome Back,{" "}
-          <span className="text-accent-foreground">
-            {currentUser.name.split(" ")[0]} 🚀
-          </span>
+          <span className="text-accent-foreground">{currentUser.name} 🚀</span>
         </h1>
         <div className="flex flex-row gap-x-5">
           <WeeklySummaryCard history={history ?? []} />
@@ -48,7 +46,7 @@ const page = () => {
               <h2 className="text-2xl font-semibold tracking-tight text-indigo-600 dark:text-indigo-400">
                 Question Of The Day
               </h2>
-              <p className="mb-4 text-muted-foreground">
+              <p className="text-muted-foreground mb-4">
                 Join fellow coders in tackling today&apos;s featured coding
                 challenge!
               </p>
@@ -62,7 +60,7 @@ const page = () => {
         <h2 className="mt-12 text-2xl font-semibold tracking-tight">
           Interviews This Week
         </h2>
-        <p className="mb-4 text-muted-foreground">
+        <p className="text-muted-foreground mb-4">
           A list of the questions that you have solved this week.
         </p>
         <HistoryTable histories={history || []} />
