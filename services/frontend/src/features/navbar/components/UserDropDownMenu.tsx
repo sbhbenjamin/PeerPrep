@@ -33,6 +33,10 @@ const UserDropDownMenu = () => {
     router.push("/");
   };
 
+  const isRegistered = auth.currentUser;
+  const isAdmin = auth.currentUser?.role === "ADMIN";
+  const { isLoggedIn } = auth;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
@@ -43,7 +47,7 @@ const UserDropDownMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-4">
         <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
-        {auth.isLoggedIn && auth.currentUser === null && (
+        {isLoggedIn && !isRegistered && (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild className="cursor-pointer">
@@ -75,20 +79,23 @@ const UserDropDownMenu = () => {
                 Find Match
               </Link>
             </DropdownMenuItem>
+          </>
+        )}
+        {isRegistered && isAdmin && (
+          <>
             <DropdownMenuItem asChild className="cursor-pointer">
               <Link href="/questions" className="flex items-center gap-2">
                 <Archive size={15} />
                 Questions
               </Link>
             </DropdownMenuItem>
-            {auth.currentUser.role === "ADMIN" && (
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/admin" className="flex items-center gap-2">
-                  <UserCog2 size={15} />
-                  Admin
-                </Link>
-              </DropdownMenuItem>
-            )}
+
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link href="/admin" className="flex items-center gap-2">
+                <UserCog2 size={15} />
+                Admin
+              </Link>
+            </DropdownMenuItem>
           </>
         )}
         <DropdownMenuSeparator />

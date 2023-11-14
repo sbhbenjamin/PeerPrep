@@ -3,9 +3,9 @@
 import { useSelector } from "react-redux";
 
 import { selectAuthData } from "@/features/auth";
+import { HistoryTable } from "@/features/home/components/HistoryTable";
 import HeroSection from "@/features/landing/component/HeroSection";
 import { InformationSection } from "@/features/landing/component/InformationSection";
-import { HistoryTable } from "@/features/home/components/HistoryTable";
 
 import { useGetHistoryQuery } from "@/services/historyApi";
 import { useGetQuestionOfTheDayQuery } from "@/services/questionApi";
@@ -48,7 +48,7 @@ const page = () => {
               <h2 className="text-2xl font-semibold tracking-tight text-indigo-600 dark:text-indigo-400">
                 Question Of The Day
               </h2>
-              <p className="mb-4 text-muted-foreground">
+              <p className="text-muted-foreground mb-4">
                 Join fellow coders in tackling today&apos;s featured coding
                 challenge!
               </p>
@@ -62,7 +62,7 @@ const page = () => {
         <h2 className="mt-12 text-2xl font-semibold tracking-tight">
           Interviews This Week
         </h2>
-        <p className="mb-4 text-muted-foreground">
+        <p className="text-muted-foreground mb-4">
           A list of the questions that you have solved this week.
         </p>
         <HistoryTable histories={history || []} />
