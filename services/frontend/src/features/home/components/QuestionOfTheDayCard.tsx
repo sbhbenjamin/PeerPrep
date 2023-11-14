@@ -32,7 +32,9 @@ export const QuestionOfTheDayCard: React.FC<QuestionOfTheDayCardProps> = ({
       </Card>
     );
   }
-  <Card className="min-w-[33%]">
-    <CardHeader>No question of the day</CardHeader>
-  </Card>;
+  return (
+    <Card className="min-w-[33%]">
+      <CardHeader>No question of the day</CardHeader>
+    </Card>
+  );
 };

@@ -23,3 +23,16 @@ export async function assertQuestionNotExistsByTitle(title: string) {
     );
   }
 }
+
+export async function assertQuestionNotExistByLink(link: string) {
+  const questions = await questionRepository.getQuestions({
+    link,
+    isDeleted: false,
+  });
+  if (questions && questions.length > 0) {
+    throw new HttpError(
+      `Question with this link: '${link}' already exists. ID: '${questions[0].id}'`,
+      409,
+    );
+  }
+}
