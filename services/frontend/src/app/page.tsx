@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 
 import { selectAuthData } from "@/features/auth";
 import { HistoryTable } from "@/features/home/components/HistoryTable";
+import HeroSection from "@/features/landing/component/HeroSection";
+import { InformationSection } from "@/features/landing/component/InformationSection";
 
 import { useGetHistoryQuery } from "@/services/historyApi";
 import { useGetQuestionOfTheDayQuery } from "@/services/questionApi";
@@ -67,7 +69,12 @@ const page = () => {
       </div>
     );
   }
-  return <p>Landing</p>;
+  return (
+    <div>
+      <HeroSection />
+      <InformationSection />
+    </div>
+  );
 };
 
 export default page;
