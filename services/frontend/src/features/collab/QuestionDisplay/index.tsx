@@ -32,10 +32,8 @@ export function QuestionDisplay({
           <CategoryBadge categories={categories} />
         </CardDescription>
       </CardHeader>
-      <CardContent
-        className={`whitespace-pre-line break-words ${contentClassName}`}
-      >
-        {description}
+      <CardContent className={`${contentClassName} text-xs`}>
+        <div dangerouslySetInnerHTML={{ __html: description }} />
       </CardContent>
     </Card>
   );

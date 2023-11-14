@@ -26,6 +26,7 @@ export async function getQuestions(
         id: filter.id,
         title: filter.title,
         difficulty: filter.difficulty,
+        link: filter.link,
         categories: {
           hasSome: filter.categories,
         },
@@ -39,6 +40,7 @@ export async function getQuestions(
       title: filter.title,
       difficulty: filter.difficulty,
       isDeleted: filter.isDeleted,
+      link: filter.link,
     },
   });
 }
