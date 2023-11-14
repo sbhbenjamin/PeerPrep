@@ -7,6 +7,7 @@ import * as questionRepo from "../data-access/question-repository";
 import { AddQuestionSchema, UpdateQuestionSchema } from "./question-schema"; // Import your schemas here
 import {
   assertQuestionExistsById,
+  assertQuestionNotExistByLink,
   assertQuestionNotExistsByTitle,
 } from "./question-validator";
 
@@ -22,6 +23,7 @@ export async function getQuestionById(questionId: string) {
 }
 
 export async function addQuestion(newQuestion: QuestionRequest) {
+  await assertQuestionNotExistByLink(newQuestion.link);
   await assertQuestionNotExistsByTitle(newQuestion.title);
   const validatedData = AddQuestionSchema.parse(newQuestion);
   const response = await questionRepo.addNewQuestion(validatedData);
@@ -62,7 +64,8 @@ export async function getDailyQuestion() {
     const question = await getQuestionById(questionOfTheDay.questionId);
     return question;
   }
-  const questions = await questionRepo.getQuestions({});
+  const questions = await questionRepo.getQuestions({ isDeleted: false });
+
   if (questions === null || questions!.length === 0) {
     throw new HttpError("No questions in database", 404);
   }

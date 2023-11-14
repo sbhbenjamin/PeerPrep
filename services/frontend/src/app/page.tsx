@@ -3,13 +3,13 @@
 import { useSelector } from "react-redux";
 
 import { selectAuthData } from "@/features/auth";
-import { WeeklySummaryCard } from "@/features/home/components/WeeklySummaryCard";
+import { HistoryTable } from "@/features/home/components/HistoryTable";
 
 import { useGetHistoryQuery } from "@/services/historyApi";
+import { useGetQuestionOfTheDayQuery } from "@/services/questionApi";
 
-import { HistoryTable } from "../features/home/components/HistoryTable";
 import { QuestionOfTheDayCard } from "../features/home/components/QuestionOfTheDayCard";
-import { questionStub } from "../features/home/stub/questionStub";
+import { WeeklySummaryCard } from "../features/home/components/WeeklySummaryCard";
 
 import { useApiNotifications } from "@/hooks/useApiNotifications";
 
@@ -20,6 +20,12 @@ const page = () => {
   const { data: history, isError: isGetHistoryError } = useGetHistoryQuery({
     userId: auth.currentUser?.id,
   });
+
+  const {
+    data: questionOfTheDay,
+    isError: isGetQuestionsError,
+    isSuccess: isGetQuestionsSuccess,
+  } = useGetQuestionOfTheDayQuery();
 
   useApiNotifications({
     isError: isGetHistoryError,
@@ -48,7 +54,7 @@ const page = () => {
               </p>
             </div>
             <div className="grow">
-              <QuestionOfTheDayCard question={questionStub} />
+              <QuestionOfTheDayCard question={questionOfTheDay} />
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ export const getQuestion = async (
   try {
     logger.info(`GET /question/?${params.toString()}`);
     const res = await fetch(
-      `http://question-service:5001/question/?${params.toString()}`,
+      `http://question-service:5001/question/?${params.toString()}&isDeleted=false`,
     );
 
     return res;
@@ -24,7 +24,7 @@ export const getQuestionById = async (
   try {
     logger.info(`GET /question/${questionId}`);
     const res = await fetch(
-      `http://question-service:5001/question/${questionId}`,
+      `http://question-service:5001/question/${questionId}?isDeleted=false`,
     );
 
     return res;

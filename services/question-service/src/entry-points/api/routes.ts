@@ -26,11 +26,17 @@ export default function defineRoutes(expressApp: express.Application) {
 
   router.get("/", validateGetQuestionRequest, async (req, res, next) => {
     try {
+      let isDeleted;
+
+      if (req.query.isDeleted && (req.query.isDeleted === "false" || "true")) {
+        isDeleted = req.query.isDeleted === "true";
+      }
       const response = await questionUseCase.getQuestions({
         id: req.query.id as string,
         title: req.query.title as string,
         difficulty: req.query.difficulty as Difficulty,
         categories: req.query.categories as string[],
+        isDeleted,
       });
       if (!req.query.getOne || !response) {
         res.json(response);

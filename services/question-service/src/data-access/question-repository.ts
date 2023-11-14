@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 import type {
   QuestionFilter,
   QuestionRecord,
@@ -7,7 +9,7 @@ import type {
 import { getPrismaClient } from "./prisma-client-factory";
 
 export async function addNewQuestion(
-  newQuestionRecordRequest: QuestionRequest,
+  newQuestionRecordRequest: Prisma.QuestionCreateInput,
 ): Promise<QuestionRecord> {
   return getPrismaClient().question.create({
     data: newQuestionRecordRequest,
@@ -27,6 +29,7 @@ export async function getQuestions(
         categories: {
           hasSome: filter.categories,
         },
+        isDeleted: filter.isDeleted,
       },
     });
   }
@@ -35,6 +38,7 @@ export async function getQuestions(
       id: filter.id,
       title: filter.title,
       difficulty: filter.difficulty,
+      isDeleted: filter.isDeleted,
     },
   });
 }
@@ -55,23 +59,36 @@ export async function updateQuestion(
   updateUserRequest: Partial<QuestionRequest>,
 ): Promise<QuestionRecord> {
   return getPrismaClient().question.update({
-    where: { id },
+    where: { id, isDeleted: false },
     data: updateUserRequest,
   });
 }
 
 export async function deleteQuestion(id: string): Promise<QuestionRecord> {
-  return getPrismaClient().question.delete({
+  await getPrismaClient().questionOfTheDay.updateMany({
+    where: {
+      questionId: id,
+    },
+    data: {
+      isDeleted: true,
+    },
+  });
+
+  return getPrismaClient().question.update({
     where: {
       id,
+    },
+    data: {
+      isDeleted: true,
     },
   });
 }
 
 export async function getQuestionOfTheDay(date: Date) {
-  return getPrismaClient().questionOfTheDay.findUnique({
+  return getPrismaClient().questionOfTheDay.findFirst({
     where: {
       date,
+      isDeleted: false,
     },
   });
 }
