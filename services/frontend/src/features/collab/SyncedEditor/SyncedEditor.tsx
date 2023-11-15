@@ -63,7 +63,7 @@ export function SyncedEditor({
     isError: isSubmitError,
     successMessage: "Attempt successfully saved!",
     errorMessage:
-      "Something went wrong saving your attempt. Please save your work manually.",
+      "Something went wrong saving your attempt. Please save your work manually before leaving this page.",
   });
 
   const monacoConfig = {
