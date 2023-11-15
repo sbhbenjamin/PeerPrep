@@ -28,7 +28,7 @@ export async function getQuestions(
         difficulty: filter.difficulty,
         link: filter.link,
         categories: {
-          hasSome: filter.categories,
+          hasSome: [filter.categories],
         },
         isDeleted: filter.isDeleted,
       },

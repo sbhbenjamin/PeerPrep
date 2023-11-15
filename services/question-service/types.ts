@@ -18,4 +18,12 @@ export type QuestionGetQueryParams = Partial<
 
 export type QuestionRequest = Omit<QuestionRecord, "id">;
 
-export type QuestionFilter = Partial<Omit<QuestionRecord, "description">>;
+export type QuestionFilter = {
+  id?: string;
+  title?: string;
+  categories?: string;
+  difficulty?: Difficulty;
+  description?: string;
+  link?: string;
+  isDeleted?: boolean;
+};
