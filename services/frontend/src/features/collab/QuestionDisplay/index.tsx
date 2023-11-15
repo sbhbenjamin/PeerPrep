@@ -32,7 +32,7 @@ export function QuestionDisplay({
           <CategoryBadge categories={categories} />
         </CardDescription>
       </CardHeader>
-      <CardContent className={`${contentClassName} text-xs`}>
+      <CardContent className={`${contentClassName} overflow-auto text-xs`}>
         <div dangerouslySetInnerHTML={{ __html: description }} />
       </CardContent>
     </Card>

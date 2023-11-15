@@ -208,10 +208,10 @@ export function SyncedEditor({
 
   return (
     <div className="flex h-[80vh] gap-2">
-      <div className="w-3/12">
+      <div className="w-4/12">
         <QuestionDisplay contentClassName="max-h-[60vh]" question={question} />
       </div>
-      <div className="w-6/12 overflow-hidden rounded-lg border py-2 shadow-sm">
+      <div className="w-5/12 overflow-hidden rounded-lg border py-2 shadow-sm">
         <Editor
           value={editorContent}
           defaultLanguage={language}
