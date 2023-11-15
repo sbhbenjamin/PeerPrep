@@ -13,13 +13,11 @@ import { useGetQuestionOfTheDayQuery } from "@/services/questionApi";
 import { QuestionOfTheDayCard } from "../features/home/components/QuestionOfTheDayCard";
 import { WeeklySummaryCard } from "../features/home/components/WeeklySummaryCard";
 
-import { useApiNotifications } from "@/hooks/useApiNotifications";
-
 const page = () => {
   const { currentUser } = useSelector(selectAuthData);
 
   const auth = useSelector(selectAuthData);
-  const { data: history, isError: isGetHistoryError } = useGetHistoryQuery({
+  const { data: history } = useGetHistoryQuery({
     userId: auth.currentUser?.id,
   });
 
@@ -28,11 +26,6 @@ const page = () => {
     isError: isGetQuestionsError,
     isSuccess: isGetQuestionsSuccess,
   } = useGetQuestionOfTheDayQuery();
-
-  useApiNotifications({
-    isError: isGetHistoryError,
-    errorMessage: "Unable to fetch history",
-  });
 
   if (currentUser) {
     return (
@@ -48,7 +41,7 @@ const page = () => {
               <h2 className="text-2xl font-semibold tracking-tight text-indigo-600 dark:text-indigo-400">
                 Question Of The Day
               </h2>
-              <p className="mb-4 text-muted-foreground">
+              <p className="text-muted-foreground mb-4">
                 Join fellow coders in tackling today&apos;s featured coding
                 challenge!
               </p>
@@ -62,7 +55,7 @@ const page = () => {
         <h2 className="mt-12 text-2xl font-semibold tracking-tight">
           Interviews This Week
         </h2>
-        <p className="mb-4 text-muted-foreground">
+        <p className="text-muted-foreground mb-4">
           A list of the questions that you have solved this week.
         </p>
         <HistoryTable histories={history || []} />
