@@ -168,6 +168,11 @@ export function SyncedEditor({
     })
       .unwrap()
       .then(() => {
+        const notificationPayload = {
+          type: NotificationType.SUCCESS,
+          value: "Attempt successfully saved!",
+        };
+        dispatch(setNotification(notificationPayload));
         push("/");
       });
   };
