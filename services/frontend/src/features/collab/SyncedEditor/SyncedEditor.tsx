@@ -63,7 +63,7 @@ export function SyncedEditor({
     isError: isSubmitError,
     successMessage: "Attempt successfully saved!",
     errorMessage:
-      "Something went wrong saving your attempt. Please try again later.",
+      "Something went wrong saving your attempt. Please save your work manually before leaving this page.",
   });
 
   const monacoConfig = {
@@ -157,7 +157,7 @@ export function SyncedEditor({
   const handleEndSession = async () => {
     socket.emit("leave", roomId);
     socket.disconnect();
-    dispatch(resetMatchDetails());
+    dispatch(updateSessionEnded());
     setSessionActive(false);
     setPartnerStatus(Status.SessionEnded);
     addHistory({
@@ -168,11 +168,6 @@ export function SyncedEditor({
     })
       .unwrap()
       .then(() => {
-        const notificationPayload = {
-          type: NotificationType.SUCCESS,
-          value: "Attempt successfully saved!",
-        };
-        dispatch(setNotification(notificationPayload));
         push("/");
       });
   };
