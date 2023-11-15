@@ -240,7 +240,14 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         />
         <Button
           type="submit"
-          disabled={!form.formState.isValid}
+          disabled={
+            !(
+              form.getValues("title") &&
+              form.getValues("link") &&
+              form.getValues("difficulty") &&
+              form.getValues("description")
+            )
+          }
           isLoading={formSubmitStatus.isLoading}
         >
           Submit
