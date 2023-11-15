@@ -6,11 +6,11 @@ const logger = pino();
 
 export const assertQuestionExists = async (
   difficulty: string,
-  category: string,
+  categories: string,
 ): Promise<void> => {
   const params = new URLSearchParams({
     difficulty,
-    category,
+    categories,
     getOne: "true",
   });
 
@@ -25,13 +25,13 @@ export const assertQuestionExists = async (
     // Check for empty response body
     if (res.headers.get("content-length") === "0") {
       throw new Error(
-        `No question exists with difficulty: ${difficulty} and category: ${category}`,
+        `No question exists with difficulty: ${difficulty} and category: ${categories}`,
       );
     }
 
     const question = await res.json();
     logger.info(
-      `Successfully fetched question for difficulty: ${difficulty}, category: ${category}`,
+      `Successfully fetched question for difficulty: ${difficulty}, category: ${categories}`,
       question,
     );
   } catch (error) {

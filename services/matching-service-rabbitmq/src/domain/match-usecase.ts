@@ -92,7 +92,7 @@ const fetchQuestion = async (match: Match) => {
   if (difficulty && category) {
     const params = new URLSearchParams({
       difficulty: difficulty.toString(),
-      category: category.toString(),
+      categories: category.toString(),
       getOne: "true",
     });
     const response = await getQuestion(params);

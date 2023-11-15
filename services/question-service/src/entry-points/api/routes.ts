@@ -35,7 +35,7 @@ export default function defineRoutes(expressApp: express.Application) {
         id: req.query.id as string,
         title: req.query.title as string,
         difficulty: req.query.difficulty as Difficulty,
-        categories: req.query.categories as string[],
+        categories: req.query.categories as string,
         isDeleted,
       });
       if (!req.query.getOne || !response) {
