@@ -13,13 +13,11 @@ import { useGetQuestionOfTheDayQuery } from "@/services/questionApi";
 import { QuestionOfTheDayCard } from "../features/home/components/QuestionOfTheDayCard";
 import { WeeklySummaryCard } from "../features/home/components/WeeklySummaryCard";
 
-import { useApiNotifications } from "@/hooks/useApiNotifications";
-
 const page = () => {
   const { currentUser } = useSelector(selectAuthData);
 
   const auth = useSelector(selectAuthData);
-  const { data: history, isError: isGetHistoryError } = useGetHistoryQuery({
+  const { data: history } = useGetHistoryQuery({
     userId: auth.currentUser?.id,
   });
 
@@ -28,11 +26,6 @@ const page = () => {
     isError: isGetQuestionsError,
     isSuccess: isGetQuestionsSuccess,
   } = useGetQuestionOfTheDayQuery();
-
-  useApiNotifications({
-    isError: isGetHistoryError,
-    errorMessage: "Unable to fetch history",
-  });
 
   if (currentUser) {
     return (
