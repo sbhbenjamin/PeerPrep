@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
+import { useDispatch } from "react-redux";
 import type * as z from "zod";
 
+import { NotificationType, setNotification } from "@/features/notifications";
 import type { QuestionWithoutIdType } from "@/features/questions";
 import { QuestionCard, QuestionForm } from "@/features/questions";
 import type { Question } from "@/features/questions/types/question.schema";
@@ -16,6 +18,7 @@ import {
 import { useApiNotifications } from "@/hooks/useApiNotifications";
 
 const page = () => {
+  const dispatch = useDispatch();
   const [
     addQuestion,
     { isSuccess: isAddSuccess, isLoading: isAddLoading, isError: isAddError },
@@ -28,14 +31,6 @@ const page = () => {
 
   const { data: questions = [], isError: isGetQuestionsError } =
     useGetQuestionsQuery();
-
-  useApiNotifications({
-    isSuccess: isAddSuccess,
-    isError: isAddError,
-    successMessage: "Question successfully added!",
-    errorMessage:
-      "Something went wrong while adding your question. Please try again later.",
-  });
 
   useApiNotifications({
     isSuccess: isDeleteSuccess,
@@ -52,7 +47,28 @@ const page = () => {
   });
 
   const handleAddQuestion = (newQuestion: z.infer<typeof Question>) => {
-    addQuestion(newQuestion as QuestionWithoutIdType);
+    addQuestion(newQuestion as QuestionWithoutIdType)
+      .unwrap()
+      .then(() => {
+        const notificationPayload = {
+          type: NotificationType.SUCCESS,
+          value: "Question successfully saved!",
+        };
+        dispatch(setNotification(notificationPayload));
+      })
+      .catch((error) => {
+        let errorMessage =
+          "Something went wrong while saving the questions. Please try again later.";
+        if (error.status === 409) {
+          errorMessage =
+            "Duplicate: Existing question found with the same title or link found.";
+        }
+        const notificationPayload = {
+          type: NotificationType.ERROR,
+          value: errorMessage,
+        };
+        dispatch(setNotification(notificationPayload));
+      });
   };
 
   return (
