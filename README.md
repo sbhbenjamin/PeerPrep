@@ -1,7 +1,33 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/UxpU_KWG)
-
+# PeerPrep
 ![Code Quality Tests](https://github.com/CS3219-AY2324S1/ay2324s1-assignment-6-g38/actions/workflows/lint.yml/badge.svg)
 ![Functional Tests](https://github.com/CS3219-AY2324S1/ay2324s1-assignment-6-g38/actions/workflows/test.yml/badge.svg)
+
+PeerPrep is a platform that matches developers to conduct mock technical interviews. It features real-time matching between two clients, live-chat between two connected users, and a Question-of-the-day feature to make it easy for you to get started solving problems quickly!
+
+<table>
+  <tr>
+    <td>
+      <img src="https://github.com/sbhbenjamin/PeerPrep/assets/34487322/e7a5073c-e134-4cbd-8d43-06de0a948cf3" alt="Landing Page" width="100%">
+      <p align="center"><i>Landing Page - The main entry point for PeerPrep users, showcasing the initial interface.</i></p>
+    </td>
+    <td>
+      <img src="https://github.com/sbhbenjamin/PeerPrep/assets/34487322/2a3d6f1f-e750-427d-9c3d-f213586e8ca6" alt="Dashboard" width="100%">
+      <p align="center"><i>Dashboard - Users can view their progress, history, or get started tackling the Question of the Day</i></p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://github.com/sbhbenjamin/PeerPrep/assets/34487322/cb630abe-f6bc-47dc-87cd-222c58c251d7" alt="Matching Page" width="100%">
+      <p align="center"><i>Matching Page - Where users are matched with peers for conducting mock interviews.</i></p>
+    </td>
+    <td>
+      <img src="https://github.com/sbhbenjamin/PeerPrep/assets/34487322/e98b2bb4-d196-4b1e-8705-a7d7bf9877a6" alt="Questions Repository" width="100%">
+      <p align="center"><i>Questions Repository - A repository of questions for admins to add and manage questions.</i></p>
+    </td>
+  </tr>
+</table>
+
+
 
 # Quick Start Guide
 Our development setup revolves around Docker, where all backend services are dockerised in a single `docker-compose`. This setup allows for hot-reloading as well, as the containers are setup with volumes that point to the respective directories. This means that if a file changes in the directory, it will be reflected within the container as they are pointing to the same files. As such, we have to do the necessary setups for each service before running the containers. This setup could include installing dependencies, setting up the database clients, etc. For this, we have defined convenience scripts for the ease of setup.
